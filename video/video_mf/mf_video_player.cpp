@@ -101,6 +101,53 @@ static int SE_YUVMode()
 #define SE_SAFE_RELEASE( p ) do { if ( p ) { ( p )->Release(); ( p ) = NULL; } } while ( 0 )
 
 //-----------------------------------------------------------------------------
+// Frame statistics probe (bring-up): one "MFFRAME" line per second with the cost of the two halves of
+// the video path - the decode (on the worker thread) and the present/upload (still on the UI thread) -
+// plus how many decoded frames are queued.  This is what tells a decode-bound stall apart from an
+// upload-bound one when panorama reports "DispatchAsyncEvent backlog".
+//-----------------------------------------------------------------------------
+#if SE_MF_VIDEO_PROBE
+static void SE_MFFrameStats( double flMs, bool bDecode, bool bPresent, int nQueue )
+{
+	static double s_flWindowStart = 0.0;
+	static int s_nDecodes = 0, s_nPresents = 0, s_nProbe = 0;
+	static double s_flDecodeSum = 0.0, s_flDecodeMax = 0.0, s_flPresentSum = 0.0, s_flPresentMax = 0.0;
+
+	if ( bDecode )
+	{
+		++s_nDecodes;
+		s_flDecodeSum += flMs;
+		if ( flMs > s_flDecodeMax ) { s_flDecodeMax = flMs; }
+	}
+	if ( bPresent )
+	{
+		++s_nPresents;
+		s_flPresentSum += flMs;
+		if ( flMs > s_flPresentMax ) { s_flPresentMax = flMs; }
+	}
+
+	double const flNow = Plat_FloatTime();
+	if ( s_flWindowStart <= 0.0 ) { s_flWindowStart = flNow; }
+	if ( flNow - s_flWindowStart < 1.0 )
+		return;
+
+	if ( s_nProbe < 900 )
+	{
+		++s_nProbe;
+		SE_MFProbe( "MFFRAME #%d decodes=%d dec_avg=%.2fms dec_max=%.2fms presents=%d pres_avg=%.2fms pres_max=%.2fms q=%d\n",
+			s_nProbe, s_nDecodes, s_nDecodes ? ( s_flDecodeSum / s_nDecodes ) : 0.0, s_flDecodeMax,
+			s_nPresents, s_nPresents ? ( s_flPresentSum / s_nPresents ) : 0.0, s_flPresentMax, nQueue );
+	}
+
+	s_flWindowStart = flNow;
+	s_nDecodes = s_nPresents = 0;
+	s_flDecodeSum = s_flDecodeMax = s_flPresentSum = s_flPresentMax = 0.0;
+}
+#else
+#define SE_MFFrameStats( ... ) ( (void)0 )
+#endif
+
+//-----------------------------------------------------------------------------
 // Audio bring-up.
 // The panorama audio renderer (CVideoPlayerAudioRenderer, panorama/data/panoramavideoplayer.cpp)
 // marshals InitAudioOutput() to the UI thread and blocks until it has run there.  This player is
@@ -232,6 +279,9 @@ public:
 		m_eError = k_EVideoPlayerPlaybackErrorNone;
 		SE_MFProbe( "MF loaded '%s' %dx%d %.1ffps dur=%ums nv12=%d audio=%d\n", pchURL, m_nWidth, m_nHeight,
 			m_flFrameInterval > 0 ? 1.0 / m_flFrameInterval : 0.0, m_unDurationMS, m_bNV12 ? 1 : 0, m_bAudioConfigured ? 1 : 0 );
+
+		// SE port (2026-09-20): decoding runs on its own thread from here on (see DecodeThread).
+		StartDecodeThread();
 		return true;
 	}
 
@@ -246,6 +296,9 @@ public:
 		if ( !m_bLoaded || !m_pReader )
 			return;
 
+		if ( !m_hDecodeThread )
+			StartDecodeThread();
+
 		if ( m_bEndOfStream )
 		{
 			// restart from the beginning
@@ -253,10 +306,13 @@ public:
 			PropVariantInit( &var );
 			var.vt = VT_I8;
 			var.hVal.QuadPart = 0;
-			m_pReader->SetCurrentPosition( GUID_NULL, var );
+			{
+				CAutoLockT< CThreadMutex > readerLock( m_ReaderMutex );
+				m_pReader->SetCurrentPosition( GUID_NULL, var );
+			}
 			PropVariantClear( &var );
 			m_bEndOfStream = false;
-			SE_SAFE_RELEASE( m_pPendingSample );
+			FlushDecodedSamples();
 		}
 
 		m_flStartTime = Plat_FloatTime();
@@ -281,10 +337,13 @@ public:
 			PropVariantInit( &var );
 			var.vt = VT_I8;
 			var.hVal.QuadPart = 0;
-			m_pReader->SetCurrentPosition( GUID_NULL, var );
+			{
+				CAutoLockT< CThreadMutex > readerLock( m_ReaderMutex );
+				m_pReader->SetCurrentPosition( GUID_NULL, var );
+			}
 			PropVariantClear( &var );
 		}
-		SE_SAFE_RELEASE( m_pPendingSample );
+		FlushDecodedSamples();
 		m_bEndOfStream = false;
 		m_unPlaybackBaseMS = 0;
 		m_flStartTime = Plat_FloatTime();
@@ -320,9 +379,14 @@ public:
 		PropVariantInit( &var );
 		var.vt = VT_I8;
 		var.hVal.QuadPart = (LONGLONG)unSeekMS * 10000;
-		if ( SUCCEEDED( m_pReader->SetCurrentPosition( GUID_NULL, var ) ) )
+		HRESULT hrSeek = E_FAIL;
 		{
-			SE_SAFE_RELEASE( m_pPendingSample );
+			CAutoLockT< CThreadMutex > readerLock( m_ReaderMutex );
+			hrSeek = m_pReader->SetCurrentPosition( GUID_NULL, var );
+		}
+		if ( SUCCEEDED( hrSeek ) )
+		{
+			FlushDecodedSamples();
 			m_bEndOfStream = false;
 			m_unPlaybackBaseMS = unSeekMS;
 			m_flStartTime = Plat_FloatTime();
@@ -446,82 +510,49 @@ public:
 
 		const uint32 unTargetMS = GetCurrentPlaybackTime();
 
-	// SE port bring-up probe: the video path runs *on the UI thread* (VideoPlaybackRunFrame), so its
-	// per frame cost is part of the menu's frame time.  ReadNextSample() is a synchronous (blocking)
-	// Media Foundation call that decodes a frame, and PresentSample() does the planar conversion plus
-	// the texture upload - timing the two apart decides where the time goes (a decode thread is a
-	// very different fix from a cheaper conversion).  One "MFFRAME" line per second.
-	static double s_flMFWindowStart = 0.0;
-	static int s_nMFDecodes = 0, s_nMFPresents = 0, s_nMFProbe = 0;
-	static double s_flMFDecodeSumMs = 0.0, s_flMFDecodeMaxMs = 0.0;
-	static double s_flMFPresentSumMs = 0.0, s_flMFPresentMaxMs = 0.0;
-
-	for ( int iGuard = 0; iGuard < 8; ++iGuard )
-	{
-		if ( !m_pPendingSample )
+		// SE port (2026-09-20): the frames are already decoded - DecodeThread() owns ReadSample(), so
+		// that blocking Media Foundation call no longer runs on the UI thread (it was what backed the
+		// panorama async event queue up: "DispatchAsyncEvent backlog").  Update() only presents what is
+		// due; the planar conversion and the texture upload still happen here, on the thread that owns
+		// the device.
+		for ( int iGuard = 0; iGuard < 8; ++iGuard )
 		{
-			double const flDecodeStart = Plat_FloatTime();
-			bool const bRead = ReadNextSample();
-			double const flDecodeMs = ( Plat_FloatTime() - flDecodeStart ) * 1000.0;
-			++s_nMFDecodes;
-			s_flMFDecodeSumMs += flDecodeMs;
-			if ( flDecodeMs > s_flMFDecodeMaxMs ) { s_flMFDecodeMaxMs = flDecodeMs; }
-			if ( !bRead )
-				break;
-		}
-
-		if ( !m_pPendingSample )
-			break;
-
-		LONGLONG llSampleTime = 0;
-		m_pPendingSample->GetSampleTime( &llSampleTime );
-		const uint32 unSampleMS = (uint32)( llSampleTime / 10000 );
-		if ( unSampleMS > unTargetMS )
-			break;						// not due yet - wait for the next call
-
-		// Late frames are *dropped* instead of presented.  The playback clock is the wall clock, and a
-		// window that was in the background (engine throttles RunFrame when occluded) comes back
-		// seconds behind - presenting every one of those frames turned the return into a burst of
-		// 150+ decodes/copies (measured: ~0.7-1.5 s of stutter right after refocusing).  The audio
-		// side already drops late samples the same way (SE_MF_AUDIO_CATCHUP_MS).
-		if ( unTargetMS - unSampleMS > 250 )
-		{
-			SE_SAFE_RELEASE( m_pPendingSample );
-			continue;
-		}
-
-		double const flPresentStart = Plat_FloatTime();
-		PresentSample( m_pPendingSample );
-		double const flPresentMs = ( Plat_FloatTime() - flPresentStart ) * 1000.0;
-		++s_nMFPresents;
-		s_flMFPresentSumMs += flPresentMs;
-		if ( flPresentMs > s_flMFPresentMaxMs ) { s_flMFPresentMaxMs = flPresentMs; }
-		SE_SAFE_RELEASE( m_pPendingSample );
-	}
-
-	{
-		double const flNow = Plat_FloatTime();
-		if ( s_flMFWindowStart <= 0.0 ) { s_flMFWindowStart = flNow; }
-		if ( flNow - s_flMFWindowStart >= 1.0 )
-		{
-			if ( s_nMFProbe < 900 )
+			IMFSample *pSample = NULL;
+			uint32 unSampleMS = 0;
 			{
-				++s_nMFProbe;
-				SE_MFProbe( "MFFRAME #%d decodes=%d dec_avg=%.2fms dec_max=%.2fms presents=%d pres_avg=%.2fms pres_max=%.2fms\n",
-					s_nMFProbe, s_nMFDecodes,
-					s_nMFDecodes ? ( s_flMFDecodeSumMs / s_nMFDecodes ) : 0.0, s_flMFDecodeMaxMs,
-					s_nMFPresents,
-					s_nMFPresents ? ( s_flMFPresentSumMs / s_nMFPresents ) : 0.0, s_flMFPresentMaxMs );
+				CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+				if ( m_vecDecoded.Count() == 0 )
+					break;
+
+				pSample = m_vecDecoded[ 0 ];
+				LONGLONG llSampleTime = 0;
+				pSample->GetSampleTime( &llSampleTime );
+				unSampleMS = (uint32)( llSampleTime / 10000 );
+				if ( unSampleMS > unTargetMS )
+					break;						// not due yet - wait for the next call
+
+				m_vecDecoded.Remove( 0 );
 			}
-			s_flMFWindowStart = flNow;
-			s_nMFDecodes = 0;
-			s_nMFPresents = 0;
-			s_flMFDecodeSumMs = 0.0;
-			s_flMFDecodeMaxMs = 0.0;
-			s_flMFPresentSumMs = 0.0;
-			s_flMFPresentMaxMs = 0.0;
+			m_DecodeWake.Set();					// the worker may decode one more frame now
+
+			// Late frames are *dropped* instead of presented.  The playback clock is the wall clock, and a
+			// window that was in the background (engine throttles RunFrame when occluded) comes back
+			// seconds behind - presenting every one of those frames turned the return into a burst of
+			// 150+ copies (measured: ~0.7-1.5 s of stutter right after refocusing).  The audio side
+			// already drops late samples the same way (SE_MF_AUDIO_CATCHUP_MS).
+			if ( unTargetMS - unSampleMS > 250 )
+			{
+				SE_SAFE_RELEASE( pSample );
+				continue;
+			}
+
+			double const flPresentStart = Plat_FloatTime();
+			PresentSample( pSample );
+			SE_MFFrameStats( ( Plat_FloatTime() - flPresentStart ) * 1000.0, false, true, QueueDepthForProbe() );
+			SE_SAFE_RELEASE( pSample );
 		}
-	}
+
+		SE_MFFrameStats( 0.0, false, false, QueueDepthForProbe() );		// once-per-second report
 
 	PumpAudio();
 
@@ -539,7 +570,7 @@ public:
 				m_pAudioCallback->GetPlaybackLatency() );
 		}
 
-		if ( m_bEndOfStream && !m_pPendingSample )
+		if ( m_bEndOfStream && QueueDepthForProbe() == 0 )
 		{
 			if ( m_bRepeat )
 			{
@@ -596,8 +627,138 @@ private:
 		return true;
 	}
 
-	bool ReadNextSample()
+	//-----------------------------------------------------------------------------------------
+	// Decode worker (SE port 2026-09-20).
+	//
+	// IMFSourceReader::ReadSample() decodes synchronously and a 720p frame costs tens of
+	// milliseconds.  It used to run inline in Update(), i.e. on the UI thread, and that is what made
+	// panorama's async event queue back up ("DispatchAsyncEvent backlog, failed to dispatch all this
+	// frame") - the message loop only got to run again once the frame was decoded.
+	//
+	// The worker owns every *video* reader call and decodes up to k_nDecodedQueueMax frames ahead;
+	// Update() (UI thread) only pops the frames that are due and uploads them.  Audio reads stay on
+	// the UI thread (PumpAudio) but take m_ReaderMutex, because a source reader must not be used from
+	// two threads at once.  Seek()/Stop() bump the generation counter, so a sample that was in flight
+	// while the position changed is dropped instead of presented.
+	//-----------------------------------------------------------------------------------------
+	static uintp SE_DecodeThreadProc( void *pParam )
 	{
+		( ( CMFVideoPlayer * )pParam )->DecodeThread();
+		return 0;
+	}
+
+	void StartDecodeThread()
+	{
+		if ( m_hDecodeThread )
+			return;
+
+		m_bDecodeExit = false;
+		{
+			CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+			m_bEndOfStream = false;
+			m_nDecodeGeneration = 0;
+			FOR_EACH_VEC( m_vecDecoded, i )
+				SE_SAFE_RELEASE( m_vecDecoded[ i ] );
+			m_vecDecoded.RemoveAll();
+		}
+
+		m_hDecodeThread = CreateSimpleThread( SE_DecodeThreadProc, this, 0x20000 );
+		SE_MFProbe( "MF decode thread started (%p)\n", (void *)m_hDecodeThread );
+	}
+
+	void StopDecodeThread()
+	{
+		if ( !m_hDecodeThread )
+			return;
+
+		m_bDecodeExit = true;
+		m_DecodeWake.Set();
+		ThreadJoin( m_hDecodeThread );
+		m_hDecodeThread = NULL;
+
+		CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+		FOR_EACH_VEC( m_vecDecoded, i )
+			SE_SAFE_RELEASE( m_vecDecoded[ i ] );
+		m_vecDecoded.RemoveAll();
+	}
+
+	// UI thread: throw away decoded frames (seek / stop / restart) and tell the worker to carry on
+	// from the new position.
+	void FlushDecodedSamples()
+	{
+		CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+		++m_nDecodeGeneration;
+		m_bEndOfStream = false;
+		FOR_EACH_VEC( m_vecDecoded, i )
+			SE_SAFE_RELEASE( m_vecDecoded[ i ] );
+		m_vecDecoded.RemoveAll();
+		m_DecodeWake.Set();
+	}
+
+	int QueueDepthForProbe()
+	{
+		CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+		return m_vecDecoded.Count();
+	}
+
+	void DecodeThread()
+	{
+		while ( !m_bDecodeExit )
+		{
+			bool bWantSample = false;
+			{
+				CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+				bWantSample = !m_bEndOfStream && ( m_vecDecoded.Count() < k_nDecodedQueueMax );
+			}
+
+			if ( !bWantSample )
+			{
+				m_DecodeWake.Wait( 50 );			// also the shutdown poll interval
+				continue;
+			}
+
+			if ( m_eState != k_EVideoPlayerPlaybackStatePlay )
+			{
+				m_DecodeWake.Wait( 20 );			// paused / stopped: no decoding ahead
+				continue;
+			}
+
+			int nGeneration = 0;
+			{
+				CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+				nGeneration = m_nDecodeGeneration;
+			}
+
+			double const flDecodeStart = Plat_FloatTime();
+			IMFSample *pSample = ReadVideoSample();
+			SE_MFFrameStats( ( Plat_FloatTime() - flDecodeStart ) * 1000.0, true, false, 0 );
+
+			if ( m_bDecodeExit )
+			{
+				SE_SAFE_RELEASE( pSample );
+				break;
+			}
+
+			CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
+			if ( nGeneration != m_nDecodeGeneration )
+			{
+				SE_SAFE_RELEASE( pSample );		// position changed while we were decoding
+				continue;
+			}
+
+			if ( pSample )
+				m_vecDecoded.AddToTail( pSample );
+		}
+	}
+
+	// The one *video* reader call, on the worker thread.  m_ReaderMutex keeps it out of the reader
+	// while the UI thread is inside PumpAudio()/ReadAudioSample().
+	IMFSample *ReadVideoSample()
+	{
+		CAutoLockT< CThreadMutex > readerLock( m_ReaderMutex );
+		if ( !m_pReader )
+			return NULL;
+
 		DWORD dwStreamFlags = 0;
 		LONGLONG llTime = 0;
 		IMFSample *pSample = NULL;
@@ -607,14 +768,14 @@ private:
 			SE_MFProbe( "MF ReadSample failed hr=0x%08X\n", (unsigned)hr );
 			m_eError = k_EVideoPlayerPlaybackErrorGeneric;
 			m_bEndOfStream = true;
-			return false;
+			return NULL;
 		}
 
 		if ( dwStreamFlags & MF_SOURCE_READERF_ENDOFSTREAM )
 		{
 			SE_SAFE_RELEASE( pSample );
 			m_bEndOfStream = true;
-			return false;
+			return NULL;
 		}
 
 		if ( dwStreamFlags & MF_SOURCE_READERF_CURRENTMEDIATYPECHANGED )
@@ -635,11 +796,7 @@ private:
 			}
 		}
 
-		if ( !pSample )
-			return true;					// stream tick / gap - keep going next call
-
-		m_pPendingSample = pSample;
-		return true;
+		return pSample;					// NULL for a stream tick / gap - the loop just tries again
 	}
 
 	void PresentSample( IMFSample *pSample )
@@ -920,6 +1077,9 @@ private:
 		if ( !m_pReader )
 			return false;
 
+		// one reader, two callers: the video decode worker also calls ReadSample (see DecodeThread)
+		CAutoLockT< CThreadMutex > readerLock( m_ReaderMutex );
+
 		DWORD dwStreamFlags = 0;
 		LONGLONG llTime = 0;
 		const HRESULT hr = m_pReader->ReadSample( MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, NULL, &dwStreamFlags, &llTime, ppSample );
@@ -1046,7 +1206,10 @@ private:
 	void ShutdownReader()
 	{
 		StopAudio();
-		SE_SAFE_RELEASE( m_pPendingSample );
+
+		// the decode worker must be gone before the reader it calls into is released
+		StopDecodeThread();
+
 		SE_SAFE_RELEASE( m_pReader );
 		m_bLoaded = false;
 		m_bEndOfStream = false;
@@ -1076,12 +1239,21 @@ private:
 	// m_pReader - that was the 0xC0000005 at mf_video_player.cpp:206.  In-class initialisers keep
 	// every path (Stop/BLoad/Play/the destructor) safe on a player that was never loaded.
 	IMFSourceReader *m_pReader = NULL;
-	IMFSample *m_pPendingSample = NULL;
+
+	// ---- decode worker (SE port 2026-09-20, see the block above Update()) ----------------------
+	static const int k_nDecodedQueueMax = 3;
+	ThreadHandle_t m_hDecodeThread = NULL;
+	CThreadMutex m_DecodeMutex;			// guards m_vecDecoded + m_nDecodeGeneration
+	CThreadMutex m_ReaderMutex;			// serialises all reader calls (worker video / UI audio)
+	CThreadEvent m_DecodeWake;			// UI -> worker: queue has room, seek, exit
+	volatile bool m_bDecodeExit = false;
+	int m_nDecodeGeneration = 0;			// bumped by FlushDecodedSamples(); stale decodes are dropped
+	CUtlVector< IMFSample * > m_vecDecoded;	// refcounted samples, guarded by m_DecodeMutex
 
 	bool m_bLoaded = false;
 	bool m_bPlaying = false;
 	bool m_bRepeat = true;			// the menu background movies loop
-	bool m_bEndOfStream = false;
+	volatile bool m_bEndOfStream = false;	// written by the decode worker, read by the UI thread
 	bool m_bHasAudio = false;
 	bool m_bNV12 = true;
 

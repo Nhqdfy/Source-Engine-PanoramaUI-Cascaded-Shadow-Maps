@@ -1605,6 +1605,87 @@
 				"_gitcommit.ps1"
 			],
 			"group": "none"
+		},
+		{
+			"label": "SE git verify commit",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_gitverify.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE set bat switch",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_set_bat_switch.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE fix vgui2 bat",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_fix_vgui2bat.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy videothread",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy videothread 2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE backlog test A",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"A",
+				"-Settle",
+				"20"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE backlog test B nosim",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"B",
+				"-NoSim",
+				"-Settle",
+				"12"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE git commit video thread",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_gitcommit2.ps1"
+			],
+			"group": "none"
 		}
 	]
 }

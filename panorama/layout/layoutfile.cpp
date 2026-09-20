@@ -2981,7 +2981,12 @@ bool CLayoutFile::BAddJavaScript( const char *pchPath )
 		// placeholders for the lobby / matchmaking / rank APIs (see se_session_sim.js).
 		BAddJavaScript( SE_PORT_GAME_TYPES );
 		BAddJavaScript( SE_PORT_ECON_REAL );
-		BAddJavaScript( SE_PORT_SESSION_SIM );
+
+		// SE port: "-se_nosim" skips the session simulator (bring-up / performance A-B: the sim feeds
+		// the menus a fake lobby and its work shows up in the JSINIT numbers).  The shim and the econ
+		// data still load, so every page keeps running on the placeholder answers.
+		if ( !CommandLine() || !CommandLine()->FindParm( "-se_nosim" ) )
+			BAddJavaScript( SE_PORT_SESSION_SIM );
 	}
 
 	CUtlString resolvedPath;
