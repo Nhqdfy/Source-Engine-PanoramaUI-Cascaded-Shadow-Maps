@@ -1686,6 +1686,363 @@
 				"_gitcommit2.ps1"
 			],
 			"group": "none"
+		},
+		{
+			"label": "SE logcheck session",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_logcheck2.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE logcheck session 2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_logcheck2.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE logdeep session",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_logdeep.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE frame probe 1080 blur on",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"1080blur1",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"18"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE frame probe qianhuili 1080",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian1",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"18"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy resync seek",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE frame probe qianhuili resync",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian2",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"18"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy clock rebase",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE frame probe qianhuili rebase",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian3",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"18"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy fps cap",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE frame probe qianhuili cap30",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian4",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"18"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE odometer rerun",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_odometer_rerun.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy moviecap",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE force video build",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_force_video_build.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE deploy moviecap2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE backlog qian5 cap30",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian5cap",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"18"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe anubis 1080p",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"a1080",
+				"-Movie",
+				"anubis720",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"15"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe anubis 1080p noblur",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"a1080nb",
+				"-Movie",
+				"anubis720",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"15",
+				"-NoBlur"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe qian 1080p noblur",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian1080nb",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-Settle",
+				"15",
+				"-NoBlur"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe qian 720p",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"qian720",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1280",
+				"-H",
+				"720",
+				"-Settle",
+				"15"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE build deploy videocap",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe qian cap30 v2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"q30",
+				"-Movie",
+				"qianhuili",
+				"-FpsCap",
+				"30",
+				"-Settle",
+				"15"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe qian 1080 cap30",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"q30_1080",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-FpsCap",
+				"30",
+				"-Settle",
+				"15"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE probe qian cap5",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_backlog_test.ps1",
+				"-Tag",
+				"q5",
+				"-Movie",
+				"qianhuili",
+				"-W",
+				"1920",
+				"-H",
+				"1080",
+				"-FpsCap",
+				"5",
+				"-Settle",
+				"12"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE git commit videocap",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_gitcommit3.ps1"
+			],
+			"group": "none"
 		}
 	]
 }

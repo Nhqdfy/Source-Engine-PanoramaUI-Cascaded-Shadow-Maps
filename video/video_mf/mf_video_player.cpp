@@ -101,6 +101,33 @@ static int SE_YUVMode()
 #define SE_SAFE_RELEASE( p ) do { if ( p ) { ( p )->Release(); ( p ) = NULL; } } while ( 0 )
 
 //-----------------------------------------------------------------------------
+// Background movie present-rate cap.
+//
+// The present path converts NV12 to three planes and uploads them as a YUV texture; at 1920x1080
+// that is several MB per frame, and a 60 fps source kept the frame loop busy enough to drop the
+// menu to ~15 fps (measured 2026-09-20 with qianhuili.webm).  A background movie is ambient - the
+// default cap presents at most 30 frames per second (and 0 disables the cap).  Read once per
+// process from D:\cstrike\se_movie_fps.txt, the same bring-up pattern as SE_YUVMode() above.
+//-----------------------------------------------------------------------------
+static int SE_MovieMaxFps()
+{
+	static int s_nFps = -2;
+	if ( s_nFps == -2 )
+	{
+		s_nFps = 30;
+		FILE *fp = fopen( "D:\\cstrike\\se_movie_fps.txt", "r" );
+		if ( fp )
+		{
+			int nRead = 0;
+			if ( fscanf( fp, "%d", &nRead ) == 1 && nRead >= 0 && nRead <= 240 )
+				s_nFps = nRead;
+			fclose( fp );
+		}
+	}
+	return s_nFps;
+}
+
+//-----------------------------------------------------------------------------
 // Frame statistics probe (bring-up): one "MFFRAME" line per second with the cost of the two halves of
 // the video path - the decode (on the worker thread) and the present/upload (still on the UI thread) -
 // plus how many decoded frames are queued.  This is what tells a decode-bound stall apart from an
@@ -509,6 +536,7 @@ public:
 			return;
 
 		const uint32 unTargetMS = GetCurrentPlaybackTime();
+		uint32 unClockTargetMS = unTargetMS;
 
 		// SE port (2026-09-20): the frames are already decoded - DecodeThread() owns ReadSample(), so
 		// that blocking Media Foundation call no longer runs on the UI thread (it was what backed the
@@ -528,23 +556,51 @@ public:
 				LONGLONG llSampleTime = 0;
 				pSample->GetSampleTime( &llSampleTime );
 				unSampleMS = (uint32)( llSampleTime / 10000 );
-				if ( unSampleMS > unTargetMS )
+				if ( unSampleMS > unClockTargetMS )
 					break;						// not due yet - wait for the next call
 
 				m_vecDecoded.Remove( 0 );
 			}
 			m_DecodeWake.Set();					// the worker may decode one more frame now
 
+			// Far behind (the menu took seconds to come up, or the window was hidden and RunFrame was
+			// throttled): re-base the playback clock onto the frame we actually have.  Decoding through
+			// the gap was a 255-decode burst, and seeking can land on a keyframe seconds away (sparse
+			// keyframes) which re-triggered the resync every frame (measured: 16-19 fps).  A background
+			// movie does not need real-time accuracy - here the clock follows the picture.
+			if ( unClockTargetMS - unSampleMS > 1000 )
+			{
+				m_unPlaybackBaseMS = unSampleMS;
+				m_flStartTime = Plat_FloatTime();
+				m_bAudioClockNeedsBase = true;		// the sound clock re-bases with it (see GetCurrentPlaybackTime)
+				unClockTargetMS = unSampleMS;		// this frame is due now
+			}
+
 			// Late frames are *dropped* instead of presented.  The playback clock is the wall clock, and a
 			// window that was in the background (engine throttles RunFrame when occluded) comes back
 			// seconds behind - presenting every one of those frames turned the return into a burst of
 			// 150+ copies (measured: ~0.7-1.5 s of stutter right after refocusing).  The audio side
 			// already drops late samples the same way (SE_MF_AUDIO_CATCHUP_MS).
-			if ( unTargetMS - unSampleMS > 250 )
+			if ( unClockTargetMS - unSampleMS > 250 )
 			{
 				SE_SAFE_RELEASE( pSample );
 				continue;
 			}
+
+			// Present-rate cap (see SE_MovieMaxFps): skip the frames in between instead of uploading
+			// every one of them.  Skipping a frame costs nothing - the decode already happened.
+			const int nMaxPresentFps = SE_MovieMaxFps();
+			if ( nMaxPresentFps > 0 )
+			{
+				const uint32 unMinPresentMS = (uint32)( 1000 / nMaxPresentFps );
+				if ( m_unLastPresentedMS != 0 && unSampleMS >= m_unLastPresentedMS
+					 && ( unSampleMS - m_unLastPresentedMS ) < unMinPresentMS )
+				{
+					SE_SAFE_RELEASE( pSample );
+					continue;
+				}
+			}
+			m_unLastPresentedMS = unSampleMS;
 
 			double const flPresentStart = Plat_FloatTime();
 			PresentSample( pSample );
@@ -689,6 +745,7 @@ private:
 		CAutoLockT< CThreadMutex > queueLock( m_DecodeMutex );
 		++m_nDecodeGeneration;
 		m_bEndOfStream = false;
+		m_unLastPresentedMS = 0;
 		FOR_EACH_VEC( m_vecDecoded, i )
 			SE_SAFE_RELEASE( m_vecDecoded[ i ] );
 		m_vecDecoded.RemoveAll();
@@ -1249,6 +1306,7 @@ private:
 	volatile bool m_bDecodeExit = false;
 	int m_nDecodeGeneration = 0;			// bumped by FlushDecodedSamples(); stale decodes are dropped
 	CUtlVector< IMFSample * > m_vecDecoded;	// refcounted samples, guarded by m_DecodeMutex
+	uint32 m_unLastPresentedMS = 0;		// present-rate cap: media time of the last presented frame
 
 	bool m_bLoaded = false;
 	bool m_bPlaying = false;
