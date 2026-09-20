@@ -24,6 +24,7 @@ using namespace panorama;
 
 CCSGO_InventoryItemList::CCSGO_InventoryItemList( CPanel2D *pParent, const char *pchID ) : BaseClass( pParent, pchID )
 {
+	m_strTeamFilter.Set( "any" );
 	// CS:GO loads inventory_item_list.xml here (DbgVerify( BLoadLayout( ... ) )).  That layout carries
 	// the list's own sizing and contains an <InventoryItemList> element; in CS:GO that nested element
 	// is what ends up holding the properties.  Loading it from inside this constructor constructs the
@@ -127,7 +128,8 @@ bool CCSGO_InventoryItemList::SetCategorySortAndFilters( const char *szCategory,
 
 	// Copy the selected view tier into our internal display list (CS:GO: FOR_EACH_MAP( pGroup->m_Items ) ).
 	m_vecItems.RemoveAll();
-	se_faux_econ::CollectItemIDs( szCategory, szSubCategory, szGroup, m_vecItems );
+	const char *pchTeamFilter = ( m_strTeamFilter.Get() && m_strTeamFilter.Get()[ 0 ] ) ? m_strTeamFilter.Get() : "any";
+	se_faux_econ::CollectItemIDs( szCategory, szSubCategory, szGroup, m_vecItems, pchTeamFilter );
 
 	// The two filters CS:GO applies here are both name based:
 	//   * szFilterString is the legacy CInventoryFilters expression ("quality:unusual, ..."), and

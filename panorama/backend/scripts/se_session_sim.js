@@ -1770,14 +1770,27 @@
 	// that InventoryAPI.GetFauxItemIDFromDefAndPaintIndex() builds and GetItemName() names.
 	// ==========================================================================
 	(function () {
-		var INV_CATEGORIES = "inv_category_any,inv_category_tools,inv_category_container,inv_category_collections";
+		// The real item table (items_game.txt -> se_econ_real.js, injected before this file by
+		// layoutfile.cpp) drives names / rarity / icons / loadout slots.  The static table further down
+		// stays as the "store + collections" part of the catalog, and as the whole answer when
+		// se_econ_real.js was not deployed.
+		var ECON = (typeof SE_ECON_REAL !== "undefined" && SE_ECON_REAL && SE_ECON_REAL.items) ? SE_ECON_REAL : null;
+
+		var INV_CATEGORIES = ECON
+			? "inv_category_any,inv_category_melee,inv_category_secondary,inv_category_smg,inv_category_rifle,inv_category_heavy,inv_category_tools,inv_category_container,inv_category_collections"
+			: "inv_category_any,inv_category_tools,inv_category_container,inv_category_collections";
 		var INV_CAT_META = {
 			"inv_category_any": "Inv_Category_any",
+			"inv_category_melee": "Inv_Category_melee",
+			"inv_category_secondary": "Inv_Category_secondary",
+			"inv_category_smg": "Inv_Category_smg",
+			"inv_category_rifle": "Inv_Category_rifle",
+			"inv_category_heavy": "Inv_Category_heavy",
 			"inv_category_tools": "Inv_Category_tools",
 			"inv_category_container": "Inv_Category_container",
 			"inv_category_collections": "Inv_Category_collections"
 		};
-		// def index -> rarity (0 consumer .. 5 covert); mirrors k_Catalog in se_faux_econ.cpp
+		// def index -> rarity (0 consumer .. 5 covert) for the static half; mirrors k_ExtraCatalog
 		var INV_RARITY = {
 			"4883": 4, "4888": 3, "6732": 3,
 			"9101": 4, "9102": 4, "9103": 4, "9104": 4, "9105": 4, "9106": 4,
@@ -1787,7 +1800,7 @@
 		};
 		// the CS:GO rarity colours (the tile washes its rarity bar with this)
 		var INV_RARITY_COLOR = ["#b0c3d9", "#5e98d9", "#4b69ff", "#8847ff", "#d32ce6", "#eb4b4b", "#e4ae39"];
-		// icons, mirroring the "m_pchImage" column of se_faux_econ.cpp
+		// icons, mirroring the "m_pchImage" column of the static table
 		var INV_ICON = {
 			"4883": "file://{images_econ}/econ/operations/op10/logo.png",
 			"4888": "file://{images_econ}/econ/store/tournament_items_18.png",
@@ -1799,10 +1812,46 @@
 			if (s.indexOf(STORE_FauxPrefix) !== 0) { return ""; }
 			return s.substring(STORE_FauxPrefix.length).split("_")[0];
 		}
-		function invIsKnown(id) { return INV_RARITY.hasOwnProperty(invDef(id)); }
+		function invPaint(id) {
+			var s = String(id === undefined || id === null ? "" : id);
+			if (s.indexOf(STORE_FauxPrefix) !== 0) { return "0"; }
+			var parts = s.substring(STORE_FauxPrefix.length).split("_");
+			return parts.length > 1 ? parts[1] : "0";
+		}
+		function invRealItem(def) {
+			return (ECON && ECON.items && ECON.items.hasOwnProperty(def)) ? ECON.items[def] : null;
+		}
+		function invRealPaint(def, paint) {
+			if (!ECON || !ECON.paints || !ECON.paints.hasOwnProperty(def)) { return null; }
+			var set = ECON.paints[def];
+			return set.hasOwnProperty(paint) ? set[paint] : null;
+		}
+		function invLocalize(token) {
+			if (!token) { return ""; }
+			try { return String($.Localize(token)); } catch (e) { return String(token); }
+		}
+		function invIsKnown(id) {
+			var d = invDef(id);
+			if (ECON) { return !!invRealPaint(d, invPaint(id)); }
+			return INV_RARITY.hasOwnProperty(d);
+		}
 		function invRarity(id) {
 			var d = invDef(id);
+			if (ECON) {
+				var rp = invRealPaint(d, invPaint(id));
+				if (rp) { return Number(rp.r) || 0; }
+			}
 			return INV_RARITY.hasOwnProperty(d) ? INV_RARITY[d] : 0;
+		}
+		function invIcon(id) {
+			var d = invDef(id);
+			if (ECON) {
+				var rp = invRealPaint(d, invPaint(id));
+				if (rp && rp.i) { return rp.i; }
+				var it = invRealItem(d);
+				if (it && it.img) { return it.img; }
+			}
+			return INV_ICON.hasOwnProperty(d) ? INV_ICON[d] : "";
 		}
 
 		// --- the category tree ("any" first, same order as the C++ side) -----------------------
@@ -1826,19 +1875,42 @@
 			if (r >= INV_RARITY_COLOR.length) { r = INV_RARITY_COLOR.length - 1; }
 			return INV_RARITY_COLOR[r];
 		};
-		g.InventoryAPI.GetItemInventoryImage = function (id) {
-			var d = invDef(id);
-			return INV_ICON.hasOwnProperty(d) ? INV_ICON[d] : "";
+		g.InventoryAPI.GetItemInventoryImage = function (id) { return invIcon(id); };
+		g.InventoryAPI.GetItemDefinitionName = function (id) {
+			var it = invRealItem(invDef(id));
+			if (it && it.cls) { return it.cls; }
+			return invIsKnown(id) ? ("se_inv_item_" + invDef(id)) : "";
 		};
-		g.InventoryAPI.GetItemDefinitionName = function (id) { return invIsKnown(id) ? ("se_inv_item_" + invDef(id)) : ""; };
 		g.InventoryAPI.GetItemTypeFromEnum = function () { return ""; };
 		g.InventoryAPI.GetRawDefinitionKey = function () { return "0"; };
+
+		// Names come straight from CS:GO's own localization: the base weapon ("#SFUI_WPNHUD_AK47")
+		// plus the paint kit tag ("#PaintKit_cu_ak47_asiimov_Tag").  itemtile.js / common/iteminfo.js
+		// split the "|" back out and rebuild the two-tone name, so this must stay the composed form.
+		var prevGetItemName = g.InventoryAPI.GetItemName;
+		g.InventoryAPI.GetItemName = function (id) {
+			var d = invDef(id);
+			var it = invRealItem(d);
+			if (it) {
+				var base = invLocalize(it.name);
+				var rp = invRealPaint(d, invPaint(id));
+				if (rp && rp.n && rp.n !== it.name) { return base + " | " + invLocalize(rp.n); }
+				return base;
+			}
+			return prevGetItemName ? prevGetItemName(id) : "";
+		};
 
 		// --- per-item state the tiles ask about -----------------------------------------------
 		g.InventoryAPI.IsEquipped = function () { return false; };
 		g.InventoryAPI.GetSlot = function () { return "noteam"; };
-		g.InventoryAPI.GetSlotSubPosition = function () { return ""; };
-		g.InventoryAPI.GetItemTeam = function () { return "noteam"; };
+		g.InventoryAPI.GetSlotSubPosition = function (id) {
+			var it = invRealItem(invDef(id));
+			return (it && it.sub) ? it.sub : "";
+		};
+		g.InventoryAPI.GetItemTeam = function (id) {
+			var it = invRealItem(invDef(id));
+			return (it && it.team) ? it.team : "noteam";
+		};
 		g.InventoryAPI.HasCustomName = function () { return false; };
 		g.InventoryAPI.DoesItemMatchDefinitionByName = function () { return false; };
 		g.InventoryAPI.GetItemSessionPropertyValue = function () { return ""; };
@@ -1869,29 +1941,46 @@
 		var INV_SORT_FALLBACK = "inv_sort_age";
 		var invResult = [];
 
-		function invAllDefs() { return Object.keys(INV_RARITY); }
-		function invItemID(def) { return STORE_FauxPrefix + def + "_0"; }
-		function invNameFor(def) {
-			var id = invItemID(def);
+		// Every id the search panel can list: the real weapons / skins first, then the static half
+		// (store entries, operations, their quests and rewards).
+		function invAllIDs() {
+			var ids = [];
+			if (ECON) {
+				var defs = Object.keys(ECON.paints);
+				for (var i = 0; i < defs.length; i++) {
+					var paints = Object.keys(ECON.paints[defs[i]]);
+					for (var j = 0; j < paints.length; j++) {
+						ids.push(STORE_FauxPrefix + defs[i] + "_" + paints[j]);
+					}
+				}
+			}
+			var faux = Object.keys(INV_RARITY);
+			for (var k = 0; k < faux.length; k++) { ids.push(STORE_FauxPrefix + faux[k] + "_0"); }
+			return ids;
+		}
+		function invNameForID(id) {
 			var name = "";
-			try { name = ($.Localize ? $.Localize("#" + (STORE_NAMES[def] ? STORE_NAMES[def].replace("#", "") : "SEPort_Store_Item_Fallback")) : ""); } catch (e) { name = ""; }
+			try { name = g.InventoryAPI.GetItemName(id); } catch (e) { name = ""; }
 			return String(name === undefined || name === null ? "" : name);
 		}
 		function invRebuild() {
-			var defs = invAllDefs();
+			var ids = invAllIDs();
 			var search = String(INV_SORT.search || "").toLowerCase();
 			if (search.length > 0) {
-				defs = defs.filter(function (d) {
-					return invNameFor(d).toLowerCase().indexOf(search) >= 0;
+				ids = ids.filter(function (id) {
+					return invNameForID(id).toLowerCase().indexOf(search) >= 0;
 				});
 			}
 			var sortType = String(INV_SORT.sortType || INV_SORT_FALLBACK);
 			if (sortType === "inv_sort_alpha") {
-				defs.sort(function (a, b) { return invNameFor(a) < invNameFor(b) ? -1 : (invNameFor(a) > invNameFor(b) ? 1 : 0); });
+				ids.sort(function (a, b) {
+					var na = invNameForID(a), nb = invNameForID(b);
+					return na < nb ? -1 : (na > nb ? 1 : 0);
+				});
 			} else if (sortType === "inv_sort_rarity" || sortType === "inv_sort_quality") {
-				defs.sort(function (a, b) { return (INV_RARITY[b] || 0) - (INV_RARITY[a] || 0); });
+				ids.sort(function (a, b) { return invRarity(b) - invRarity(a); });
 			}
-			invResult = defs.map(invItemID);
+			invResult = ids;
 		}
 		var INV_SORT = { sortType: INV_SORT_FALLBACK, search: "" };
 		g.InventoryAPI.SetInventorySortAndFilters = function (sortType, bForce, searchText) {
@@ -1929,7 +2018,9 @@
 
 		if (!g.__seInvLogged) {
 			g.__seInvLogged = true;
-			log("库存: 数据层已安装 (categories=" + INV_CATEGORIES + ", items=" + Object.keys(INV_RARITY).length + ")");
+			var nReal = 0;
+			if (ECON) { var rk = Object.keys(ECON.paints); for (var ri = 0; ri < rk.length; ri++) { nReal += Object.keys(ECON.paints[rk[ri]]).length; } }
+			log("库存: 数据层已安装 (categories=" + INV_CATEGORIES + ", 真物品=" + nReal + ", 商店条目=" + Object.keys(INV_RARITY).length + ")");
 		}
 	})();
 
@@ -1941,7 +2032,14 @@
 			var s = String(id === undefined || id === null ? "" : id);
 			if (s.indexOf(STORE_FauxPrefix) !== 0) { return ""; }
 			var def = s.substring(STORE_FauxPrefix.length).split("_")[0];
-			// loadout.js does $.Localize( InventoryAPI.GetItemBaseName( id ) ) - it wants a token
+			// real items carry CS:GO's own token ("#SFUI_WPNHUD_AK47"); loadout.js does
+			// $.Localize( InventoryAPI.GetItemBaseName( id ) ), so the token is returned as-is
+			try {
+				if (typeof SE_ECON_REAL !== "undefined" && SE_ECON_REAL && SE_ECON_REAL.items && SE_ECON_REAL.items[def]) {
+					return SE_ECON_REAL.items[def].name;
+				}
+			} catch (e) { }
+			// fallback: the static half of the catalog (loadout.js wants a token here)
 			return "#" + (STORE_NAMES[def] ? STORE_NAMES[def].replace("#", "") : "SEPort_Store_Item_Fallback");
 		}
 		g.InventoryAPI.GetItemBaseName = invBaseName;

@@ -37,6 +37,11 @@ public:
 	bool SetCategorySortAndFilters( const char *szCategory, const char *szSubCategory = "any", const char *szGroup = "any", const char *szSort = NULL, const char *szFilterString = NULL, const char *szSubStringFilter = NULL );
 	int GetItemCount( void ) const { return m_vecItems.Count(); }
 
+	// SE port: the loadout page shows one team's items (CS:GO: the client inventory view is per
+	// team).  NULL / "any" keeps both, "ct" / "t" keeps that team plus the team-neutral items.
+	// Set before SetCategorySortAndFilters(); the next call applies it.
+	void SetTeamFilter( const char *szTeam ) { m_strTeamFilter.Set( szTeam ? szTeam : "any" ); }
+
 protected:
 	// CPanel2D overrides
 	virtual bool BSetProperties( const CUtlVector< panorama::ParsedPanelProperty_t > &vecProperties ) OVERRIDE;
@@ -50,6 +55,7 @@ protected:
 	CUtlString m_strTileLayoutFile;
 	CUtlString m_strTileContextMenuFilter;
 	CUtlString m_strPresentationList;
+	CUtlString m_strTeamFilter;			// "any" until the loadout page asks for one team
 };
 
 #endif // CSGO_INVENTORY_ITEM_LIST_H

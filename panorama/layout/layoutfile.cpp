@@ -42,6 +42,9 @@ static const int64 k_nAutoReloadFailedFileLoadDelay = 100 * k_nThousand;
 // the data first (the sim reads it while it loads), then the sim, which replaces the shim's "no data"
 // placeholders for LobbyAPI / PartyListAPI / PartyBrowserAPI / SessionUtil / GameTypesAPI / rank.
 #define SE_PORT_GAME_TYPES "file://{resources}/scripts/se_gametypes.js"
+// SE port: the real item table generated from the retail items_game.txt (build/_gen_econ_real.ps1).
+// Pure data - se_session_sim.js consumes it; missing file just leaves the static fallback table.
+#define SE_PORT_ECON_REAL "file://{resources}/scripts/se_econ_real.js"
 #define SE_PORT_SESSION_SIM "file://{resources}/scripts/se_session_sim.js"
 
 #if !defined( SOURCE2_PANORAMA )
@@ -2977,6 +2980,7 @@ bool CLayoutFile::BAddJavaScript( const char *pchPath )
 		// SE port: the data table and the simulated session layer load after the shim and override its
 		// placeholders for the lobby / matchmaking / rank APIs (see se_session_sim.js).
 		BAddJavaScript( SE_PORT_GAME_TYPES );
+		BAddJavaScript( SE_PORT_ECON_REAL );
 		BAddJavaScript( SE_PORT_SESSION_SIM );
 	}
 

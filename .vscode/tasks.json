@@ -984,6 +984,627 @@
 				"_deploy_se_js.ps1"
 			],
 			"group": "none"
+		},
+		{
+			"label": "SE gitcheck3",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_gitcheck3.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build post-merge",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE postmerge check",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_postmerge_check.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE deploy postmerge",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_deploy_pair.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE deploy JS postmerge",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_deploy_se_js.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE verify postmerge",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_batchA_verify.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel recon",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_recon.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE loadout slots",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_loadoutslots.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel fix",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE deploy wheel fix",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_deploy_pair.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE deploy wheel fix 2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_deploy_pair.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE verify wheel fix",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_batchA_verify.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel css",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_css.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel css2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_css2.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE scripts list",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_scripts_ls.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE op scripts",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-ChildItem d:\\source-engine\\build -Filter '_op*' | Select-Object Name | Format-Table -AutoSize | Out-File d:\\source-engine\\build\\_opls.txt -Encoding utf8"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE target check2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_targetcheck2.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe3",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run3",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe4",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run4",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe5",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run5",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe6",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run6",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe7",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run7",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE target check3",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_targetcheck2.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE target check4",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_targetcheck3.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe8",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run8",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1",
+				"-MenuLayout",
+				"mainmenu_inventory.xml"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel probe9",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run9",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1",
+				"-MenuLayout",
+				"mainmenu_inventory.xml"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel fix2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag run10",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1",
+				"-MenuLayout",
+				"mainmenu_inventory.xml"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE build wheel clean",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_build_target.ps1",
+				"-Targets",
+				"panoramauiclient"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE target check5",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_targetcheck2.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE deploy wheel clean",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_deploy_pair.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE wheel clean check",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_clean_check.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE odometer fresh",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_port_odometer.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE csgo client recon",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_csgoclient_recon.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE csgo client recon2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_csgoclient_recon2.ps1"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "SE econ verify",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_verify.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE econ logscan",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_logscan.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag real items",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag real items 2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1",
+				"-MenuLayout",
+				"mainmenu_inventory.xml"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE nav menu shot",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_loadout_nav.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE nav click loadout rail",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_loadout_nav.ps1",
+				"-ClickX",
+				"40",
+				"-ClickY",
+				"532"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE econ build",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE econ deploy2",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag slot filter",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1",
+				"-MenuLayout",
+				"mainmenu_inventory.xml"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE econ build+deploy team filter",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_econ_build_deploy.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE wheel diag team filter",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_wheel_diag.ps1",
+				"-MenuLayout",
+				"mainmenu_inventory.xml"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE git status",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_gitstatus.ps1"
+			],
+			"group": "none"
+		},
+		{
+			"label": "SE git commit econ",
+			"type": "shell",
+			"command": "d:\\source-engine\\build\\se_run.cmd",
+			"args": [
+				"_gitcommit.ps1"
+			],
+			"group": "none"
 		}
 	]
 }

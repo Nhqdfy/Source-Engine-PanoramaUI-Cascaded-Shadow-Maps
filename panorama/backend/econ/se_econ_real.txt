@@ -1,0 +1,1598 @@
+"econ_real"
+{
+    "version" "items_game 1575"
+    "items"
+    {
+        "1" { "cls" "weapon_deagle" "name" "#SFUI_WPNHUD_DesertEagle" "img" "econ/weapons/base_weapons/weapon_deagle" "r" "1" "sub" "secondary4" "team" "t" "dflt" "1" }
+        "2" { "cls" "weapon_elite" "name" "#SFUI_WPNHUD_Elites" "img" "econ/weapons/base_weapons/weapon_elite" "r" "0" "sub" "secondary1" "team" "t" "dflt" "1" }
+        "3" { "cls" "weapon_fiveseven" "name" "#SFUI_WPNHUD_FiveSeven" "img" "econ/weapons/base_weapons/weapon_fiveseven" "r" "0" "sub" "secondary3" "team" "" "dflt" "1" }
+        "4" { "cls" "weapon_glock" "name" "#SFUI_WPNHUD_Glock18" "img" "econ/weapons/base_weapons/weapon_glock" "r" "1" "sub" "secondary0" "team" "t" "dflt" "1" }
+        "7" { "cls" "weapon_ak47" "name" "#SFUI_WPNHUD_AK47" "img" "econ/weapons/base_weapons/weapon_ak47" "r" "1" "sub" "rifle1" "team" "t" "dflt" "1" }
+        "8" { "cls" "weapon_aug" "name" "#SFUI_WPNHUD_Aug" "img" "econ/weapons/base_weapons/weapon_aug" "r" "0" "sub" "rifle3" "team" "" "dflt" "1" }
+        "9" { "cls" "weapon_awp" "name" "#SFUI_WPNHUD_AWP" "img" "econ/weapons/base_weapons/weapon_awp" "r" "1" "sub" "rifle4" "team" "t" "dflt" "1" }
+        "10" { "cls" "weapon_famas" "name" "#SFUI_WPNHUD_Famas" "img" "econ/weapons/base_weapons/weapon_famas" "r" "0" "sub" "rifle0" "team" "" "dflt" "1" }
+        "11" { "cls" "weapon_g3sg1" "name" "#SFUI_WPNHUD_G3SG1" "img" "econ/weapons/base_weapons/weapon_g3sg1" "r" "0" "sub" "rifle5" "team" "t" "dflt" "1" }
+        "13" { "cls" "weapon_galilar" "name" "#SFUI_WPNHUD_GalilAR" "img" "econ/weapons/base_weapons/weapon_galilar" "r" "0" "sub" "rifle0" "team" "t" "dflt" "1" }
+        "14" { "cls" "weapon_m249" "name" "#SFUI_WPNHUD_M249" "img" "econ/weapons/base_weapons/weapon_m249" "r" "0" "sub" "heavy3" "team" "t" "dflt" "1" }
+        "16" { "cls" "weapon_m4a1" "name" "#SFUI_WPNHUD_M4A1" "img" "econ/weapons/base_weapons/weapon_m4a1" "r" "1" "sub" "rifle1" "team" "" "dflt" "1" }
+        "17" { "cls" "weapon_mac10" "name" "#SFUI_WPNHUD_MAC10" "img" "econ/weapons/base_weapons/weapon_mac10" "r" "0" "sub" "smg0" "team" "t" "dflt" "1" }
+        "19" { "cls" "weapon_p90" "name" "#SFUI_WPNHUD_P90" "img" "econ/weapons/base_weapons/weapon_p90" "r" "0" "sub" "smg3" "team" "t" "dflt" "1" }
+        "20" { "cls" "weapon_zone_repulsor" "name" "#SFUI_WPNHUD_Zone_Repulsor" "img" "" "r" "0" "sub" "secondary2" "team" "t" "dflt" "0" }
+        "23" { "cls" "weapon_mp7" "name" "#SFUI_WPNHUD_MP5SD" "img" "econ/weapons/base_weapons/weapon_mp7" "r" "0" "sub" "smg1" "team" "t" "dflt" "0" }
+        "24" { "cls" "weapon_ump45" "name" "#SFUI_WPNHUD_UMP45" "img" "econ/weapons/base_weapons/weapon_ump45" "r" "0" "sub" "smg2" "team" "t" "dflt" "1" }
+        "25" { "cls" "weapon_xm1014" "name" "#SFUI_WPNHUD_xm1014" "img" "econ/weapons/base_weapons/weapon_xm1014" "r" "0" "sub" "heavy1" "team" "t" "dflt" "1" }
+        "26" { "cls" "weapon_bizon" "name" "#SFUI_WPNHUD_Bizon" "img" "econ/weapons/base_weapons/weapon_bizon" "r" "0" "sub" "smg4" "team" "t" "dflt" "1" }
+        "27" { "cls" "weapon_mag7" "name" "#SFUI_WPNHUD_Mag7" "img" "econ/weapons/base_weapons/weapon_mag7" "r" "0" "sub" "heavy2" "team" "" "dflt" "1" }
+        "28" { "cls" "weapon_negev" "name" "#SFUI_WPNHUD_Negev" "img" "econ/weapons/base_weapons/weapon_negev" "r" "0" "sub" "heavy4" "team" "t" "dflt" "1" }
+        "29" { "cls" "weapon_sawedoff" "name" "#SFUI_WPNHUD_Sawedoff" "img" "econ/weapons/base_weapons/weapon_sawedoff" "r" "0" "sub" "heavy2" "team" "t" "dflt" "1" }
+        "30" { "cls" "weapon_tec9" "name" "#SFUI_WPNHUD_Tec9" "img" "econ/weapons/base_weapons/weapon_tec9" "r" "0" "sub" "secondary3" "team" "t" "dflt" "1" }
+        "31" { "cls" "weapon_taser" "name" "#SFUI_WPNHUD_Taser" "img" "econ/weapons/base_weapons/weapon_taser" "r" "0" "sub" "equipment2" "team" "t" "dflt" "1" }
+        "32" { "cls" "weapon_hkp2000" "name" "#SFUI_WPNHUD_HKP2000" "img" "econ/weapons/base_weapons/weapon_hkp2000" "r" "1" "sub" "secondary0" "team" "" "dflt" "1" }
+        "33" { "cls" "weapon_mp7" "name" "#SFUI_WPNHUD_MP7" "img" "econ/weapons/base_weapons/weapon_mp7" "r" "0" "sub" "smg1" "team" "t" "dflt" "1" }
+        "34" { "cls" "weapon_mp9" "name" "#SFUI_WPNHUD_MP9" "img" "econ/weapons/base_weapons/weapon_mp9" "r" "0" "sub" "smg0" "team" "" "dflt" "1" }
+        "35" { "cls" "weapon_nova" "name" "#SFUI_WPNHUD_Nova" "img" "econ/weapons/base_weapons/weapon_nova" "r" "0" "sub" "heavy0" "team" "t" "dflt" "1" }
+        "36" { "cls" "weapon_p250" "name" "#SFUI_WPNHUD_P250" "img" "econ/weapons/base_weapons/weapon_p250" "r" "0" "sub" "secondary2" "team" "t" "dflt" "1" }
+        "37" { "cls" "weapon_shield" "name" "#SFUI_WPNHUD_Shield" "img" "econ/weapons/base_weapons/weapon_shield" "r" "0" "sub" "heavy5" "team" "t" "dflt" "1" }
+        "38" { "cls" "weapon_scar20" "name" "#SFUI_WPNHUD_SCAR20" "img" "econ/weapons/base_weapons/weapon_scar20" "r" "0" "sub" "rifle5" "team" "" "dflt" "1" }
+        "39" { "cls" "weapon_sg556" "name" "#SFUI_WPNHUD_SG556" "img" "econ/weapons/base_weapons/weapon_sg556" "r" "0" "sub" "rifle3" "team" "t" "dflt" "1" }
+        "40" { "cls" "weapon_ssg08" "name" "#SFUI_WPNHUD_SSG08" "img" "econ/weapons/base_weapons/weapon_ssg08" "r" "0" "sub" "rifle2" "team" "t" "dflt" "1" }
+        "41" { "cls" "weapon_knifegg" "name" "#SFUI_WPNHUD_Knife" "img" "" "r" "0" "sub" "none" "team" "" "dflt" "0" }
+        "42" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_Knife" "img" "econ/weapons/base_weapons/weapon_knife" "r" "0" "sub" "melee" "team" "" "dflt" "1" }
+        "43" { "cls" "weapon_flashbang" "name" "#SFUI_WPNHUD_FLASHBANG" "img" "econ/weapons/base_weapons/weapon_flashbang" "r" "0" "sub" "grenade2" "team" "t" "dflt" "1" }
+        "44" { "cls" "weapon_hegrenade" "name" "#SFUI_WPNHUD_HE_Grenade" "img" "econ/weapons/base_weapons/weapon_hegrenade" "r" "0" "sub" "grenade3" "team" "t" "dflt" "1" }
+        "45" { "cls" "weapon_smokegrenade" "name" "#SFUI_WPNHUD_Smoke_Grenade" "img" "econ/weapons/base_weapons/weapon_smokegrenade" "r" "0" "sub" "grenade4" "team" "t" "dflt" "1" }
+        "46" { "cls" "weapon_molotov" "name" "#SFUI_WPNHUD_MOLOTOV" "img" "econ/weapons/base_weapons/weapon_molotov" "r" "0" "sub" "grenade0" "team" "t" "dflt" "1" }
+        "47" { "cls" "weapon_decoy" "name" "#SFUI_WPNHUD_DECOY" "img" "econ/weapons/base_weapons/weapon_decoy" "r" "0" "sub" "grenade1" "team" "t" "dflt" "1" }
+        "48" { "cls" "weapon_incgrenade" "name" "#SFUI_WPNHUD_IncGrenade" "img" "econ/weapons/base_weapons/weapon_incgrenade" "r" "0" "sub" "grenade0" "team" "" "dflt" "1" }
+        "49" { "cls" "weapon_c4" "name" "#SFUI_WPNHUD_C4" "img" "econ/weapons/base_weapons/weapon_c4" "r" "0" "sub" "c4" "team" "t" "dflt" "1" }
+        "57" { "cls" "weapon_healthshot" "name" "#SFUI_WPNHUD_Healthshot" "img" "econ/weapons/base_weapons/weapon_healthshot" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "59" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_Knife_T" "img" "econ/weapons/base_weapons/weapon_knife" "r" "0" "sub" "melee" "team" "t" "dflt" "1" }
+        "60" { "cls" "weapon_m4a1" "name" "#SFUI_WPNHUD_M4_SILENCER" "img" "econ/weapons/base_weapons/weapon_m4a1" "r" "1" "sub" "rifle1" "team" "" "dflt" "0" }
+        "61" { "cls" "weapon_hkp2000" "name" "#SFUI_WPNHUD_USP_SILENCER" "img" "econ/weapons/base_weapons/weapon_hkp2000" "r" "1" "sub" "secondary0" "team" "" "dflt" "0" }
+        "63" { "cls" "weapon_p250" "name" "#SFUI_WPNHUD_CZ75" "img" "econ/weapons/base_weapons/weapon_p250" "r" "0" "sub" "secondary3" "team" "t" "dflt" "0" }
+        "64" { "cls" "weapon_deagle" "name" "#SFUI_WPNHUD_REVOLVER" "img" "econ/weapons/base_weapons/weapon_deagle" "r" "0" "sub" "secondary4" "team" "t" "dflt" "0" }
+        "68" { "cls" "weapon_tagrenade" "name" "#SFUI_WPNHUD_TAGrenade" "img" "econ/weapons/base_weapons/weapon_tagrenade" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "69" { "cls" "weapon_fists" "name" "#SFUI_WPNHUD_Fists" "img" "econ/weapons/base_weapons/weapon_fists" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "70" { "cls" "weapon_breachcharge" "name" "#SFUI_WPNHUD_BreachCharge" "img" "econ/weapons/base_weapons/weapon_breachcharge" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "72" { "cls" "weapon_tablet" "name" "#SFUI_WPNHUD_Tablet" "img" "econ/weapons/base_weapons/weapon_tablet" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "74" { "cls" "weapon_melee" "name" "#SFUI_WPNHUD_Knife" "img" "econ/weapons/base_weapons/weapon_melee" "r" "0" "sub" "none" "team" "" "dflt" "0" }
+        "75" { "cls" "weapon_melee" "name" "#SFUI_WPNHUD_Axe" "img" "econ/weapons/base_weapons/weapon_melee" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "76" { "cls" "weapon_melee" "name" "#SFUI_WPNHUD_Hammer" "img" "econ/weapons/base_weapons/weapon_melee" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "78" { "cls" "weapon_melee" "name" "#SFUI_WPNHUD_Spanner" "img" "econ/weapons/base_weapons/weapon_melee" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "80" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_Knife_Ghost" "img" "econ/weapons/base_weapons/weapon_knife" "r" "0" "sub" "none" "team" "t" "dflt" "1" }
+        "81" { "cls" "weapon_molotov" "name" "#SFUI_WPNHUD_FIREBOMB" "img" "econ/weapons/base_weapons/weapon_molotov" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "82" { "cls" "weapon_decoy" "name" "#SFUI_WPNHUD_Diversion" "img" "econ/weapons/base_weapons/weapon_decoy" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "83" { "cls" "weapon_hegrenade" "name" "#SFUI_WPNHUD_frag_Grenade" "img" "econ/weapons/base_weapons/weapon_hegrenade" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "84" { "cls" "weapon_snowball" "name" "#SFUI_WPNHUD_Snowball" "img" "econ/weapons/base_weapons/weapon_snowball" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "85" { "cls" "weapon_bumpmine" "name" "#SFUI_WPNHUD_BUMPMINE" "img" "econ/weapons/base_weapons/weapon_bumpmine" "r" "0" "sub" "none" "team" "t" "dflt" "0" }
+        "500" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeBayonet" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "503" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeCSS" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "505" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeFlip" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "506" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeGut" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "507" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeKaram" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "508" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeM9" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "509" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_KnifeTactical" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "512" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_falchion_advanced" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "514" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_survival_bowie" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "515" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_Knife_Butterfly" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "516" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_push" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "517" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_cord" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "518" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_canis" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "519" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_ursus" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "520" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_gypsy_jackknife" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "521" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_outdoor" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "522" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_stiletto" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "523" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_widowmaker" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+        "525" { "cls" "weapon_knife" "name" "#SFUI_WPNHUD_knife_skeleton" "img" "econ/weapons/base_weapons/weapon_knife" "r" "5" "sub" "melee" "team" "t" "dflt" "0" }
+    }
+    "paints"
+    {
+        "1"
+        {
+            "0" { "n" "#SFUI_WPNHUD_DesertEagle" "i" "econ/weapons/base_weapons/weapon_deagle" "r" "1" "pn" "default" }
+        }
+        "2"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Elites" "i" "econ/weapons/base_weapons/weapon_elite" "r" "0" "pn" "default" }
+            "28" { "n" "#PaintKit_an_navy_Tag" "i" "econ/default_generated/weapon_elite_an_navy_light_large" "r" "2" "pn" "an_navy" }
+            "43" { "n" "#PaintKit_aq_forced_Tag" "i" "econ/default_generated/weapon_elite_aq_forced_light_large" "r" "1" "pn" "aq_forced" }
+            "46" { "n" "#PaintKit_so_pmc_Tag" "i" "econ/default_generated/weapon_elite_so_pmc_light_large" "r" "0" "pn" "so_pmc" }
+            "47" { "n" "#PaintKit_so_space_marine_Tag" "i" "econ/default_generated/weapon_elite_so_space_marine_light_large" "r" "0" "pn" "so_space_marine" }
+            "153" { "n" "#PaintKit_so_tangerine_Tag" "i" "econ/default_generated/weapon_elite_so_tangerine_light_large" "r" "3" "pn" "so_tangerine" }
+            "190" { "n" "#PaintKit_cu_season_elites_bravo_Tag" "i" "econ/default_generated/weapon_elite_cu_season_elites_bravo_light_large" "r" "2" "pn" "cu_season_elites_bravo" }
+            "220" { "n" "#PaintKit_am_ossify_red_Tag" "i" "econ/default_generated/weapon_elite_am_ossify_red_light_large" "r" "3" "pn" "am_ossify_red" }
+            "249" { "n" "#PaintKit_am_crystallized_blue_Tag" "i" "econ/default_generated/weapon_elite_am_crystallized_blue_light_large" "r" "3" "pn" "am_crystallized_blue" }
+            "261" { "n" "#PaintKit_hy_marina_sunrise_tag" "i" "econ/default_generated/weapon_elite_hy_marina_sunrise_light_large" "r" "3" "pn" "hy_marina_sunrise" }
+            "276" { "n" "#PaintKit_so_panther_Tag" "i" "econ/default_generated/weapon_elite_so_panther_light_large" "r" "2" "pn" "so_panther" }
+            "307" { "n" "#PaintKit_cu_retribution_beretta_Tag" "i" "econ/default_generated/weapon_elite_cu_retribution_light_large" "r" "2" "pn" "cu_retribution" }
+            "330" { "n" "#PaintKit_hy_vines_Tag" "i" "econ/default_generated/weapon_elite_hy_vines_light_large" "r" "0" "pn" "hy_vines" }
+            "396" { "n" "#PaintKit_cu_elites_urbanstorm_Tag" "i" "econ/default_generated/weapon_elite_cu_elites_urbanstorm_light_large" "r" "3" "pn" "cu_elites_urbanstorm" }
+            "447" { "n" "#PaintKit_gs_mother_of_pearl_elite_Tag" "i" "econ/default_generated/weapon_elite_gs_mother_of_pearl_elite_light_large" "r" "3" "pn" "gs_mother_of_pearl_elite" }
+            "450" { "n" "#PaintKit_hy_zodiac1_Tag" "i" "econ/default_generated/weapon_elite_hy_zodiac1_light_large" "r" "0" "pn" "hy_zodiac1" }
+            "453" { "n" "#PaintKit_an_emerald_bravo_Tag" "i" "econ/default_generated/weapon_elite_an_emerald_light_large" "r" "2" "pn" "an_emerald" }
+            "491" { "n" "#PaintKit_cu_dualberretta_dragons_Tag" "i" "econ/default_generated/weapon_elite_cu_dualberretta_dragons_light_large" "r" "2" "pn" "cu_dualberretta_dragons" }
+            "528" { "n" "#PaintKit_aq_p250_cartel_Tag" "i" "econ/default_generated/weapon_elite_aq_dualberettas_cartel_light_large" "r" "2" "pn" "aq_dualberettas_cartel" }
+            "544" { "n" "#PaintKit_gs_dualberettas_ventilators_Tag" "i" "econ/default_generated/weapon_elite_gs_dualberettas_ventilators_light_large" "r" "2" "pn" "gs_dualberettas_ventilators" }
+            "625" { "n" "#PaintKit_gs_dual_berettas_golden_venice_Tag" "i" "econ/default_generated/weapon_elite_gs_dual_berettas_golden_venice_light_large" "r" "3" "pn" "gs_dual_berettas_golden_venice" }
+            "658" { "n" "#PaintKit_gs_dualberettas_cobra_Tag" "i" "econ/default_generated/weapon_elite_gs_dualberettas_cobra_light_large" "r" "4" "pn" "gs_dualberettas_cobra" }
+            "710" { "n" "#PaintKit_sp_elites_winter_raider_Tag" "i" "econ/default_generated/weapon_elite_sp_elites_winter_raider_light_large" "r" "2" "pn" "sp_elites_winter_raider" }
+            "747" { "n" "#PaintKit_cu_dual_elites_rally_Tag" "i" "econ/default_generated/weapon_elite_cu_dual_elites_rally_light_large" "r" "4" "pn" "cu_dual_elites_rally" }
+            "824" { "n" "#PaintKit_sp_dry_wood_Tag" "i" "econ/default_generated/weapon_elite_sp_dry_wood_light_large" "r" "1" "pn" "sp_dry_wood" }
+            "860" { "n" "#PaintKit_hy_gelpen_dark_Tag" "i" "econ/default_generated/weapon_elite_hy_gelpen_dark_light_large" "r" "1" "pn" "hy_gelpen_dark" }
+            "895" { "n" "#PaintKit_gs_dual_elites_rose_Tag" "i" "econ/default_generated/weapon_elite_gs_dual_elites_rose_light_large" "r" "2" "pn" "gs_dual_elites_rose" }
+            "903" { "n" "#PaintKit_gs_dual_elites_classic_Tag" "i" "econ/default_generated/weapon_elite_gs_dual_elites_classic_light_large" "r" "2" "pn" "gs_dual_elites_classic" }
+            "978" { "n" "#PaintKit_gs_dual_elites_dezastre_Tag" "i" "econ/default_generated/weapon_elite_gs_dual_elites_dezastre_light_large" "r" "3" "pn" "gs_dual_elites_dezastre" }
+            "998" { "n" "#PaintKit_hy_numbers_green_Tag" "i" "econ/default_generated/weapon_elite_hy_numbers_green_light_large" "r" "1" "pn" "hy_numbers_green" }
+            "1005" { "n" "#PaintKit_am_heist_plans_green_Tag" "i" "econ/default_generated/weapon_elite_am_heist_plans_green_light_large" "r" "0" "pn" "am_heist_plans_green" }
+            "1086" { "n" "#PaintKit_sp_engine_dirty_Tag" "i" "econ/default_generated/weapon_elite_sp_engine_dirty_light_large" "r" "0" "pn" "sp_engine_dirty" }
+            "1091" { "n" "#PaintKit_gs_dual_berettas_tread_Tag" "i" "econ/default_generated/weapon_elite_gs_dual_berettas_tread_light_large" "r" "2" "pn" "gs_dual_berettas_tread" }
+            "1126" { "n" "#PaintKit_cu_elites_beware_Tag" "i" "econ/default_generated/weapon_elite_cu_elites_beware_light_large" "r" "4" "pn" "cu_elites_beware" }
+            "1156" { "n" "#PaintKit_cu_dual_elites_evil_flora_Tag" "i" "econ/default_generated/weapon_elite_cu_dual_elites_evil_flora_light_large" "r" "3" "pn" "cu_dual_elites_evil_flora" }
+        }
+        "3"
+        {
+            "0" { "n" "#SFUI_WPNHUD_FiveSeven" "i" "econ/weapons/base_weapons/weapon_fiveseven" "r" "0" "pn" "default" }
+            "3" { "n" "#PaintKit_so_red_Tag" "i" "econ/default_generated/weapon_fiveseven_so_red_light_large" "r" "1" "pn" "so_red" }
+            "44" { "n" "#PaintKit_aq_oiled_Tag" "i" "econ/default_generated/weapon_fiveseven_aq_oiled_light_large" "r" "3" "pn" "aq_oiled" }
+            "46" { "n" "#PaintKit_so_pmc_Tag" "i" "econ/default_generated/weapon_fiveseven_so_pmc_light_large" "r" "0" "pn" "so_pmc" }
+            "78" { "n" "#PaintKit_hy_forest_night_Tag" "i" "econ/default_generated/weapon_fiveseven_hy_forest_night_light_large" "r" "0" "pn" "hy_forest_night" }
+            "141" { "n" "#PaintKit_sp_tape_orange_Tag" "i" "econ/default_generated/weapon_fiveseven_sp_tape_orange_light_large" "r" "1" "pn" "sp_tape_orange" }
+            "151" { "n" "#PaintKit_so_jungle_Tag" "i" "econ/default_generated/weapon_fiveseven_so_jungle_light_large" "r" "0" "pn" "so_jungle" }
+            "210" { "n" "#PaintKit_an_gunmetal_Tag" "i" "econ/default_generated/weapon_fiveseven_an_gunmetal_bravo_light_large" "r" "0" "pn" "an_gunmetal_bravo" }
+            "223" { "n" "#PaintKit_hy_flowers_Tag" "i" "econ/default_generated/weapon_fiveseven_hy_flowers_light_large" "r" "2" "pn" "hy_flowers" }
+            "252" { "n" "#PaintKit_am_crystallized_silver_Tag" "i" "econ/default_generated/weapon_fiveseven_am_crystallized_silver_light_large" "r" "2" "pn" "am_crystallized_silver" }
+            "254" { "n" "#PaintKit_so_orange_accents_Tag" "i" "econ/default_generated/weapon_fiveseven_so_orange_accents_light_large" "r" "2" "pn" "so_orange_accents" }
+            "265" { "n" "#PaintKit_hy_kami_tag" "i" "econ/default_generated/weapon_fiveseven_hy_kami_light_large" "r" "2" "pn" "hy_kami" }
+            "274" { "n" "#PaintKit_am_copper_flecks_Tag" "i" "econ/default_generated/weapon_fiveseven_am_copper_flecks_light_large" "r" "3" "pn" "am_copper_flecks" }
+            "352" { "n" "#PaintKit_aq_57_feathers_tag" "i" "econ/default_generated/weapon_fiveseven_aq_57_feathers_light_large" "r" "4" "pn" "aq_57_feathers" }
+            "377" { "n" "#PaintKit_so_grey_nuclear_orange_five_seven_Tag" "i" "econ/default_generated/weapon_fiveseven_so_grey_nuclear_orange_five_seven_light_large" "r" "1" "pn" "so_grey_nuclear_orange_five_seven" }
+            "387" { "n" "#PaintKit_cu_mp7-commander_tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_urban_hazard_light_large" "r" "2" "pn" "cu_fiveseven_urban_hazard" }
+            "427" { "n" "#PaintKit_cu_fiveseven_banana_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_banana_light_large" "r" "4" "pn" "cu_fiveseven_banana" }
+            "464" { "n" "#PaintKit_hy_kimono_diamonds_Tag" "i" "econ/default_generated/weapon_fiveseven_hy_kimono_diamonds_light_large" "r" "3" "pn" "hy_kimono_diamonds" }
+            "510" { "n" "#PaintKit_cu_fiveseven_retrobution_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_retrobution_light_large" "r" "3" "pn" "cu_fiveseven_retrobution" }
+            "530" { "n" "#PaintKit_cu_fiveseven_augmented_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_augmented_light_large" "r" "3" "pn" "cu_fiveseven_augmented" }
+            "585" { "n" "#PaintKit_cu_five_seven_daimyo_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_five_seven_daimyo_light_large" "r" "2" "pn" "cu_five_seven_daimyo" }
+            "605" { "n" "#PaintKit_aq_Five_Seven_Scumbria_Tag" "i" "econ/default_generated/weapon_fiveseven_aq_five_seven_scumbria_light_large" "r" "2" "pn" "aq_five_seven_scumbria" }
+            "646" { "n" "#PaintKit_cu_fiveseven_vein_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_vein_light_large" "r" "2" "pn" "cu_fiveseven_vein" }
+            "660" { "n" "#PaintKit_cu_fiveseven_hyperbeast_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_hyperbeast_light_large" "r" "5" "pn" "cu_fiveseven_hyperbeast" }
+            "693" { "n" "#PaintKit_gs_fiveseven_hot_rod_violet_Tag" "i" "econ/default_generated/weapon_fiveseven_gs_fiveseven_hot_rod_violet_light_large" "r" "2" "pn" "gs_fiveseven_hot_rod_violet" }
+            "729" { "n" "#PaintKit_hy_bud_red_Tag" "i" "econ/default_generated/weapon_fiveseven_hy_bud_red_light_large" "r" "2" "pn" "hy_bud_red" }
+            "784" { "n" "#PaintKit_hy_ducts_green_Tag" "i" "econ/default_generated/weapon_fiveseven_hy_ducts_green_light_large" "r" "0" "pn" "hy_ducts_green" }
+            "837" { "n" "#PaintKit_cu_five_seven_angry_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_five_seven_angry_light_large" "r" "5" "pn" "cu_five_seven_angry" }
+            "906" { "n" "#PaintKit_cu_fiveseven_gsg9_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_gsg9_light_large" "r" "3" "pn" "cu_fiveseven_gsg9" }
+            "932" { "n" "#PaintKit_sp_moro_textile_purple_yellow_Tag" "i" "econ/default_generated/weapon_fiveseven_sp_moro_textile_purple_yellow_light_large" "r" "1" "pn" "sp_moro_textile_purple_yellow" }
+            "979" { "n" "#PaintKit_cu_five_seven_diary_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_five_seven_diary_light_large" "r" "4" "pn" "cu_five_seven_diary" }
+            "1002" { "n" "#PaintKit_aa_fade_red_blue_Tag" "i" "econ/default_generated/weapon_fiveseven_aa_fade_red_blue_light_large" "r" "3" "pn" "aa_fade_red_blue" }
+            "1082" { "n" "#PaintKit_cu_vertigo_fiveseven_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_vertigo_fiveseven_light_large" "r" "4" "pn" "cu_vertigo_fiveseven" }
+            "1093" { "n" "#PaintKit_gs_five_seven_efusion_Tag" "i" "econ/default_generated/weapon_fiveseven_gs_five_seven_efusion_light_large" "r" "3" "pn" "gs_five_seven_efusion" }
+            "1128" { "n" "#PaintKit_cu_fiveseven_alpha_omega_Tag" "i" "econ/default_generated/weapon_fiveseven_cu_fiveseven_alpha_omega_light_large" "r" "2" "pn" "cu_fiveseven_alpha_omega" }
+        }
+        "4"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Glock18" "i" "econ/weapons/base_weapons/weapon_glock" "r" "1" "pn" "default" }
+            "2" { "n" "#PaintKit_so_olive_Tag" "i" "econ/default_generated/weapon_glock_so_olive_light_large" "r" "0" "pn" "so_olive" }
+            "3" { "n" "#PaintKit_so_red_Tag" "i" "econ/default_generated/weapon_glock_so_red_light_large" "r" "1" "pn" "so_red" }
+            "38" { "n" "#PaintKit_aa_fade_Tag" "i" "econ/default_generated/weapon_glock_aa_fade_light_large" "r" "2" "pn" "aa_fade" }
+            "40" { "n" "#PaintKit_so_night_Tag" "i" "econ/default_generated/weapon_glock_so_night_light_large" "r" "0" "pn" "so_night" }
+            "48" { "n" "#PaintKit_am_dragon_glock_Tag" "i" "econ/default_generated/weapon_glock_am_dragon_glock_light_large" "r" "2" "pn" "am_dragon_glock" }
+            "84" { "n" "#PaintKit_hy_ddpat_pink_Tag" "i" "econ/default_generated/weapon_glock_hy_ddpat_pink_light_large" "r" "2" "pn" "hy_ddpat_pink" }
+            "159" { "n" "#PaintKit_aq_brass_Tag" "i" "econ/default_generated/weapon_glock_aq_brass_light_large" "r" "2" "pn" "aq_brass" }
+            "208" { "n" "#PaintKit_so_sand_Tag" "i" "econ/default_generated/weapon_glock_so_sand_bravo_light_large" "r" "0" "pn" "so_sand_bravo" }
+            "230" { "n" "#PaintKit_am_ddpatdense_silver_Tag" "i" "econ/default_generated/weapon_glock_am_ddpatdense_silver_light_large" "r" "2" "pn" "am_ddpatdense_silver" }
+            "278" { "n" "#PaintKit_hy_craquelure_Tag" "i" "econ/default_generated/weapon_glock_hy_craquelure_light_large" "r" "1" "pn" "hy_craquelure" }
+            "293" { "n" "#PaintKit_hy_nerodia_Tag" "i" "econ/default_generated/weapon_glock_hy_nerodia_light_large" "r" "0" "pn" "hy_nerodia" }
+            "353" { "n" "#PaintKit_cu_glock-liquescent_tag" "i" "econ/default_generated/weapon_glock_cu_glock-liquescent_light_large" "r" "3" "pn" "cu_glock-liquescent" }
+            "367" { "n" "#PaintKit_am_nuclear_pattern1_glock_Tag" "i" "econ/default_generated/weapon_glock_am_nuclear_pattern1_glock_light_large" "r" "1" "pn" "am_nuclear_pattern1_glock" }
+            "381" { "n" "#PaintKit_aq_glock_coiled_Tag" "i" "econ/default_generated/weapon_glock_aq_glock_coiled_light_large" "r" "2" "pn" "aq_glock_coiled" }
+            "399" { "n" "#PaintKit_cu_glock_deathtoll_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_deathtoll_light_large" "r" "1" "pn" "cu_glock_deathtoll" }
+            "437" { "n" "#PaintKit_am_aqua_flecks_Tag" "i" "econ/default_generated/weapon_glock_am_aqua_flecks_light_large" "r" "3" "pn" "am_aqua_flecks" }
+            "479" { "n" "#PaintKit_aq_glock18_flames_blue_Tag" "i" "econ/default_generated/weapon_glock_aq_glock18_flames_blue_light_large" "r" "1" "pn" "aq_glock18_flames_blue" }
+            "495" { "n" "#PaintKit_gs_glock18_wrathys_Tag" "i" "econ/default_generated/weapon_glock_gs_glock18_wrathys_light_large" "r" "1" "pn" "gs_glock18_wrathys" }
+            "532" { "n" "#PaintKit_gs_glock18_award_Tag" "i" "econ/default_generated/weapon_glock_gs_glock18_award_light_large" "r" "2" "pn" "gs_glock18_award" }
+            "586" { "n" "#PaintKit_cu_glock_wasteland_rebel_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_wasteland_rebel_light_large" "r" "4" "pn" "cu_glock_wasteland_rebel" }
+            "607" { "n" "#PaintKit_cu_Glock18_Weasel_Tag" "i" "econ/default_generated/weapon_glock_cu_glock18_weasel_light_large" "r" "2" "pn" "cu_glock18_weasel" }
+            "623" { "n" "#PaintKit_aq_glock_dark-fall_Tag" "i" "econ/default_generated/weapon_glock_aq_glock_dark-fall_light_large" "r" "1" "pn" "aq_glock_dark-fall" }
+            "680" { "n" "#PaintKit_cu_glock_indigo_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_indigo_light_large" "r" "1" "pn" "cu_glock_indigo" }
+            "694" { "n" "#PaintKit_aa_glock_18_urban_moon_fever_Tag" "i" "econ/default_generated/weapon_glock_aa_glock_18_urban_moon_fever_light_large" "r" "2" "pn" "aa_glock_18_urban_moon_fever" }
+            "713" { "n" "#PaintKit_gs_glock_thunder_dust_Tag" "i" "econ/default_generated/weapon_glock_gs_glock_thunder_dust_light_large" "r" "1" "pn" "gs_glock_thunder_dust" }
+            "732" { "n" "#PaintKit_hy_leaf_blue_Tag" "i" "econ/default_generated/weapon_glock_hy_leaf_blue_light_large" "r" "2" "pn" "hy_leaf_blue" }
+            "789" { "n" "#PaintKit_am_nuclear_skulls_green_Tag" "i" "econ/default_generated/weapon_glock_am_nuclear_skulls_green_light_large" "r" "2" "pn" "am_nuclear_skulls_green" }
+            "799" { "n" "#PaintKit_aa_vertigo_blue_Tag" "i" "econ/default_generated/weapon_glock_aa_vertigo_blue_light_large" "r" "0" "pn" "aa_vertigo_blue" }
+            "808" { "n" "#PaintKit_cu_glock18_corroden_Tag" "i" "econ/default_generated/weapon_glock_cu_glock18_corroden_light_large" "r" "1" "pn" "cu_glock18_corroden" }
+            "918" { "n" "#PaintKit_cu_glock_hero_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_hero_light_large" "r" "1" "pn" "cu_glock_hero" }
+            "957" { "n" "#PaintKit_cu_glock18_warmaiden_Tag" "i" "econ/default_generated/weapon_glock_cu_glock18_warmaiden_light_large" "r" "4" "pn" "cu_glock18_warmaiden" }
+            "963" { "n" "#PaintKit_cu_glock_eyecontact_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_eyecontact_light_large" "r" "3" "pn" "cu_glock_eyecontact" }
+            "988" { "n" "#PaintKit_cu_glock_noir_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_noir_light_large" "r" "4" "pn" "cu_glock_noir" }
+            "1016" { "n" "#PaintKit_cu_money_Tag" "i" "econ/default_generated/weapon_glock_cu_money_glock_light_large" "r" "2" "pn" "cu_money_glock" }
+            "1039" { "n" "#PaintKit_gs_glock_polymer_Tag" "i" "econ/default_generated/weapon_glock_gs_glock_polymer_light_large" "r" "1" "pn" "gs_glock_polymer" }
+            "1079" { "n" "#PaintKit_sp_tire_tread_red_Tag" "i" "econ/default_generated/weapon_glock_sp_tire_tread_red_light_large" "r" "0" "pn" "sp_tire_tread_red" }
+            "1100" { "n" "#PaintKit_cu_glock_snackattack_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_snackattack_light_large" "r" "3" "pn" "cu_glock_snackattack" }
+            "1119" { "n" "#PaintKit_am_marbleized_g_Tag" "i" "econ/default_generated/weapon_glock_am_emerald_marbleized_glock_light_large" "r" "4" "pn" "am_emerald_marbleized_glock" }
+            "1120" { "n" "#PaintKit_am_marbleized_g_Tag" "i" "econ/default_generated/weapon_glock_am_gamma_doppler_phase1_glock_light_large" "r" "4" "pn" "am_gamma_doppler_phase1_glock" }
+            "1121" { "n" "#PaintKit_am_marbleized_g_Tag" "i" "econ/default_generated/weapon_glock_am_gamma_doppler_phase2_glock_light_large" "r" "4" "pn" "am_gamma_doppler_phase2_glock" }
+            "1122" { "n" "#PaintKit_am_marbleized_g_Tag" "i" "econ/default_generated/weapon_glock_am_gamma_doppler_phase3_glock_light_large" "r" "4" "pn" "am_gamma_doppler_phase3_glock" }
+            "1123" { "n" "#PaintKit_am_marbleized_g_Tag" "i" "econ/default_generated/weapon_glock_am_gamma_doppler_phase4_glock_light_large" "r" "4" "pn" "am_gamma_doppler_phase4_glock" }
+            "1158" { "n" "#PaintKit_gs_glock_elite_camo_Tag" "i" "econ/default_generated/weapon_glock_gs_glock_elite_camo_light_large" "r" "1" "pn" "gs_glock_elite_camo" }
+            "1227" { "n" "#PaintKit_cu_glock_moon_rabbit_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_moon_rabbit_light_large" "r" "2" "pn" "cu_glock_moon_rabbit" }
+            "1240" { "n" "#PaintKit_cu_glock_ramzes_Tag" "i" "econ/default_generated/weapon_glock_cu_glock_ramzes_light_large" "r" "2" "pn" "cu_glock_ramzes" }
+        }
+        "7"
+        {
+            "0" { "n" "#SFUI_WPNHUD_AK47" "i" "econ/weapons/base_weapons/weapon_ak47" "r" "1" "pn" "default" }
+            "14" { "n" "#PaintKit_hy_ak47lam_Tag" "i" "econ/default_generated/weapon_ak47_hy_ak47lam_light_large" "r" "3" "pn" "hy_ak47lam" }
+            "44" { "n" "#PaintKit_aq_oiled_Tag" "i" "econ/default_generated/weapon_ak47_aq_oiled_light_large" "r" "3" "pn" "aq_oiled" }
+            "72" { "n" "#PaintKit_sp_mesh_tan_Tag" "i" "econ/default_generated/weapon_ak47_sp_mesh_tan_light_large" "r" "0" "pn" "sp_mesh_tan" }
+            "122" { "n" "#PaintKit_sp_spray_jungle_Tag" "i" "econ/default_generated/weapon_ak47_sp_spray_jungle_light_large" "r" "0" "pn" "sp_spray_jungle" }
+            "170" { "n" "#PaintKit_sp_zebracam_Tag" "i" "econ/default_generated/weapon_ak47_sp_zebracam_light_large" "r" "0" "pn" "sp_zebracam" }
+            "172" { "n" "#PaintKit_hy_ak47lam_bw_Tag" "i" "econ/default_generated/weapon_ak47_hy_ak47lam_bw_light_large" "r" "1" "pn" "hy_ak47lam_bw" }
+            "180" { "n" "#PaintKit_cu_fireserpent_ak47_bravo_Tag" "i" "econ/default_generated/weapon_ak47_cu_fireserpent_ak47_bravo_light_large" "r" "4" "pn" "cu_fireserpent_ak47_bravo" }
+            "226" { "n" "#PaintKit_hy_ak47lam_blue_Tag" "i" "econ/default_generated/weapon_ak47_hy_ak47lam_blue_light_large" "r" "2" "pn" "hy_ak47lam_blue" }
+            "282" { "n" "#PaintKit_cu_awp_cobra_tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_cobra_light_large" "r" "3" "pn" "cu_ak47_cobra" }
+            "300" { "n" "#PaintKit_cu_pinstripe_ak47_Tag" "i" "econ/default_generated/weapon_ak47_cu_pinstripe_ak47_light_large" "r" "2" "pn" "cu_pinstripe_ak47" }
+            "302" { "n" "#PaintKit_cu_rubber_ak47_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_rubber_light_large" "r" "4" "pn" "cu_ak47_rubber" }
+            "316" { "n" "#PaintKit_cu_panther_ak47_Tag" "i" "econ/default_generated/weapon_ak47_cu_panther_ak47_light_large" "r" "4" "pn" "cu_panther_ak47" }
+            "340" { "n" "#PaintKit_cu_well_traveled_ak47_Tag" "i" "econ/default_generated/weapon_ak47_cu_well_traveled_ak47_light_large" "r" "3" "pn" "cu_well_traveled_ak47" }
+            "341" { "n" "#PaintKit_cu_green_leather_Tag" "i" "econ/default_generated/weapon_ak47_cu_green_leather_ak47_light_large" "r" "2" "pn" "cu_green_leather_ak47" }
+            "380" { "n" "#PaintKit_cu_tribute_ak47_Tag" "i" "econ/default_generated/weapon_ak47_cu_tribute_ak47_light_large" "r" "4" "pn" "cu_tribute_ak47" }
+            "394" { "n" "#PaintKit_aq_p250_cartel_Tag" "i" "econ/default_generated/weapon_ak47_aq_ak47_cartel_light_large" "r" "3" "pn" "aq_ak47_cartel" }
+            "422" { "n" "#PaintKit_cu_ak47_mastery_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_mastery_light_large" "r" "1" "pn" "cu_ak47_mastery" }
+            "456" { "n" "#PaintKit_am_bamboo_jungle_Tag" "i" "econ/default_generated/weapon_ak47_am_bamboo_jungle_light_large" "r" "3" "pn" "am_bamboo_jungle" }
+            "474" { "n" "#PaintKit_cu_ak47_courage_alt_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_courage_alt_light_large" "r" "4" "pn" "cu_ak47_courage_alt" }
+            "490" { "n" "#PaintKit_cu_ak47_winter_sport_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_winter_sport_light_large" "r" "3" "pn" "cu_ak47_winter_sport" }
+            "506" { "n" "#PaintKit_cu_ak47_point_disarray_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_point_disarray_light_large" "r" "3" "pn" "cu_ak47_point_disarray" }
+            "524" { "n" "#PaintKit_gs_ak47_supercharged_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_supercharged_light_large" "r" "4" "pn" "gs_ak47_supercharged" }
+            "600" { "n" "#PaintKit_cu_AK47_Anarchy_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_anarchy_light_large" "r" "4" "pn" "cu_ak47_anarchy" }
+            "639" { "n" "#PaintKit_gs_ak47_bloodsport_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_bloodsport_light_large" "r" "4" "pn" "gs_ak47_bloodsport" }
+            "656" { "n" "#PaintKit_gs_ak_colony01_red_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak_colony01_red_light_large" "r" "2" "pn" "gs_ak_colony01_red" }
+            "675" { "n" "#PaintKit_gs_ak47_empress_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_empress_light_large" "r" "4" "pn" "gs_ak47_empress" }
+            "707" { "n" "#PaintKit_cu_ak_neon_rider_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak_neon_rider_light_large" "r" "4" "pn" "cu_ak_neon_rider" }
+            "724" { "n" "#PaintKit_cu_ak_island_floral_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak_island_floral_light_large" "r" "4" "pn" "cu_ak_island_floral" }
+            "745" { "n" "#PaintKit_hy_veneto_purple_Tag" "i" "econ/default_generated/weapon_ak47_hy_veneto_purple_light_large" "r" "0" "pn" "hy_veneto_purple" }
+            "795" { "n" "#PaintKit_hy_mesh_safetyorange_Tag" "i" "econ/default_generated/weapon_ak47_hy_mesh_safetyorange_light_large" "r" "2" "pn" "hy_mesh_safetyorange" }
+            "801" { "n" "#PaintKit_cu_ak47_asiimov_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_asiimov_light_large" "r" "4" "pn" "cu_ak47_asiimov" }
+            "836" { "n" "#PaintKit_cu_ak47_aztec_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_aztec_light_large" "r" "1" "pn" "cu_ak47_aztec" }
+            "885" { "n" "#PaintKit_gs_ak47_nibbler_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_nibbler_light_large" "r" "2" "pn" "gs_ak47_nibbler" }
+            "921" { "n" "#PaintKit_gs_ak47_gold_arabesque_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_gold_arabesque_light_large" "r" "4" "pn" "gs_ak47_gold_arabesque" }
+            "941" { "n" "#PaintKit_cu_ak-47_phantom_disruptor_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak-47_phantom_disruptor_light_large" "r" "3" "pn" "cu_ak-47_phantom_disruptor" }
+            "959" { "n" "#PaintKit_cu_ak47_anubis_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_anubis_light_large" "r" "4" "pn" "cu_ak47_anubis" }
+            "1004" { "n" "#PaintKit_cu_ak_xray_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak_xray_light_large" "r" "4" "pn" "cu_ak_xray" }
+            "1018" { "n" "#PaintKit_cu_ak_jaguar_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak_jaguar_light_large" "r" "3" "pn" "cu_ak_jaguar" }
+            "1035" { "n" "#PaintKit_gs_ak47_professional_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_professional_light_large" "r" "2" "pn" "gs_ak47_professional" }
+            "1070" { "n" "#PaintKit_hy_ak47lam_green_Tag" "i" "econ/default_generated/weapon_ak47_hy_ak47lam_green_light_large" "r" "1" "pn" "hy_ak47lam_green" }
+            "1087" { "n" "#PaintKit_gs_ak47_abstract_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_abstract_light_large" "r" "4" "pn" "gs_ak47_abstract" }
+            "1141" { "n" "#PaintKit_cu_ak47_nightwish_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_nightwish_light_large" "r" "4" "pn" "cu_ak47_nightwish" }
+            "1143" { "n" "#PaintKit_cu_ak47_cogthings_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak47_cogthings_light_large" "r" "3" "pn" "cu_ak47_cogthings" }
+            "1221" { "n" "#PaintKit_cu_ak_head_shot_holo_Tag" "i" "econ/default_generated/weapon_ak47_cu_ak_head_shot_holo_light_large" "r" "4" "pn" "cu_ak_head_shot_holo" }
+            "1238" { "n" "#PaintKit_gs_ak47_strone_Tag" "i" "econ/default_generated/weapon_ak47_gs_ak47_strone_light_large" "r" "1" "pn" "gs_ak47_strone" }
+        }
+        "8"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Aug" "i" "econ/weapons/base_weapons/weapon_aug" "r" "0" "pn" "default" }
+            "9" { "n" "#PaintKit_hy_tiger_Tag" "i" "econ/default_generated/weapon_aug_hy_tiger_light_large" "r" "4" "pn" "hy_tiger" }
+            "10" { "n" "#PaintKit_hy_copperhead_Tag" "i" "econ/default_generated/weapon_aug_hy_copperhead_light_large" "r" "2" "pn" "hy_copperhead" }
+            "33" { "n" "#PaintKit_an_red_Tag" "i" "econ/default_generated/weapon_aug_an_red_light_large" "r" "2" "pn" "an_red" }
+            "46" { "n" "#PaintKit_so_pmc_Tag" "i" "econ/default_generated/weapon_aug_so_pmc_light_large" "r" "0" "pn" "so_pmc" }
+            "47" { "n" "#PaintKit_so_space_marine_Tag" "i" "econ/default_generated/weapon_aug_so_space_marine_light_large" "r" "0" "pn" "so_space_marine" }
+            "73" { "n" "#PaintKit_hy_feathers_aug_Tag" "i" "econ/default_generated/weapon_aug_hy_feathers_aug_light_large" "r" "2" "pn" "hy_feathers_aug" }
+            "100" { "n" "#PaintKit_so_stormfront_Tag" "i" "econ/default_generated/weapon_aug_so_stormfront_light_large" "r" "0" "pn" "so_stormfront" }
+            "110" { "n" "#PaintKit_sp_mesh_fire_Tag" "i" "econ/default_generated/weapon_aug_sp_mesh_forest_fire_light_large" "r" "1" "pn" "sp_mesh_forest_fire" }
+            "197" { "n" "#PaintKit_an_navy_Tag" "i" "econ/default_generated/weapon_aug_an_navy_bravo_light_large" "r" "2" "pn" "an_navy_bravo" }
+            "246" { "n" "#PaintKit_aa_fade_metallic_Tag" "i" "econ/default_generated/weapon_aug_aa_fade_metallic_light_large" "r" "2" "pn" "aa_fade_metallic" }
+            "280" { "n" "#PaintKit_cu_aug_chameleonaire_tag" "i" "econ/default_generated/weapon_aug_cu_aug_chameleonaire_light_large" "r" "5" "pn" "cu_aug_chameleonaire" }
+            "305" { "n" "#PaintKit_cu_progressiv_aug_Tag" "i" "econ/default_generated/weapon_aug_cu_aug_progressiv_light_large" "r" "3" "pn" "cu_aug_progressiv" }
+            "375" { "n" "#PaintKit_sp_nukestripe_orange_Tag" "i" "econ/default_generated/weapon_aug_sp_nukestripe_orange_aug_light_large" "r" "1" "pn" "sp_nukestripe_orange_aug" }
+            "444" { "n" "#PaintKit_sp_labyrinth3_Tag" "i" "econ/default_generated/weapon_aug_sp_labyrinth3_light_large" "r" "0" "pn" "sp_labyrinth3" }
+            "455" { "n" "#PaintKit_cu_anime_aug_Tag" "i" "econ/default_generated/weapon_aug_cu_anime_aug_light_large" "r" "5" "pn" "cu_anime_aug" }
+            "507" { "n" "#PaintKit_am_aug_jumble_Tag" "i" "econ/default_generated/weapon_aug_am_aug_jumble_light_large" "r" "2" "pn" "am_aug_jumble" }
+            "541" { "n" "#PaintKit_cu_aug_swallows_Tag" "i" "econ/default_generated/weapon_aug_cu_aug_swallows_light_large" "r" "4" "pn" "cu_aug_swallows" }
+            "583" { "n" "#PaintKit_gs_aug_aristocrat_Tag" "i" "econ/default_generated/weapon_aug_gs_aug_aristocrat_light_large" "r" "3" "pn" "gs_aug_aristocrat" }
+            "601" { "n" "#PaintKit_gs_AUG_Syd_Mead_Tag" "i" "econ/default_generated/weapon_aug_gs_aug_syd_mead_light_large" "r" "4" "pn" "gs_aug_syd_mead" }
+            "674" { "n" "#PaintKit_cu_aug_orange_triangle_Tag" "i" "econ/default_generated/weapon_aug_cu_aug_orange_triangle_light_large" "r" "2" "pn" "cu_aug_orange_triangle" }
+            "690" { "n" "#PaintKit_gs_aug_stymphalian_birds_Tag" "i" "econ/default_generated/weapon_aug_gs_aug_stymphalian_birds_light_large" "r" "4" "pn" "gs_aug_stymphalian_birds" }
+            "708" { "n" "#PaintKit_hy_aug_torn_orange_Tag" "i" "econ/default_generated/weapon_aug_hy_aug_torn_orange_light_large" "r" "2" "pn" "hy_aug_torn_orange" }
+            "727" { "n" "#PaintKit_am_bloom_blue_Tag" "i" "econ/default_generated/weapon_aug_am_bloom_blue_light_large" "r" "3" "pn" "am_bloom_blue" }
+            "740" { "n" "#PaintKit_hy_murano_blue_Tag" "i" "econ/default_generated/weapon_aug_hy_murano_blue_light_large" "r" "0" "pn" "hy_murano_blue" }
+            "758" { "n" "#PaintKit_am_jorm_orange_Tag" "i" "econ/default_generated/weapon_aug_am_jorm_orange_light_large" "r" "3" "pn" "am_jorm_orange" }
+            "779" { "n" "#PaintKit_am_circuitboard_orange_Tag" "i" "econ/default_generated/weapon_aug_am_circuitboard_orange_light_large" "r" "3" "pn" "am_circuitboard_orange" }
+            "794" { "n" "#PaintKit_sp_mesh_safetyblack_Tag" "i" "econ/default_generated/weapon_aug_sp_mesh_safetyblack_light_large" "r" "0" "pn" "sp_mesh_safetyblack" }
+            "823" { "n" "#PaintKit_gs_aug_sand_storm_Tag" "i" "econ/default_generated/weapon_aug_gs_aug_sand_storm_light_large" "r" "3" "pn" "gs_aug_sand_storm" }
+            "845" { "n" "#PaintKit_cu_aug_momentum_Tag" "i" "econ/default_generated/weapon_aug_cu_aug_momentum_light_large" "r" "4" "pn" "cu_aug_momentum" }
+            "886" { "n" "#PaintKit_cu_aug_whitefang_Tag" "i" "econ/default_generated/weapon_aug_cu_aug_whitefang_light_large" "r" "3" "pn" "cu_aug_whitefang" }
+            "913" { "n" "#PaintKit_am_aug_death_by_doggy_Tag" "i" "econ/default_generated/weapon_aug_am_aug_death_by_doggy_light_large" "r" "4" "pn" "am_aug_death_by_doggy" }
+            "927" { "n" "#PaintKit_hy_dry_wood_Tag" "i" "econ/default_generated/weapon_aug_hy_dry_wood_light_large" "r" "1" "pn" "hy_dry_wood" }
+            "942" { "n" "#PaintKit_gs_aug_thunderstorm_Tag" "i" "econ/default_generated/weapon_aug_gs_aug_thunderstorm_light_large" "r" "2" "pn" "gs_aug_thunderstorm" }
+            "995" { "n" "#PaintKit_am_intelligence_grey_Tag" "i" "econ/default_generated/weapon_aug_am_intelligence_grey_light_large" "r" "0" "pn" "am_intelligence_grey" }
+            "1033" { "n" "#PaintKit_am_jade_Tag" "i" "econ/default_generated/weapon_aug_am_jade_light_large" "r" "2" "pn" "am_jade" }
+            "1088" { "n" "#PaintKit_gs_aug_plague_Tag" "i" "econ/default_generated/weapon_aug_gs_aug_plague_light_large" "r" "2" "pn" "gs_aug_plague" }
+            "1249" { "n" "#PaintKit_hy_dune_trap_Tag" "i" "econ/default_generated/weapon_aug_hy_dune_trap_light_large" "r" "0" "pn" "hy_dune_trap" }
+        }
+        "9"
+        {
+            "0" { "n" "#SFUI_WPNHUD_AWP" "i" "econ/weapons/base_weapons/weapon_awp" "r" "1" "pn" "default" }
+            "30" { "n" "#PaintKit_sp_snake_Tag" "i" "econ/default_generated/weapon_awp_sp_snake_light_large" "r" "1" "pn" "sp_snake" }
+            "51" { "n" "#PaintKit_am_lightning_awp_Tag" "i" "econ/default_generated/weapon_awp_am_lightning_awp_light_large" "r" "4" "pn" "am_lightning_awp" }
+            "72" { "n" "#PaintKit_sp_mesh_tan_Tag" "i" "econ/default_generated/weapon_awp_sp_mesh_tan_light_large" "r" "0" "pn" "sp_mesh_tan" }
+            "84" { "n" "#PaintKit_hy_ddpat_pink_Tag" "i" "econ/default_generated/weapon_awp_hy_ddpat_pink_light_large" "r" "2" "pn" "hy_ddpat_pink" }
+            "174" { "n" "#PaintKit_hy_blam_simple_Tag" "i" "econ/default_generated/weapon_awp_hy_blam_simple_light_large" "r" "3" "pn" "hy_blam_simple" }
+            "181" { "n" "#PaintKit_cu_favela_Tag" "i" "econ/default_generated/weapon_awp_cu_favela_awp_light_large" "r" "3" "pn" "cu_favela_awp" }
+            "212" { "n" "#PaintKit_am_crumple_Tag" "i" "econ/default_generated/weapon_awp_am_crumple_bravo_light_large" "r" "3" "pn" "am_crumple_bravo" }
+            "227" { "n" "#PaintKit_hy_hive_Tag" "i" "econ/default_generated/weapon_awp_hy_hive_light_large" "r" "3" "pn" "hy_hive" }
+            "251" { "n" "#PaintKit_hy_snakeskin_Tag" "i" "econ/default_generated/weapon_awp_hy_snakeskin_light_large" "r" "2" "pn" "hy_snakeskin" }
+            "259" { "n" "#PaintKit_cu_awp_cobra_tag" "i" "econ/default_generated/weapon_awp_cu_awp_cobra_light_large" "r" "3" "pn" "cu_awp_cobra" }
+            "279" { "n" "#PaintKit_cu_m4_asimov_tag" "i" "econ/default_generated/weapon_awp_cu_awp_asimov_light_large" "r" "4" "pn" "cu_awp_asimov" }
+            "344" { "n" "#PaintKit_cu_medieval_dragon_awp_Tag" "i" "econ/default_generated/weapon_awp_cu_medieval_dragon_awp_light_large" "r" "4" "pn" "cu_medieval_dragon_awp" }
+            "395" { "n" "#PaintKit_am_awp_glory_Tag" "i" "econ/default_generated/weapon_awp_am_awp_glory_light_large" "r" "4" "pn" "am_awp_glory" }
+            "424" { "n" "#PaintKit_aq_awp_twine_Tag" "i" "econ/default_generated/weapon_awp_aq_awp_twine_light_large" "r" "2" "pn" "aq_awp_twine" }
+            "446" { "n" "#PaintKit_cu_medusa_awp_Tag" "i" "econ/default_generated/weapon_awp_cu_medusa_awp_light_large" "r" "4" "pn" "cu_medusa_awp" }
+            "451" { "n" "#PaintKit_hy_zodiac2_Tag" "i" "econ/default_generated/weapon_awp_hy_zodiac2_light_large" "r" "0" "pn" "hy_zodiac2" }
+            "475" { "n" "#PaintKit_cu_m4a1_hyper_beast_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_hyper_beast_light_large" "r" "4" "pn" "cu_awp_hyper_beast" }
+            "525" { "n" "#PaintKit_cu_ak47_mastery_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_mastery_light_large" "r" "3" "pn" "cu_awp_mastery" }
+            "584" { "n" "#PaintKit_gs_awp_phobos_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_phobos_light_large" "r" "2" "pn" "gs_awp_phobos" }
+            "640" { "n" "#PaintKit_cu_awp_psychopath_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_psychopath_light_large" "r" "3" "pn" "cu_awp_psychopath" }
+            "662" { "n" "#PaintKit_cu_awp_hannya_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_hannya_light_large" "r" "4" "pn" "cu_awp_hannya" }
+            "691" { "n" "#PaintKit_gs_awp_death_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_death_light_large" "r" "3" "pn" "gs_awp_death" }
+            "718" { "n" "#PaintKit_am_awp_pawpaw_Tag" "i" "econ/default_generated/weapon_awp_am_awp_pawpaw_light_large" "r" "2" "pn" "am_awp_pawpaw" }
+            "736" { "n" "#PaintKit_gs_awp_enamel_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_enamel_light_large" "r" "4" "pn" "gs_awp_enamel" }
+            "756" { "n" "#PaintKit_gs_awp_gungnir_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_gungnir_light_large" "r" "4" "pn" "gs_awp_gungnir" }
+            "788" { "n" "#PaintKit_hy_nuclear_skulls_redblue_Tag" "i" "econ/default_generated/weapon_awp_hy_nuclear_skulls_redblue_light_large" "r" "1" "pn" "hy_nuclear_skulls_redblue" }
+            "803" { "n" "#PaintKit_cu_awp_neonoir_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_neonoir_light_large" "r" "4" "pn" "cu_awp_neonoir" }
+            "819" { "n" "#PaintKit_gs_awp_hydra_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_hydra_light_large" "r" "4" "pn" "gs_awp_hydra" }
+            "838" { "n" "#PaintKit_cu_awp_viper_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_viper_light_large" "r" "2" "pn" "cu_awp_viper" }
+            "887" { "n" "#PaintKit_cu_awp_virus_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_virus_light_large" "r" "4" "pn" "cu_awp_virus" }
+            "917" { "n" "#PaintKit_cu_awp_wildfire_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_wildfire_light_large" "r" "4" "pn" "cu_awp_wildfire" }
+            "943" { "n" "#PaintKit_cu_awp_vein_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_vein_light_large" "r" "1" "pn" "cu_awp_vein" }
+            "975" { "n" "#PaintKit_gs_awp_exoskeleton_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_exoskeleton_light_large" "r" "2" "pn" "gs_awp_exoskeleton" }
+            "1026" { "n" "#PaintKit_aa_fade_Tag" "i" "econ/default_generated/weapon_awp_aa_awp_fade_light_large" "r" "4" "pn" "aa_awp_fade" }
+            "1029" { "n" "#PaintKit_am_tigers_blue_Tag" "i" "econ/default_generated/weapon_awp_am_tigers_blue_light_large" "r" "3" "pn" "am_tigers_blue" }
+            "1058" { "n" "#PaintKit_hy_technowar_rwb_Tag" "i" "econ/default_generated/weapon_awp_hy_technowar_rwb_light_large" "r" "2" "pn" "hy_technowar_rwb" }
+            "1144" { "n" "#PaintKit_cu_awp_chroma_pink_Tag" "i" "econ/default_generated/weapon_awp_cu_awp_chroma_pink_light_large" "r" "4" "pn" "cu_awp_chroma_pink" }
+            "1222" { "n" "#PaintKit_gs_awp_limbo_snake_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_limbo_snake_light_large" "r" "3" "pn" "gs_awp_limbo_snake" }
+            "1239" { "n" "#PaintKit_gs_awp_strone_Tag" "i" "econ/default_generated/weapon_awp_gs_awp_strone_light_large" "r" "1" "pn" "gs_awp_strone" }
+        }
+        "10"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Famas" "i" "econ/weapons/base_weapons/weapon_famas" "r" "0" "pn" "default" }
+            "22" { "n" "#PaintKit_sp_spray_Tag" "i" "econ/default_generated/weapon_famas_sp_spray_light_large" "r" "0" "pn" "sp_spray" }
+            "47" { "n" "#PaintKit_so_space_marine_Tag" "i" "econ/default_generated/weapon_famas_so_space_marine_light_large" "r" "0" "pn" "so_space_marine" }
+            "60" { "n" "#PaintKit_am_zebra_dark_Tag" "i" "econ/default_generated/weapon_famas_am_zebra_dark_light_large" "r" "2" "pn" "am_zebra_dark" }
+            "92" { "n" "#PaintKit_hy_reef_rock_Tag" "i" "econ/default_generated/weapon_famas_hy_reef_light_large" "r" "1" "pn" "hy_reef" }
+            "154" { "n" "#PaintKit_cu_broken_path_famas_Tag" "i" "econ/default_generated/weapon_famas_cu_broken_path_famas_light_large" "r" "4" "pn" "cu_broken_path_famas" }
+            "178" { "n" "#PaintKit_CSGO_Doomkitty_Tag" "i" "econ/default_generated/weapon_famas_hy_doomkitty_light_large" "r" "2" "pn" "hy_doomkitty" }
+            "194" { "n" "#PaintKit_sp_spitfire_famas_Tag" "i" "econ/default_generated/weapon_famas_sp_spitfire_famas_bravo_light_large" "r" "3" "pn" "sp_spitfire_famas_bravo" }
+            "218" { "n" "#PaintKit_hy_bluehex_Tag" "i" "econ/default_generated/weapon_famas_hy_bluehex_light_large" "r" "2" "pn" "hy_bluehex" }
+            "240" { "n" "#PaintKit_hy_varicamo_desert_Tag" "i" "econ/default_generated/weapon_famas_hy_varicamo_desert_light_large" "r" "1" "pn" "hy_varicamo_desert" }
+            "244" { "n" "#PaintKit_sp_mesh_hot_and_cold_Tag" "i" "econ/default_generated/weapon_famas_sp_mesh_hot_and_cold_light_large" "r" "2" "pn" "sp_mesh_hot_and_cold" }
+            "260" { "n" "#PaintKit_cu_famas_pulse_tag" "i" "econ/default_generated/weapon_famas_cu_famas_pulse_light_large" "r" "3" "pn" "cu_famas_pulse" }
+            "288" { "n" "#PaintKit_an_famas_sgt_tag" "i" "econ/default_generated/weapon_famas_an_famas_sgt_light_large" "r" "3" "pn" "an_famas_sgt" }
+            "371" { "n" "#PaintKit_am_nuclear_skulls2_famas_Tag" "i" "econ/default_generated/weapon_famas_am_nuclear_skulls2_famas_light_large" "r" "3" "pn" "am_nuclear_skulls2_famas" }
+            "429" { "n" "#PaintKit_aq_famas_jinn_Tag" "i" "econ/default_generated/weapon_famas_aq_famas_jinn_light_large" "r" "4" "pn" "aq_famas_jinn" }
+            "477" { "n" "#PaintKit_am_famas_dots_Tag" "i" "econ/default_generated/weapon_famas_am_famas_dots_light_large" "r" "3" "pn" "am_famas_dots" }
+            "492" { "n" "#PaintKit_cu_famas_lenta_Tag" "i" "econ/default_generated/weapon_famas_cu_famas_lenta_light_large" "r" "2" "pn" "cu_famas_lenta" }
+            "529" { "n" "#PaintKit_aq_p250_contour_Tag" "i" "econ/default_generated/weapon_famas_aq_famas_contour_light_large" "r" "3" "pn" "aq_famas_contour" }
+            "604" { "n" "#PaintKit_gs_FAMAS_Rally_Tag" "i" "econ/default_generated/weapon_famas_gs_famas_rally_light_large" "r" "5" "pn" "gs_famas_rally" }
+            "626" { "n" "#PaintKit_gs_famas_mecha_Tag" "i" "econ/default_generated/weapon_famas_gs_famas_mecha_light_large" "r" "4" "pn" "gs_famas_mecha" }
+            "659" { "n" "#PaintKit_sp_famas_macabre_Tag" "i" "econ/default_generated/weapon_famas_sp_famas_macabre_light_large" "r" "2" "pn" "sp_famas_macabre" }
+            "723" { "n" "#PaintKit_cu_famas_owl_orange_Tag" "i" "econ/default_generated/weapon_famas_cu_famas_owl_orange_light_large" "r" "4" "pn" "cu_famas_owl_orange" }
+            "835" { "n" "#PaintKit_sp_famas_ghost_insects_Tag" "i" "econ/default_generated/weapon_famas_sp_famas_ghost_insects_light_large" "r" "2" "pn" "sp_famas_ghost_insects" }
+            "863" { "n" "#PaintKit_sp_knots_blue_Tag" "i" "econ/default_generated/weapon_famas_sp_knots_blue_light_large" "r" "0" "pn" "sp_knots_blue" }
+            "869" { "n" "#PaintKit_sp_palm_sunset_Tag" "i" "econ/default_generated/weapon_famas_sp_palm_sunset_light_large" "r" "2" "pn" "sp_palm_sunset" }
+            "904" { "n" "#PaintKit_cu_famas_nuke_tension_Tag" "i" "econ/default_generated/weapon_famas_cu_famas_nuke_tension_light_large" "r" "2" "pn" "cu_famas_nuke_tension" }
+            "919" { "n" "#PaintKit_gs_famas_legacy_gold_Tag" "i" "econ/default_generated/weapon_famas_gs_famas_legacy_gold_light_large" "r" "5" "pn" "gs_famas_legacy_gold" }
+            "999" { "n" "#PaintKit_am_numbers_magenta_Tag" "i" "econ/default_generated/weapon_famas_am_numbers_magenta_light_large" "r" "3" "pn" "am_numbers_magenta" }
+            "1053" { "n" "#PaintKit_am_nuclear_pattern4_famas_Tag" "i" "econ/default_generated/weapon_famas_am_nuclear_pattern4_famas_light_large" "r" "4" "pn" "am_nuclear_pattern4_famas" }
+            "1066" { "n" "#PaintKit_aa_wiring_yellow_Tag" "i" "econ/default_generated/weapon_famas_aa_wiring_yellow_light_large" "r" "0" "pn" "aa_wiring_yellow" }
+            "1092" { "n" "#PaintKit_cu_famas_spectron_Tag" "i" "econ/default_generated/weapon_famas_cu_famas_spectron_light_large" "r" "3" "pn" "cu_famas_spectron" }
+            "1127" { "n" "#PaintKit_gs_famas_rapid_eyes_Tag" "i" "econ/default_generated/weapon_famas_gs_famas_rapid_eyes_light_large" "r" "4" "pn" "gs_famas_rapid_eyes" }
+            "1146" { "n" "#PaintKit_gs_famas_corp_meow_Tag" "i" "econ/default_generated/weapon_famas_gs_famas_corp_meow_light_large" "r" "2" "pn" "gs_famas_corp_meow" }
+            "1241" { "n" "#PaintKit_cu_famas_holo_ocean_Tag" "i" "econ/default_generated/weapon_famas_cu_famas_holo_ocean_light_large" "r" "4" "pn" "cu_famas_holo_ocean" }
+        }
+        "11"
+        {
+            "0" { "n" "#SFUI_WPNHUD_G3SG1" "i" "econ/weapons/base_weapons/weapon_g3sg1" "r" "0" "pn" "default" }
+            "6" { "n" "#PaintKit_hy_arctic_Tag" "i" "econ/default_generated/weapon_g3sg1_hy_arctic_light_large" "r" "1" "pn" "hy_arctic" }
+            "8" { "n" "#PaintKit_hy_desert_Tag" "i" "econ/default_generated/weapon_g3sg1_hy_desert_light_large" "r" "0" "pn" "hy_desert" }
+            "46" { "n" "#PaintKit_so_pmc_Tag" "i" "econ/default_generated/weapon_g3sg1_so_pmc_light_large" "r" "0" "pn" "so_pmc" }
+            "72" { "n" "#PaintKit_sp_mesh_tan_Tag" "i" "econ/default_generated/weapon_g3sg1_sp_mesh_tan_light_large" "r" "0" "pn" "sp_mesh_tan" }
+            "74" { "n" "#Paintkit_hy_arctic_contrast_Tag" "i" "econ/default_generated/weapon_g3sg1_hy_arctic_contrast_light_large" "r" "0" "pn" "hy_arctic_contrast" }
+            "147" { "n" "#PaintKit_sp_short_tape_jungle_Tag" "i" "econ/default_generated/weapon_g3sg1_sp_tape_short_jungle_light_large" "r" "0" "pn" "sp_tape_short_jungle" }
+            "195" { "n" "#PaintKit_hy_bluepolygon_bravo_Tag" "i" "econ/default_generated/weapon_g3sg1_hy_bluepolygon_bravo_light_large" "r" "2" "pn" "hy_bluepolygon_bravo" }
+            "229" { "n" "#PaintKit_sp_zebracam_blue_Tag" "i" "econ/default_generated/weapon_g3sg1_sp_zebracam_blue_light_large" "r" "2" "pn" "sp_zebracam_blue" }
+            "235" { "n" "#PaintKit_hy_varicamo_Tag" "i" "econ/default_generated/weapon_g3sg1_hy_varicamo_light_large" "r" "1" "pn" "hy_varicamo" }
+            "294" { "n" "#PaintKit_so_green_Tag" "i" "econ/default_generated/weapon_g3sg1_so_green_light_large" "r" "1" "pn" "so_green" }
+            "382" { "n" "#PaintKit_am_g3sg1_murky_Tag" "i" "econ/default_generated/weapon_g3sg1_am_g3sg1_murky_light_large" "r" "2" "pn" "am_g3sg1_murky" }
+            "438" { "n" "#PaintKit_cu_chronos_g3sg1_Tag" "i" "econ/default_generated/weapon_g3sg1_cu_chronos_g3sg1_light_large" "r" "3" "pn" "cu_chronos_g3sg1" }
+            "465" { "n" "#PaintKit_hy_kimono_diamonds_orange_Tag" "i" "econ/default_generated/weapon_g3sg1_hy_kimono_diamonds_orange_light_large" "r" "0" "pn" "hy_kimono_diamonds_orange" }
+            "493" { "n" "#PaintKit_gs_g3sg1_flux_purple_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_flux_purple_light_large" "r" "4" "pn" "gs_g3sg1_flux_purple" }
+            "511" { "n" "#PaintKit_cu_g3sg1_executioner_Tag" "i" "econ/default_generated/weapon_g3sg1_cu_g3sg1_executioner_light_large" "r" "4" "pn" "cu_g3sg1_executioner" }
+            "545" { "n" "#PaintKit_sp_g3sg1_militiaorange_Tag" "i" "econ/default_generated/weapon_g3sg1_sp_g3sg1_militiaorange_light_large" "r" "2" "pn" "sp_g3sg1_militiaorange" }
+            "606" { "n" "#PaintKit_gs_G3SG1_Ventilator_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_ventilator_light_large" "r" "2" "pn" "gs_g3sg1_ventilator" }
+            "628" { "n" "#PaintKit_gs_g3sg1_viper_yellow_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_viper_yellow_light_large" "r" "3" "pn" "gs_g3sg1_viper_yellow" }
+            "677" { "n" "#PaintKit_gs_g3sg1_cetme_redux_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_cetme_redux_light_large" "r" "2" "pn" "gs_g3sg1_cetme_redux" }
+            "712" { "n" "#PaintKit_gs_g3sg1_buccaneer_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_buccaneer_light_large" "r" "3" "pn" "gs_g3sg1_buccaneer" }
+            "739" { "n" "#PaintKit_am_murano_violet_Tag" "i" "econ/default_generated/weapon_g3sg1_am_murano_violet_light_large" "r" "2" "pn" "am_murano_violet" }
+            "806" { "n" "#PaintKit_gs_g3sg1_savage_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_savage_light_large" "r" "3" "pn" "gs_g3sg1_savage" }
+            "891" { "n" "#PaintKit_cu_g3sg1_blacksand_Tag" "i" "econ/default_generated/weapon_g3sg1_cu_g3sg1_blacksand_light_large" "r" "2" "pn" "cu_g3sg1_blacksand" }
+            "930" { "n" "#PaintKit_sp_moro_carving_lightblue_Tag" "i" "econ/default_generated/weapon_g3sg1_sp_moro_carving_lightblue_light_large" "r" "2" "pn" "sp_moro_carving_lightblue" }
+            "980" { "n" "#PaintKit_gs_g3sg1_disrupt_Tag" "i" "econ/default_generated/weapon_g3sg1_gs_g3sg1_disrupt_light_large" "r" "2" "pn" "gs_g3sg1_disrupt" }
+            "1034" { "n" "#PaintKit_am_ancient_wine_Tag" "i" "econ/default_generated/weapon_g3sg1_am_ancient_wine_light_large" "r" "1" "pn" "am_ancient_wine" }
+            "1095" { "n" "#PaintKit_cu_g3sg1_tacticalmap_Tag" "i" "econ/default_generated/weapon_g3sg1_cu_g3sg1_tacticalmap_light_large" "r" "2" "pn" "cu_g3sg1_tacticalmap" }
+            "1129" { "n" "#PaintKit_cu_g3sg1_glade_Tag" "i" "econ/default_generated/weapon_g3sg1_cu_g3sg1_glade_light_large" "r" "3" "pn" "cu_g3sg1_glade" }
+        }
+        "13"
+        {
+            "0" { "n" "#SFUI_WPNHUD_GalilAR" "i" "econ/weapons/base_weapons/weapon_galilar" "r" "0" "pn" "default" }
+            "76" { "n" "#PaintKit_hy_forest_winter_Tag" "i" "econ/default_generated/weapon_galilar_hy_forest_winter_light_large" "r" "1" "pn" "hy_forest_winter" }
+            "83" { "n" "#PaintKit_hy_ddpat_orange_Tag" "i" "econ/default_generated/weapon_galilar_hy_ddpat_orange_light_large" "r" "3" "pn" "hy_ddpat_orange" }
+            "101" { "n" "#PaintKit_so_tornado_Tag" "i" "econ/default_generated/weapon_galilar_so_tornado_light_large" "r" "0" "pn" "so_tornado" }
+            "119" { "n" "#PaintKit_sp_spray_sage_Tag" "i" "econ/default_generated/weapon_galilar_sp_spray_desert_sage_light_large" "r" "0" "pn" "sp_spray_desert_sage" }
+            "192" { "n" "#PaintKit_hy_crumple_bravo_Tag" "i" "econ/default_generated/weapon_galilar_hy_crumple_bravo_light_large" "r" "2" "pn" "hy_crumple_bravo" }
+            "216" { "n" "#PaintKit_an_titanium30v_Tag" "i" "econ/default_generated/weapon_galilar_an_titanium30v_light_large" "r" "2" "pn" "an_titanium30v" }
+            "235" { "n" "#PaintKit_hy_varicamo_Tag" "i" "econ/default_generated/weapon_galilar_hy_varicamo_light_large" "r" "1" "pn" "hy_varicamo" }
+            "237" { "n" "#PaintKit_hy_varicamo_urban_Tag" "i" "econ/default_generated/weapon_galilar_hy_varicamo_urban_light_large" "r" "1" "pn" "hy_varicamo_urban" }
+            "241" { "n" "#PaintKit_sp_mesh_slashes_Tag" "i" "econ/default_generated/weapon_galilar_sp_mesh_slashes_light_large" "r" "0" "pn" "sp_mesh_slashes" }
+            "246" { "n" "#PaintKit_aa_fade_metallic_Tag" "i" "econ/default_generated/weapon_galilar_aa_fade_metallic_light_large" "r" "2" "pn" "aa_fade_metallic" }
+            "264" { "n" "#PaintKit_cu_sandstorm_tag" "i" "econ/default_generated/weapon_galilar_cu_sandstorm_light_large" "r" "2" "pn" "cu_sandstorm" }
+            "297" { "n" "#PaintKit_so_orca_Tag" "i" "econ/default_generated/weapon_galilar_so_orca_light_large" "r" "2" "pn" "so_orca" }
+            "308" { "n" "#PaintKit_hy_kami_tag" "i" "econ/default_generated/weapon_galilar_hy_galil_kami_light_large" "r" "2" "pn" "hy_galil_kami" }
+            "379" { "n" "#PaintKit_cu_cerbrus_galil_Tag" "i" "econ/default_generated/weapon_galilar_cu_cerbrus_galil_light_large" "r" "3" "pn" "cu_cerbrus_galil" }
+            "398" { "n" "#PaintKit_cu_galil_abrasion_Tag" "i" "econ/default_generated/weapon_galilar_cu_galil_abrasion_light_large" "r" "5" "pn" "cu_galil_abrasion" }
+            "428" { "n" "#PaintKit_cu_galil_eco_Tag" "i" "econ/default_generated/weapon_galilar_cu_galil_eco_light_large" "r" "4" "pn" "cu_galil_eco" }
+            "460" { "n" "#PaintKit_am_geometric_steps_Tag" "i" "econ/default_generated/weapon_galilar_am_geometric_steps_light_large" "r" "2" "pn" "am_geometric_steps" }
+            "478" { "n" "#PaintKit_cu_galilar_particles_Tag" "i" "econ/default_generated/weapon_galilar_cu_galilar_particles_light_large" "r" "2" "pn" "cu_galilar_particles" }
+            "494" { "n" "#PaintKit_gs_galil_nightwing_Tag" "i" "econ/default_generated/weapon_galilar_gs_galil_nightwing_light_large" "r" "3" "pn" "gs_galil_nightwing" }
+            "546" { "n" "#PaintKit_gs_galilar_incenerator_Tag" "i" "econ/default_generated/weapon_galilar_gs_galilar_incenerator_light_large" "r" "3" "pn" "gs_galilar_incenerator" }
+            "629" { "n" "#PaintKit_cu_galil_ar-camo_Tag" "i" "econ/default_generated/weapon_galilar_cu_galil_ar-camo_light_large" "r" "2" "pn" "cu_galil_ar-camo" }
+            "647" { "n" "#PaintKit_sp_galil_wave_Tag" "i" "econ/default_generated/weapon_galilar_sp_galil_wave_light_large" "r" "3" "pn" "sp_galil_wave" }
+            "661" { "n" "#PaintKit_cu_galil_candychaos_Tag" "i" "econ/default_generated/weapon_galilar_cu_galil_candychaos_light_large" "r" "4" "pn" "cu_galil_candychaos" }
+            "790" { "n" "#PaintKit_hy_nuclear_skulls_aqua_Tag" "i" "econ/default_generated/weapon_galilar_hy_nuclear_skulls_aqua_light_large" "r" "1" "pn" "hy_nuclear_skulls_aqua" }
+            "807" { "n" "#PaintKit_hy_galil_signal_red_Tag" "i" "econ/default_generated/weapon_galilar_hy_galil_signal_red_light_large" "r" "3" "pn" "hy_galil_signal_red" }
+            "842" { "n" "#PaintKit_sp_galil_akoben_Tag" "i" "econ/default_generated/weapon_galilar_sp_galil_akoben_light_large" "r" "2" "pn" "sp_galil_akoben" }
+            "972" { "n" "#PaintKit_gs_galil_phoenix_Tag" "i" "econ/default_generated/weapon_galilar_gs_galil_phoenix_light_large" "r" "3" "pn" "gs_galil_phoenix" }
+            "981" { "n" "#PaintKit_gs_galil_vandal_Tag" "i" "econ/default_generated/weapon_galilar_gs_galil_vandal_light_large" "r" "2" "pn" "gs_galil_vandal" }
+            "1013" { "n" "#PaintKit_sp_phoenix_tags_purple_Tag" "i" "econ/default_generated/weapon_galilar_sp_phoenix_tags_purple_light_large" "r" "3" "pn" "sp_phoenix_tags_purple" }
+            "1032" { "n" "#PaintKit_hy_ruins_red_Tag" "i" "econ/default_generated/weapon_galilar_hy_ruins_red_light_large" "r" "2" "pn" "hy_ruins_red" }
+            "1038" { "n" "#PaintKit_cu_galil_chroma_pink_Tag" "i" "econ/default_generated/weapon_galilar_cu_galil_chroma_pink_light_large" "r" "4" "pn" "cu_galil_chroma_pink" }
+            "1071" { "n" "#PaintKit_sp_galil_caution_Tag" "i" "econ/default_generated/weapon_galilar_sp_galil_caution_light_large" "r" "3" "pn" "sp_galil_caution" }
+            "1147" { "n" "#PaintKit_cu_galil_destroyer_Tag" "i" "econ/default_generated/weapon_galilar_cu_galil_destroyer_light_large" "r" "2" "pn" "cu_galil_destroyer" }
+        }
+        "14"
+        {
+            "0" { "n" "#SFUI_WPNHUD_M249" "i" "econ/weapons/base_weapons/weapon_m249" "r" "0" "pn" "default" }
+            "22" { "n" "#PaintKit_sp_spray_Tag" "i" "econ/default_generated/weapon_m249_sp_spray_light_large" "r" "0" "pn" "sp_spray" }
+            "75" { "n" "#PaintKit_hy_blizzard_Tag" "i" "econ/default_generated/weapon_m249_hy_blizzard_light_large" "r" "1" "pn" "hy_blizzard" }
+            "151" { "n" "#PaintKit_so_jungle_Tag" "i" "econ/default_generated/weapon_m249_so_jungle_light_large" "r" "0" "pn" "so_jungle" }
+            "170" { "n" "#PaintKit_sp_zebracam_Tag" "i" "econ/default_generated/weapon_m249_sp_zebracam_light_large" "r" "0" "pn" "sp_zebracam" }
+            "202" { "n" "#PaintKit_hy_ddpat_jungle_Tag" "i" "econ/default_generated/weapon_m249_hy_ddpat_jungle_bravo_light_large" "r" "0" "pn" "hy_ddpat_jungle_bravo" }
+            "243" { "n" "#PaintKit_sp_mesh_python_Tag" "i" "econ/default_generated/weapon_m249_sp_mesh_python_light_large" "r" "1" "pn" "sp_mesh_python" }
+            "266" { "n" "#PaintKit_aq_obsidian_tag" "i" "econ/default_generated/weapon_m249_aq_obsidian_light_large" "r" "2" "pn" "aq_obsidian" }
+            "401" { "n" "#PaintKit_cu_m249_sektor_Tag" "i" "econ/default_generated/weapon_m249_cu_m249_sektor_light_large" "r" "2" "pn" "cu_m249_sektor" }
+            "452" { "n" "#PaintKit_hy_zodiac3_Tag" "i" "econ/default_generated/weapon_m249_hy_zodiac3_light_large" "r" "1" "pn" "hy_zodiac3" }
+            "472" { "n" "#PaintKit_am_so_keycolors_Tag" "i" "econ/default_generated/weapon_m249_so_keycolors_light_large" "r" "0" "pn" "so_keycolors" }
+            "496" { "n" "#PaintKit_gs_m249_nebula_crusader_Tag" "i" "econ/default_generated/weapon_m249_gs_m249_nebula_crusader_light_large" "r" "3" "pn" "gs_m249_nebula_crusader" }
+            "547" { "n" "#PaintKit_cu_m249_spectre_Tag" "i" "econ/default_generated/weapon_m249_cu_m249_spectre_light_large" "r" "2" "pn" "cu_m249_spectre" }
+            "648" { "n" "#PaintKit_sp_m249_frog_original_Tag" "i" "econ/default_generated/weapon_m249_sp_m249_frog_original_light_large" "r" "3" "pn" "sp_m249_frog_original" }
+            "827" { "n" "#PaintKit_sp_moro_carving_burnt_Tag" "i" "econ/default_generated/weapon_m249_sp_moro_carving_burnt_light_large" "r" "2" "pn" "sp_moro_carving_burnt" }
+            "900" { "n" "#PaintKit_gs_m249_warbird_veteran_Tag" "i" "econ/default_generated/weapon_m249_gs_m249_warbird_veteran_light_large" "r" "2" "pn" "gs_m249_warbird_veteran" }
+            "902" { "n" "#PaintKit_aq_m249_aztec_Tag" "i" "econ/default_generated/weapon_m249_aq_m249_aztec_light_large" "r" "3" "pn" "aq_m249_aztec" }
+            "933" { "n" "#PaintKit_sp_palm_night_Tag" "i" "econ/default_generated/weapon_m249_sp_palm_night_light_large" "r" "1" "pn" "sp_palm_night" }
+            "983" { "n" "#PaintKit_cu_m249_deep_relief_Tag" "i" "econ/default_generated/weapon_m249_cu_m249_deep_relief_light_large" "r" "2" "pn" "cu_m249_deep_relief" }
+            "1042" { "n" "#PaintKit_gs_m249_combine_Tag" "i" "econ/default_generated/weapon_m249_gs_m249_combine_light_large" "r" "2" "pn" "gs_m249_combine" }
+            "1148" { "n" "#PaintKit_cu_m249_downvote_Tag" "i" "econ/default_generated/weapon_m249_cu_m249_downvote_light_large" "r" "3" "pn" "cu_m249_downvote" }
+            "1242" { "n" "#PaintKit_cu_m249_scarab_Tag" "i" "econ/default_generated/weapon_m249_cu_m249_scarab_light_large" "r" "0" "pn" "cu_m249_scarab" }
+        }
+        "16"
+        {
+            "0" { "n" "#SFUI_WPNHUD_M4A1" "i" "econ/weapons/base_weapons/weapon_m4a1" "r" "1" "pn" "default" }
+        }
+        "17"
+        {
+            "0" { "n" "#SFUI_WPNHUD_MAC10" "i" "econ/weapons/base_weapons/weapon_mac10" "r" "0" "pn" "default" }
+            "3" { "n" "#PaintKit_so_red_Tag" "i" "econ/default_generated/weapon_mac10_so_red_light_large" "r" "1" "pn" "so_red" }
+            "17" { "n" "#PaintKit_hy_ddpat_urb_Tag" "i" "econ/default_generated/weapon_mac10_hy_ddpat_urb_light_large" "r" "0" "pn" "hy_ddpat_urb" }
+            "32" { "n" "#PaintKit_an_silver_Tag" "i" "econ/default_generated/weapon_mac10_an_silver_light_large" "r" "1" "pn" "an_silver" }
+            "38" { "n" "#PaintKit_aa_fade_Tag" "i" "econ/default_generated/weapon_mac10_aa_fade_light_large" "r" "2" "pn" "aa_fade" }
+            "44" { "n" "#PaintKit_aq_oiled_Tag" "i" "econ/default_generated/weapon_mac10_aq_oiled_light_large" "r" "3" "pn" "aq_oiled" }
+            "98" { "n" "#PaintKit_so_purple_Tag" "i" "econ/default_generated/weapon_mac10_so_purple_light_large" "r" "2" "pn" "so_purple" }
+            "101" { "n" "#PaintKit_so_tornado_Tag" "i" "econ/default_generated/weapon_mac10_so_tornado_light_large" "r" "0" "pn" "so_tornado" }
+            "157" { "n" "#PaintKit_sp_palm_Tag" "i" "econ/default_generated/weapon_mac10_sp_palm_light_large" "r" "1" "pn" "sp_palm" }
+            "188" { "n" "#PaintKit_aq_etched_mac10_bravo_Tag" "i" "econ/default_generated/weapon_mac10_aq_etched_mac10_bravo_light_large" "r" "3" "pn" "aq_etched_mac10_bravo" }
+            "246" { "n" "#PaintKit_aa_fade_metallic_Tag" "i" "econ/default_generated/weapon_mac10_aa_fade_metallic_light_large" "r" "2" "pn" "aa_fade_metallic" }
+            "284" { "n" "#PaintKit_cu_mac10_redhot_tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_redhot_light_large" "r" "3" "pn" "cu_mac10_redhot" }
+            "310" { "n" "#PaintKit_cu_decay_mac10_tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_decay_light_large" "r" "3" "pn" "cu_mac10_decay" }
+            "333" { "n" "#PaintKit_so_indigo_and_grey_Tag" "i" "econ/default_generated/weapon_mac10_so_indigo_and_grey_light_large" "r" "0" "pn" "so_indigo_and_grey" }
+            "337" { "n" "#PaintKit_cu_korupt_tag" "i" "econ/default_generated/weapon_mac10_cu_korupt_light_large" "r" "3" "pn" "cu_korupt" }
+            "343" { "n" "#PaintKit_cu_luggage_mac10_Tag" "i" "econ/default_generated/weapon_mac10_cu_luggage_mac10_light_large" "r" "1" "pn" "cu_luggage_mac10" }
+            "372" { "n" "#PaintKit_am_nuclear_skulls3_mac10_Tag" "i" "econ/default_generated/weapon_mac10_am_nuclear_skulls3_mac10_light_large" "r" "2" "pn" "am_nuclear_skulls3_mac10" }
+            "402" { "n" "#PaintKit_am_mac10_malachite_Tag" "i" "econ/default_generated/weapon_mac10_am_mac10_malachite_light_large" "r" "3" "pn" "am_mac10_malachite" }
+            "433" { "n" "#PaintKit_cu_mac10_neonrider_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_neonrider_light_large" "r" "5" "pn" "cu_mac10_neonrider" }
+            "498" { "n" "#PaintKit_cu_mac10_alekhya_duo_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_alekhya_duo_light_large" "r" "2" "pn" "cu_mac10_alekhya_duo" }
+            "534" { "n" "#PaintKit_am_mac10_electricity_Tag" "i" "econ/default_generated/weapon_mac10_am_mac10_electricity_light_large" "r" "2" "pn" "am_mac10_electricity" }
+            "589" { "n" "#PaintKit_aq_mac_10_alien_camo_Tag" "i" "econ/default_generated/weapon_mac10_aq_mac_10_alien_camo_light_large" "r" "2" "pn" "aq_mac_10_alien_camo" }
+            "651" { "n" "#PaintKit_aa_mac10_the_last_dive_Tag" "i" "econ/default_generated/weapon_mac10_aa_mac10_the_last_dive_light_large" "r" "3" "pn" "aa_mac10_the_last_dive" }
+            "665" { "n" "#PaintKit_am_mac10_aloha_Tag" "i" "econ/default_generated/weapon_mac10_am_mac10_aloha_light_large" "r" "2" "pn" "am_mac10_aloha" }
+            "682" { "n" "#PaintKit_hy_p2000_oceani_Tag" "i" "econ/default_generated/weapon_mac10_am_mac10_oceani_light_large" "r" "2" "pn" "am_mac10_oceani" }
+            "742" { "n" "#PaintKit_am_ren_red_Tag" "i" "econ/default_generated/weapon_mac10_am_ren_red_light_large" "r" "3" "pn" "am_ren_red" }
+            "748" { "n" "#PaintKit_gs_mac10_checker_Tag" "i" "econ/default_generated/weapon_mac10_gs_mac10_checker_light_large" "r" "1" "pn" "gs_mac10_checker" }
+            "761" { "n" "#PaintKit_am_knots_brown_Tag" "i" "econ/default_generated/weapon_mac10_am_knots_brown_light_large" "r" "2" "pn" "am_knots_brown" }
+            "812" { "n" "#PaintKit_gs_mac10_exo_pipes_Tag" "i" "econ/default_generated/weapon_mac10_gs_mac10_exo_pipes_light_large" "r" "3" "pn" "gs_mac10_exo_pipes" }
+            "826" { "n" "#PaintKit_sp_mirage_flowers_tan_Tag" "i" "econ/default_generated/weapon_mac10_sp_mirage_flowers_tan_light_large" "r" "0" "pn" "sp_mirage_flowers_tan" }
+            "840" { "n" "#PaintKit_gs_mac10_fish_bait_Tag" "i" "econ/default_generated/weapon_mac10_gs_mac10_fish_bait_light_large" "r" "2" "pn" "gs_mac10_fish_bait" }
+            "871" { "n" "#PaintKit_sp_twigs_beach_Tag" "i" "econ/default_generated/weapon_mac10_sp_twigs_beach_light_large" "r" "0" "pn" "sp_twigs_beach" }
+            "898" { "n" "#PaintKit_gs_mac10_stalker_Tag" "i" "econ/default_generated/weapon_mac10_gs_mac10_stalker_light_large" "r" "5" "pn" "gs_mac10_stalker" }
+            "908" { "n" "#PaintKit_gs_mac10_dust_crate_Tag" "i" "econ/default_generated/weapon_mac10_gs_mac10_dust_crate_light_large" "r" "2" "pn" "gs_mac10_dust_crate" }
+            "947" { "n" "#PaintKit_cu_mac10_nacre_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_nacre_light_large" "r" "4" "pn" "cu_mac10_nacre" }
+            "965" { "n" "#PaintKit_cu_mac10_isoonna_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_isoonna_light_large" "r" "3" "pn" "cu_mac10_isoonna" }
+            "1009" { "n" "#PaintKit_gs_mac10_snake_Tag" "i" "econ/default_generated/weapon_mac10_gs_mac10_snake_light_large" "r" "4" "pn" "gs_mac10_snake" }
+            "1025" { "n" "#PaintKit_am_gold_brick_Tag" "i" "econ/default_generated/weapon_mac10_am_gold_brick_light_large" "r" "3" "pn" "am_gold_brick" }
+            "1045" { "n" "#PaintKit_cu_mac10_portable_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_portable_light_large" "r" "3" "pn" "cu_mac10_portable" }
+            "1067" { "n" "#PaintKit_cu_mac10_propaganda_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_propaganda_light_large" "r" "4" "pn" "cu_mac10_propaganda" }
+            "1075" { "n" "#PaintKit_hy_vertigospray_blue_Tag" "i" "econ/default_generated/weapon_mac10_hy_vertigospray_blue_light_large" "r" "0" "pn" "hy_vertigospray_blue" }
+            "1098" { "n" "#PaintKit_cu_mac10_toybox_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_toybox_light_large" "r" "4" "pn" "cu_mac10_toybox" }
+            "1131" { "n" "#PaintKit_cu_mac10_pixie_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_pixie_light_large" "r" "2" "pn" "cu_mac10_pixie" }
+            "1150" { "n" "#PaintKit_cu_mac10_monkeyflage_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_monkeyflage_light_large" "r" "2" "pn" "cu_mac10_monkeyflage" }
+            "1229" { "n" "#PaintKit_cu_mac10_sakkaku_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_sakkaku_light_large" "r" "3" "pn" "cu_mac10_sakkaku" }
+            "1244" { "n" "#PaintKit_cu_mac10_scarab_Tag" "i" "econ/default_generated/weapon_mac10_cu_mac10_scarab_light_large" "r" "1" "pn" "cu_mac10_scarab" }
+        }
+        "19"
+        {
+            "0" { "n" "#SFUI_WPNHUD_P90" "i" "econ/weapons/base_weapons/weapon_p90" "r" "0" "pn" "default" }
+            "20" { "n" "#PaintKit_hy_zombie_Tag" "i" "econ/default_generated/weapon_p90_hy_zombie_light_large" "r" "3" "pn" "hy_zombie" }
+            "67" { "n" "#PaintKit_am_slither_p90_Tag" "i" "econ/default_generated/weapon_p90_am_slither_p90_light_large" "r" "4" "pn" "am_slither_p90" }
+            "100" { "n" "#PaintKit_so_stormfront_Tag" "i" "econ/default_generated/weapon_p90_so_stormfront_light_large" "r" "0" "pn" "so_stormfront" }
+            "111" { "n" "#PaintKit_sp_mesh_glacier_Tag" "i" "econ/default_generated/weapon_p90_sp_mesh_glacier_light_large" "r" "2" "pn" "sp_mesh_glacier" }
+            "124" { "n" "#PaintKit_sp_spray_sand_Tag" "i" "econ/default_generated/weapon_p90_sp_spray_sand_light_large" "r" "0" "pn" "sp_spray_sand" }
+            "156" { "n" "#PaintKit_cu_catskulls_p90_Tag" "i" "econ/default_generated/weapon_p90_cu_catskulls_p90_light_large" "r" "5" "pn" "cu_catskulls_p90" }
+            "169" { "n" "#PaintKit_sp_nukestripe_maroon_Tag" "i" "econ/default_generated/weapon_p90_sp_nukestripe_maroon_light_large" "r" "1" "pn" "sp_nukestripe_maroon" }
+            "175" { "n" "#PaintKit_sp_dapple_Tag" "i" "econ/default_generated/weapon_p90_sp_dapple_light_large" "r" "0" "pn" "sp_dapple" }
+            "182" { "n" "#PaintKit_cu_dragon_p90_bravo_Tag" "i" "econ/default_generated/weapon_p90_cu_dragon_p90_bravo_light_large" "r" "4" "pn" "cu_dragon_p90_bravo" }
+            "228" { "n" "#PaintKit_hy_modspots_Tag" "i" "econ/default_generated/weapon_p90_hy_modspots_light_large" "r" "3" "pn" "hy_modspots" }
+            "234" { "n" "#PaintKit_sp_twigs_Tag" "i" "econ/default_generated/weapon_p90_sp_twigs_light_large" "r" "1" "pn" "sp_twigs" }
+            "244" { "n" "#PaintKit_sp_mesh_hot_and_cold_Tag" "i" "econ/default_generated/weapon_p90_sp_mesh_hot_and_cold_light_large" "r" "2" "pn" "sp_mesh_hot_and_cold" }
+            "283" { "n" "#PaintKit_cu_p90_trigon_tag" "i" "econ/default_generated/weapon_p90_cu_p90_trigon_light_large" "r" "4" "pn" "cu_p90_trigon" }
+            "311" { "n" "#PaintKit_cu_scorpius_p90_tag" "i" "econ/default_generated/weapon_p90_cu_p90_scorpius_light_large" "r" "2" "pn" "cu_p90_scorpius" }
+            "335" { "n" "#PaintKit_an_royalbleed_tag" "i" "econ/default_generated/weapon_p90_an_royalbleed_light_large" "r" "2" "pn" "an_royalbleed" }
+            "342" { "n" "#PaintKit_cu_brown_leather_p90_Tag" "i" "econ/default_generated/weapon_p90_cu_brown_leather_p90_light_large" "r" "1" "pn" "cu_brown_leather_p90" }
+            "359" { "n" "#PaintKit_cu_m4_asimov_tag" "i" "econ/default_generated/weapon_p90_cu_p90-asiimov_light_large" "r" "5" "pn" "cu_p90-asiimov" }
+            "486" { "n" "#PaintKit_cu_ak47_mastery_Tag" "i" "econ/default_generated/weapon_p90_cu_p90_mastery_light_large" "r" "2" "pn" "cu_p90_mastery" }
+            "516" { "n" "#PaintKit_cu_p90_shapewood_Tag" "i" "econ/default_generated/weapon_p90_cu_p90_shapewood_light_large" "r" "4" "pn" "cu_p90_shapewood" }
+            "593" { "n" "#PaintKit_gs_p90_full_throttle_Tag" "i" "econ/default_generated/weapon_p90_gs_p90_full_throttle_light_large" "r" "3" "pn" "gs_p90_full_throttle" }
+            "611" { "n" "#PaintKit_cu_P90_Grimm_Tag" "i" "econ/default_generated/weapon_p90_cu_p90_grimm_light_large" "r" "2" "pn" "cu_p90_grimm" }
+            "636" { "n" "#PaintKit_gs_p90_shallow_grave_Tag" "i" "econ/default_generated/weapon_p90_gs_p90_shallow_grave_light_large" "r" "4" "pn" "gs_p90_shallow_grave" }
+            "669" { "n" "#PaintKit_hy_p90_barebones_blue_Tag" "i" "econ/default_generated/weapon_p90_hy_p90_barebones_blue_light_large" "r" "3" "pn" "hy_p90_barebones_blue" }
+            "717" { "n" "#PaintKit_gs_p90_tread_Tag" "i" "econ/default_generated/weapon_p90_gs_p90_tread_light_large" "r" "2" "pn" "gs_p90_tread" }
+            "726" { "n" "#PaintKit_sp_bloom_orange_Tag" "i" "econ/default_generated/weapon_p90_sp_bloom_orange_light_large" "r" "1" "pn" "sp_bloom_orange" }
+            "744" { "n" "#PaintKit_am_veneto_red_Tag" "i" "econ/default_generated/weapon_p90_am_veneto_red_light_large" "r" "2" "pn" "am_veneto_red" }
+            "759" { "n" "#PaintKit_am_jorm_blue_Tag" "i" "econ/default_generated/weapon_p90_am_jorm_blue_light_large" "r" "3" "pn" "am_jorm_blue" }
+            "776" { "n" "#PaintKit_hy_blueprint_aqua_Tag" "i" "econ/default_generated/weapon_p90_hy_blueprint_aqua_light_large" "r" "2" "pn" "hy_blueprint_aqua" }
+            "828" { "n" "#PaintKit_sp_moro_textile_green_vine_Tag" "i" "econ/default_generated/weapon_p90_sp_moro_textile_green_vine_light_large" "r" "1" "pn" "sp_moro_textile_green_vine" }
+            "849" { "n" "#PaintKit_cu_p90_offworld_Tag" "i" "econ/default_generated/weapon_p90_cu_p90_offworld_light_large" "r" "2" "pn" "cu_p90_offworld" }
+            "911" { "n" "#PaintKit_cu_p90_nostalgia_Tag" "i" "econ/default_generated/weapon_p90_cu_p90_nostalgia_light_large" "r" "4" "pn" "cu_p90_nostalgia" }
+            "925" { "n" "#PaintKit_hy_ddpat_desert_Tag" "i" "econ/default_generated/weapon_p90_hy_ddpat_desert_light_large" "r" "0" "pn" "hy_ddpat_desert" }
+            "969" { "n" "#PaintKit_gs_p90_container_Tag" "i" "econ/default_generated/weapon_p90_gs_p90_container_light_large" "r" "2" "pn" "gs_p90_container" }
+            "977" { "n" "#PaintKit_hy_p90_dino_rampage_Tag" "i" "econ/default_generated/weapon_p90_hy_p90_dino_rampage_light_large" "r" "2" "pn" "hy_p90_dino_rampage" }
+            "1000" { "n" "#PaintKit_cu_jaguar_p90_Tag" "i" "econ/default_generated/weapon_p90_cu_jaguar_p90_light_large" "r" "4" "pn" "cu_jaguar_p90" }
+            "1015" { "n" "#PaintKit_am_tigers_brown_Tag" "i" "econ/default_generated/weapon_p90_am_tigers_brown_light_large" "r" "2" "pn" "am_tigers_brown" }
+            "1020" { "n" "#PaintKit_aa_ancient_brown_Tag" "i" "econ/default_generated/weapon_p90_aa_ancient_brown_light_large" "r" "0" "pn" "aa_ancient_brown" }
+            "1074" { "n" "#PaintKit_hy_vertigogeo_Tag" "i" "econ/default_generated/weapon_p90_hy_vertigogeo_light_large" "r" "2" "pn" "hy_vertigogeo" }
+            "1154" { "n" "#PaintKit_gs_p90_tangled_Tag" "i" "econ/default_generated/weapon_p90_gs_p90_tangled_light_large" "r" "3" "pn" "gs_p90_tangled" }
+            "1233" { "n" "#PaintKit_gs_p90_neoqueen_Tag" "i" "econ/default_generated/weapon_p90_gs_p90_neoqueen_light_large" "r" "3" "pn" "gs_p90_neoqueen" }
+            "1250" { "n" "#PaintKit_cu_p90_scarab_of_wisdom_Tag" "i" "econ/default_generated/weapon_p90_cu_p90_scarab_of_wisdom_light_large" "r" "3" "pn" "cu_p90_scarab_of_wisdom" }
+        }
+        "20"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Zone_Repulsor" "i" "" "r" "0" "pn" "default" }
+        }
+        "23"
+        {
+            "0" { "n" "#SFUI_WPNHUD_MP5SD" "i" "econ/weapons/base_weapons/weapon_mp7" "r" "0" "pn" "default" }
+        }
+        "24"
+        {
+            "0" { "n" "#SFUI_WPNHUD_UMP45" "i" "econ/weapons/base_weapons/weapon_ump45" "r" "0" "pn" "default" }
+            "15" { "n" "#PaintKit_hy_gelpen_Tag" "i" "econ/default_generated/weapon_ump45_hy_gelpen_light_large" "r" "1" "pn" "hy_gelpen" }
+            "17" { "n" "#PaintKit_hy_ddpat_urb_Tag" "i" "econ/default_generated/weapon_ump45_hy_ddpat_urb_light_large" "r" "0" "pn" "hy_ddpat_urb" }
+            "37" { "n" "#PaintKit_aa_flames_Tag" "i" "econ/default_generated/weapon_ump45_aa_flames_light_large" "r" "2" "pn" "aa_flames" }
+            "70" { "n" "#PaintKit_am_carbon_fiber_Tag" "i" "econ/default_generated/weapon_ump45_am_carbon_fiber_light_large" "r" "1" "pn" "am_carbon_fiber" }
+            "90" { "n" "#PaintKit_hy_sediment_Tag" "i" "econ/default_generated/weapon_ump45_hy_mottled_sand_light_large" "r" "0" "pn" "hy_mottled_sand" }
+            "93" { "n" "#PaintKit_so_caramel_Tag" "i" "econ/default_generated/weapon_ump45_so_caramel_light_large" "r" "0" "pn" "so_caramel" }
+            "169" { "n" "#PaintKit_sp_nukestripe_maroon_Tag" "i" "econ/default_generated/weapon_ump45_sp_nukestripe_maroon_light_large" "r" "1" "pn" "sp_nukestripe_maroon" }
+            "175" { "n" "#PaintKit_sp_dapple_Tag" "i" "econ/default_generated/weapon_ump45_sp_dapple_light_large" "r" "0" "pn" "sp_dapple" }
+            "193" { "n" "#PaintKit_sp_skull_diagram_bravo_Tag" "i" "econ/default_generated/weapon_ump45_sp_skull_diagram_bravo_light_large" "r" "2" "pn" "sp_skull_diagram_bravo" }
+            "250" { "n" "#PaintKit_hy_varicamo_red_Tag" "i" "econ/default_generated/weapon_ump45_hy_varicamo_red_light_large" "r" "2" "pn" "hy_varicamo_red" }
+            "281" { "n" "#PaintKit_cu_ump_corporal_tag" "i" "econ/default_generated/weapon_ump45_cu_ump_corporal_light_large" "r" "2" "pn" "cu_ump_corporal" }
+            "333" { "n" "#PaintKit_so_indigo_and_grey_Tag" "i" "econ/default_generated/weapon_ump45_so_indigo_and_grey_light_large" "r" "0" "pn" "so_indigo_and_grey" }
+            "362" { "n" "#PaintKit_hy_lines_orange_tag" "i" "econ/default_generated/weapon_ump45_hy_lines_orange_light_large" "r" "2" "pn" "hy_lines_orange" }
+            "392" { "n" "#PaintKit_sp_ump45_d-visions_Tag" "i" "econ/default_generated/weapon_ump45_sp_ump45_d-visions_light_large" "r" "2" "pn" "sp_ump45_d-visions" }
+            "436" { "n" "#PaintKit_am_ump_racer_Tag" "i" "econ/default_generated/weapon_ump45_am_ump_racer_light_large" "r" "3" "pn" "am_ump_racer" }
+            "441" { "n" "#PaintKit_cu_labyrinth_Tag" "i" "econ/default_generated/weapon_ump45_cu_labyrinth_light_large" "r" "2" "pn" "cu_labyrinth" }
+            "488" { "n" "#PaintKit_cu_ump45_uproar_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump45_uproar_light_large" "r" "2" "pn" "cu_ump45_uproar" }
+            "556" { "n" "#PaintKit_cu_ump45_primalsaber_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump45_primalsaber_light_large" "r" "4" "pn" "cu_ump45_primalsaber" }
+            "615" { "n" "#PaintKit_cu_UMP45_Metritera_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump45_metritera_light_large" "r" "2" "pn" "cu_ump45_metritera" }
+            "652" { "n" "#PaintKit_gs_ump_abyss_Tag" "i" "econ/default_generated/weapon_ump45_gs_ump_abyss_light_large" "r" "3" "pn" "gs_ump_abyss" }
+            "672" { "n" "#PaintKit_aq_ump45_flameflower_Tag" "i" "econ/default_generated/weapon_ump45_aq_ump45_flameflower_light_large" "r" "2" "pn" "aq_ump45_flameflower" }
+            "688" { "n" "#PaintKit_cu_ump45_x-ray_machine_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump45_x-ray_machine_light_large" "r" "3" "pn" "cu_ump45_x-ray_machine" }
+            "704" { "n" "#PaintKit_cu_ump45_white_fang_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump45_white_fang_light_large" "r" "3" "pn" "cu_ump45_white_fang" }
+            "725" { "n" "#PaintKit_hy_bloom_red_Tag" "i" "econ/default_generated/weapon_ump45_hy_bloom_red_light_large" "r" "2" "pn" "hy_bloom_red" }
+            "778" { "n" "#PaintKit_hy_blueprint_bluered_Tag" "i" "econ/default_generated/weapon_ump45_hy_blueprint_bluered_light_large" "r" "0" "pn" "hy_blueprint_bluered" }
+            "802" { "n" "#PaintKit_cu_ump_arrows_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump_arrows_light_large" "r" "4" "pn" "cu_ump_arrows" }
+            "851" { "n" "#PaintKit_aa_ump45_moonrise_sunset_Tag" "i" "econ/default_generated/weapon_ump45_aa_ump45_moonrise_sunset_light_large" "r" "3" "pn" "aa_ump45_moonrise_sunset" }
+            "879" { "n" "#PaintKit_aa_fade_Tag" "i" "econ/default_generated/weapon_ump45_aa_fade_ump_light_large" "r" "4" "pn" "aa_fade_ump" }
+            "916" { "n" "#PaintKit_cu_ump_bomb_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump_bomb_light_large" "r" "3" "pn" "cu_ump_bomb" }
+            "990" { "n" "#PaintKit_gs_ump_gold_bismuth_Tag" "i" "econ/default_generated/weapon_ump45_gs_ump_gold_bismuth_light_large" "r" "3" "pn" "gs_ump_gold_bismuth" }
+            "1003" { "n" "#PaintKit_cu_ump_crime_scene_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump_crime_scene_light_large" "r" "3" "pn" "cu_ump_crime_scene" }
+            "1008" { "n" "#PaintKit_hy_houndstooth_brown_Tag" "i" "econ/default_generated/weapon_ump45_hy_houndstooth_brown_light_large" "r" "1" "pn" "hy_houndstooth_brown" }
+            "1049" { "n" "#PaintKit_am_ump45_electrowave_Tag" "i" "econ/default_generated/weapon_ump45_am_ump45_electrowave_light_large" "r" "2" "pn" "am_ump45_electrowave" }
+            "1085" { "n" "#PaintKit_aa_engine_performance_Tag" "i" "econ/default_generated/weapon_ump45_aa_engine_performance_light_large" "r" "1" "pn" "aa_engine_performance" }
+            "1157" { "n" "#PaintKit_gs_ump_roadblock_Tag" "i" "econ/default_generated/weapon_ump45_gs_ump_roadblock_light_large" "r" "2" "pn" "gs_ump_roadblock" }
+            "1236" { "n" "#PaintKit_cu_ump_clutch_kick_Tag" "i" "econ/default_generated/weapon_ump45_cu_ump_clutch_kick_light_large" "r" "4" "pn" "cu_ump_clutch_kick" }
+        }
+        "25"
+        {
+            "0" { "n" "#SFUI_WPNHUD_xm1014" "i" "econ/weapons/base_weapons/weapon_xm1014" "r" "0" "pn" "default" }
+            "42" { "n" "#PaintKit_aq_blued_Tag" "i" "econ/default_generated/weapon_xm1014_aq_blued_light_large" "r" "1" "pn" "aq_blued" }
+            "95" { "n" "#PaintKit_so_grassland_Tag" "i" "econ/default_generated/weapon_xm1014_so_grassland_light_large" "r" "0" "pn" "so_grassland" }
+            "96" { "n" "#PaintKit_so_moss_Tag" "i" "econ/default_generated/weapon_xm1014_so_moss_light_large" "r" "0" "pn" "so_moss" }
+            "135" { "n" "#PaintKit_sp_tape_dots_urban_Tag" "i" "econ/default_generated/weapon_xm1014_sp_tape_dots_urban_light_large" "r" "0" "pn" "sp_tape_dots_urban" }
+            "166" { "n" "#PaintKit_hy_hunter_blaze_orange_Tag" "i" "econ/default_generated/weapon_xm1014_hy_hunter_blaze_orange_light_large" "r" "2" "pn" "hy_hunter_blaze_orange" }
+            "169" { "n" "#PaintKit_sp_nukestripe_maroon_Tag" "i" "econ/default_generated/weapon_xm1014_sp_nukestripe_maroon_light_large" "r" "1" "pn" "sp_nukestripe_maroon" }
+            "205" { "n" "#PaintKit_so_jungle_Tag" "i" "econ/default_generated/weapon_xm1014_so_jungle_bravo_light_large" "r" "0" "pn" "so_jungle_bravo" }
+            "238" { "n" "#PaintKit_hy_varicamo_blue_Tag" "i" "econ/default_generated/weapon_xm1014_hy_varicamo_blue_light_large" "r" "2" "pn" "hy_varicamo_blue" }
+            "240" { "n" "#PaintKit_hy_varicamo_desert_Tag" "i" "econ/default_generated/weapon_xm1014_hy_varicamo_desert_light_large" "r" "1" "pn" "hy_varicamo_desert" }
+            "314" { "n" "#PaintKit_cu_mag7_heaven_tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_heaven_guard_light_large" "r" "3" "pn" "cu_xm1014_heaven_guard" }
+            "320" { "n" "#PaintKit_hy_snakeskin_red_Tag" "i" "econ/default_generated/weapon_xm1014_hy_snakeskin_red_light_large" "r" "2" "pn" "hy_snakeskin_red" }
+            "348" { "n" "#PaintKit_cu_leather_xm1014_Tag" "i" "econ/default_generated/weapon_xm1014_cu_leather_xm1014_light_large" "r" "2" "pn" "cu_leather_xm1014" }
+            "370" { "n" "#PaintKit_am_nuclear_skulls1_xm1014_Tag" "i" "econ/default_generated/weapon_xm1014_am_nuclear_skulls1_xm1014_light_large" "r" "2" "pn" "am_nuclear_skulls1_xm1014" }
+            "393" { "n" "#PaintKit_cu_xm1014_caritas_Tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_caritas_light_large" "r" "4" "pn" "cu_xm1014_caritas" }
+            "407" { "n" "#PaintKit_aq_xm1014_sigla_Tag" "i" "econ/default_generated/weapon_xm1014_aq_xm1014_sigla_light_large" "r" "2" "pn" "aq_xm1014_sigla" }
+            "505" { "n" "#PaintKit_aq_xm1014_scumbria_Tag" "i" "econ/default_generated/weapon_xm1014_aq_xm1014_scumbria_light_large" "r" "2" "pn" "aq_xm1014_scumbria" }
+            "521" { "n" "#PaintKit_aq_xm1014_hot_rod_Tag" "i" "econ/default_generated/weapon_xm1014_aq_xm1014_hot_rod_light_large" "r" "3" "pn" "aq_xm1014_hot_rod" }
+            "557" { "n" "#PaintKit_cu_xm1014_spectrum_Tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_spectrum_light_large" "r" "3" "pn" "cu_xm1014_spectrum" }
+            "616" { "n" "#PaintKit_hy_XM1014_Fractal_Blue_Tag" "i" "econ/default_generated/weapon_xm1014_hy_xm1014_fractal_blue_light_large" "r" "2" "pn" "hy_xm1014_fractal_blue" }
+            "654" { "n" "#PaintKit_aq_xm_leaf_fade_Tag" "i" "econ/default_generated/weapon_xm1014_aq_xm_leaf_fade_light_large" "r" "3" "pn" "aq_xm_leaf_fade" }
+            "689" { "n" "#PaintKit_aq_xm1014_ziggy_anarchy_Tag" "i" "econ/default_generated/weapon_xm1014_aq_xm1014_ziggy_anarchy_light_large" "r" "3" "pn" "aq_xm1014_ziggy_anarchy" }
+            "706" { "n" "#PaintKit_cu_xm1014_oxide_blaze_Tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_oxide_blaze_light_large" "r" "2" "pn" "cu_xm1014_oxide_blaze" }
+            "731" { "n" "#PaintKit_hy_leaf_green_Tag" "i" "econ/default_generated/weapon_xm1014_hy_leaf_green_light_large" "r" "1" "pn" "hy_leaf_green" }
+            "760" { "n" "#PaintKit_am_knots_silver_Tag" "i" "econ/default_generated/weapon_xm1014_am_knots_silver_light_large" "r" "2" "pn" "am_knots_silver" }
+            "821" { "n" "#PaintKit_am_moro_textile_bright_Tag" "i" "econ/default_generated/weapon_xm1014_am_moro_textile_bright_light_large" "r" "3" "pn" "am_moro_textile_bright" }
+            "850" { "n" "#PaintKit_cu_xm1014_incinerator_Tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_incinerator_light_large" "r" "4" "pn" "cu_xm1014_incinerator" }
+            "970" { "n" "#PaintKit_cu_xm1014_amulet_blue_Tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_amulet_blue_light_large" "r" "4" "pn" "cu_xm1014_amulet_blue" }
+            "994" { "n" "#PaintKit_am_authority_brown_Tag" "i" "econ/default_generated/weapon_xm1014_am_authority_brown_light_large" "r" "0" "pn" "am_authority_brown" }
+            "1021" { "n" "#PaintKit_am_ancient_warm_Tag" "i" "econ/default_generated/weapon_xm1014_am_ancient_warm_light_large" "r" "3" "pn" "am_ancient_warm" }
+            "1046" { "n" "#PaintKit_aq_xm1014_punk_Tag" "i" "econ/default_generated/weapon_xm1014_aq_xm1014_punk_light_large" "r" "4" "pn" "aq_xm1014_punk" }
+            "1078" { "n" "#PaintKit_sp_tire_tread_blue_Tag" "i" "econ/default_generated/weapon_xm1014_sp_tire_tread_blue_light_large" "r" "0" "pn" "sp_tire_tread_blue" }
+            "1103" { "n" "#PaintKit_gs_xm1014_watchdog_Tag" "i" "econ/default_generated/weapon_xm1014_gs_xm1014_watchdog_light_large" "r" "2" "pn" "gs_xm1014_watchdog" }
+            "1135" { "n" "#PaintKit_am_xm_zombie_offensive_Tag" "i" "econ/default_generated/weapon_xm1014_am_xm_zombie_offensive_light_large" "r" "3" "pn" "am_xm_zombie_offensive" }
+            "1254" { "n" "#PaintKit_cu_xm1014_pharaoh_Tag" "i" "econ/default_generated/weapon_xm1014_cu_xm1014_pharaoh_light_large" "r" "0" "pn" "cu_xm1014_pharaoh" }
+        }
+        "26"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Bizon" "i" "econ/weapons/base_weapons/weapon_bizon" "r" "0" "pn" "default" }
+            "3" { "n" "#PaintKit_so_red_Tag" "i" "econ/default_generated/weapon_bizon_so_red_light_large" "r" "1" "pn" "so_red" }
+            "13" { "n" "#PaintKit_hy_splatter_Tag" "i" "econ/default_generated/weapon_bizon_hy_splatter_light_large" "r" "3" "pn" "hy_splatter" }
+            "25" { "n" "#PaintKit_sp_leaves_Tag" "i" "econ/default_generated/weapon_bizon_sp_leaves_light_large" "r" "0" "pn" "sp_leaves" }
+            "70" { "n" "#PaintKit_am_carbon_fiber_Tag" "i" "econ/default_generated/weapon_bizon_am_carbon_fiber_light_large" "r" "1" "pn" "am_carbon_fiber" }
+            "148" { "n" "#PaintKit_sp_short_tape_sand_Tag" "i" "econ/default_generated/weapon_bizon_sp_tape_short_sand_light_large" "r" "0" "pn" "sp_tape_short_sand" }
+            "149" { "n" "#PaintKit_sp_short_tape_urban_Tag" "i" "econ/default_generated/weapon_bizon_sp_tape_short_urban_light_large" "r" "0" "pn" "sp_tape_short_urban" }
+            "159" { "n" "#PaintKit_aq_brass_Tag" "i" "econ/default_generated/weapon_bizon_aq_brass_light_large" "r" "2" "pn" "aq_brass" }
+            "164" { "n" "#PaintKit_hy_hunter_modern_Tag" "i" "econ/default_generated/weapon_bizon_hy_hunter_modern_light_large" "r" "2" "pn" "hy_hunter_modern" }
+            "171" { "n" "#PaintKit_sp_nukestripe_brown_Tag" "i" "econ/default_generated/weapon_bizon_sp_nukestripe_brown_light_large" "r" "0" "pn" "sp_nukestripe_brown" }
+            "203" { "n" "#PaintKit_aq_steel_bravo_Tag" "i" "econ/default_generated/weapon_bizon_aq_steel_bravo_light_large" "r" "2" "pn" "aq_steel_bravo" }
+            "224" { "n" "#PaintKit_hy_water_crest_Tag" "i" "econ/default_generated/weapon_bizon_hy_water_crest_light_large" "r" "2" "pn" "hy_water_crest" }
+            "236" { "n" "#PaintKit_hy_varicamo_night_Tag" "i" "econ/default_generated/weapon_bizon_hy_varicamo_night_light_large" "r" "1" "pn" "hy_varicamo_night" }
+            "267" { "n" "#PaintKit_am_turqoise_halftone_tag" "i" "econ/default_generated/weapon_bizon_am_turqoise_halftone_light_large" "r" "2" "pn" "am_turqoise_halftone" }
+            "293" { "n" "#PaintKit_hy_nerodia_Tag" "i" "econ/default_generated/weapon_bizon_hy_nerodia_light_large" "r" "0" "pn" "hy_nerodia" }
+            "306" { "n" "#PaintKit_cu_nova_antique_tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_antique_light_large" "r" "3" "pn" "cu_bizon_antique" }
+            "349" { "n" "#PaintKit_cu_bizon-osiris_tag" "i" "econ/default_generated/weapon_bizon_cu_bizon-osiris_light_large" "r" "3" "pn" "cu_bizon-osiris" }
+            "376" { "n" "#PaintKit_so_grey_nuclear_green_bizon_Tag" "i" "econ/default_generated/weapon_bizon_so_grey_nuclear_green_bizon_light_large" "r" "1" "pn" "so_grey_nuclear_green_bizon" }
+            "457" { "n" "#PaintKit_hy_bamboo_jungle_ink_Tag" "i" "econ/default_generated/weapon_bizon_hy_bamboo_jungle_ink_light_large" "r" "0" "pn" "hy_bamboo_jungle_ink" }
+            "508" { "n" "#PaintKit_cu_bizon_noxious_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_noxious_light_large" "r" "3" "pn" "cu_bizon_noxious" }
+            "526" { "n" "#PaintKit_cu_bizon_citizen_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_citizen_light_large" "r" "2" "pn" "cu_bizon_citizen" }
+            "542" { "n" "#PaintKit_cu_bizon_Curse_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_Curse_light_large" "r" "5" "pn" "cu_bizon_Curse" }
+            "594" { "n" "#PaintKit_gs_pp_bizon_harvester_Tag" "i" "econ/default_generated/weapon_bizon_gs_pp_bizon_harvester_light_large" "r" "2" "pn" "gs_pp_bizon_harvester" }
+            "641" { "n" "#PaintKit_hy_bizon_torn_green_Tag" "i" "econ/default_generated/weapon_bizon_hy_bizon_torn_green_light_large" "r" "2" "pn" "hy_bizon_torn_green" }
+            "676" { "n" "#PaintKit_cu_bizon_all_in_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_all_in_light_large" "r" "4" "pn" "cu_bizon_all_in" }
+            "692" { "n" "#PaintKit_cu_bizon_riot_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_riot_light_large" "r" "2" "pn" "cu_bizon_riot" }
+            "775" { "n" "#PaintKit_hy_blueprint_white_Tag" "i" "econ/default_generated/weapon_bizon_hy_blueprint_white_light_large" "r" "0" "pn" "hy_blueprint_white" }
+            "829" { "n" "#PaintKit_hy_lizard_skin_Tag" "i" "econ/default_generated/weapon_bizon_hy_lizard_skin_light_large" "r" "0" "pn" "hy_lizard_skin" }
+            "873" { "n" "#PaintKit_so_aqua_Tag" "i" "econ/default_generated/weapon_bizon_so_aqua_stmarc_light_large" "r" "0" "pn" "so_aqua_stmarc" }
+            "884" { "n" "#PaintKit_cu_bizon_road_warrior_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_road_warrior_light_large" "r" "3" "pn" "cu_bizon_road_warrior" }
+            "973" { "n" "#PaintKit_gs_bizon_hellraider_Tag" "i" "econ/default_generated/weapon_bizon_gs_bizon_hellraider_light_large" "r" "2" "pn" "gs_bizon_hellraider" }
+            "1083" { "n" "#PaintKit_aa_wiring_Tag" "i" "econ/default_generated/weapon_bizon_aa_wiring_light_large" "r" "1" "pn" "aa_wiring" }
+            "1099" { "n" "#PaintKit_gs_bizon_flasher_Tag" "i" "econ/default_generated/weapon_bizon_gs_bizon_flasher_light_large" "r" "2" "pn" "gs_bizon_flasher" }
+            "1125" { "n" "#PaintKit_cu_bizon_spacecat_Tag" "i" "econ/default_generated/weapon_bizon_cu_bizon_spacecat_light_large" "r" "3" "pn" "cu_bizon_spacecat" }
+        }
+        "27"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Mag7" "i" "econ/weapons/base_weapons/weapon_mag7" "r" "0" "pn" "default" }
+            "32" { "n" "#PaintKit_an_silver_Tag" "i" "econ/default_generated/weapon_mag7_an_silver_light_large" "r" "1" "pn" "an_silver" }
+            "34" { "n" "#PaintKit_am_urban_Tag" "i" "econ/default_generated/weapon_mag7_am_urban_light_large" "r" "1" "pn" "am_urban" }
+            "39" { "n" "#PaintKit_so_yellow_Tag" "i" "econ/default_generated/weapon_mag7_so_yellow_light_large" "r" "3" "pn" "so_yellow" }
+            "70" { "n" "#PaintKit_am_carbon_fiber_Tag" "i" "econ/default_generated/weapon_mag7_am_carbon_fiber_light_large" "r" "1" "pn" "am_carbon_fiber" }
+            "99" { "n" "#PaintKit_so_sand_Tag" "i" "econ/default_generated/weapon_mag7_so_sand_light_large" "r" "0" "pn" "so_sand" }
+            "100" { "n" "#PaintKit_so_stormfront_Tag" "i" "econ/default_generated/weapon_mag7_so_stormfront_light_large" "r" "0" "pn" "so_stormfront" }
+            "171" { "n" "#PaintKit_sp_nukestripe_brown_Tag" "i" "econ/default_generated/weapon_mag7_sp_nukestripe_brown_light_large" "r" "0" "pn" "sp_nukestripe_brown" }
+            "177" { "n" "#PaintKit_CSGO_Icosahedron_Tag" "i" "econ/default_generated/weapon_mag7_hy_icosahedron_light_large" "r" "2" "pn" "hy_icosahedron" }
+            "198" { "n" "#PaintKit_sp_hazard_Tag" "i" "econ/default_generated/weapon_mag7_sp_hazard_bravo_light_large" "r" "2" "pn" "sp_hazard_bravo" }
+            "291" { "n" "#PaintKit_cu_mag7_heaven_tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_heaven_light_large" "r" "2" "pn" "cu_mag7_heaven" }
+            "327" { "n" "#PaintKit_am_chainmail_Tag" "i" "econ/default_generated/weapon_mag7_am_chainmail_light_large" "r" "1" "pn" "am_chainmail" }
+            "385" { "n" "#PaintKit_sp_mag7_firebitten_Tag" "i" "econ/default_generated/weapon_mag7_sp_mag7_firebitten_light_large" "r" "2" "pn" "sp_mag7_firebitten" }
+            "431" { "n" "#PaintKit_cu_mac10_redhot_tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_redhot_light_large" "r" "3" "pn" "cu_mag7_redhot" }
+            "462" { "n" "#PaintKit_hy_geometric_steps_green_Tag" "i" "econ/default_generated/weapon_mag7_hy_geometric_steps_green_light_large" "r" "2" "pn" "hy_geometric_steps_green" }
+            "473" { "n" "#PaintKit_so_aqua_Tag" "i" "econ/default_generated/weapon_mag7_so_aqua_light_large" "r" "0" "pn" "so_aqua" }
+            "499" { "n" "#PaintKit_cu_mag7_myrcene_Tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_myrcene_light_large" "r" "2" "pn" "cu_mag7_myrcene" }
+            "535" { "n" "#PaintKit_gs_mag7_praetorian_Tag" "i" "econ/default_generated/weapon_mag7_gs_mag7_praetorian_light_large" "r" "3" "pn" "gs_mag7_praetorian" }
+            "608" { "n" "#PaintKit_cu_MAG7_Tribal_Tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_tribal_light_large" "r" "3" "pn" "cu_mag7_tribal" }
+            "633" { "n" "#PaintKit_am_mag7_malform_Tag" "i" "econ/default_generated/weapon_mag7_am_mag7_malform_light_large" "r" "2" "pn" "am_mag7_malform" }
+            "666" { "n" "#PaintKit_am_mag7_caustic_Tag" "i" "econ/default_generated/weapon_mag7_am_mag7_caustic_light_large" "r" "2" "pn" "am_mag7_caustic" }
+            "703" { "n" "#PaintKit_aq_mag7_swag7_Tag" "i" "econ/default_generated/weapon_mag7_aq_mag7_swag7_light_large" "r" "3" "pn" "aq_mag7_swag7" }
+            "737" { "n" "#PaintKit_gs_mag7_glass_Tag" "i" "econ/default_generated/weapon_mag7_gs_mag7_glass_light_large" "r" "4" "pn" "gs_mag7_glass" }
+            "754" { "n" "#PaintKit_aq_steel_bravo_Tag" "i" "econ/default_generated/weapon_mag7_aq_steel_inferno_light_large" "r" "0" "pn" "aq_steel_inferno" }
+            "787" { "n" "#PaintKit_hy_nuclear_hotorange_Tag" "i" "econ/default_generated/weapon_mag7_hy_nuclear_hotorange_light_large" "r" "3" "pn" "hy_nuclear_hotorange" }
+            "822" { "n" "#PaintKit_am_navy_shine_Tag" "i" "econ/default_generated/weapon_mag7_am_navy_shine_light_large" "r" "0" "pn" "am_navy_shine" }
+            "909" { "n" "#PaintKit_gs_mag7_popdog_Tag" "i" "econ/default_generated/weapon_mag7_gs_mag7_popdog_light_large" "r" "2" "pn" "gs_mag7_popdog" }
+            "948" { "n" "#PaintKit_gs_mag7_justice_Tag" "i" "econ/default_generated/weapon_mag7_gs_mag7_justice_light_large" "r" "4" "pn" "gs_mag7_justice" }
+            "961" { "n" "#PaintKit_cu_mag7_monster_call_Tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_monster_call_light_large" "r" "3" "pn" "cu_mag7_monster_call" }
+            "1072" { "n" "#PaintKit_hy_geometric_steps_pearl_Tag" "i" "econ/default_generated/weapon_mag7_hy_geometric_steps_pearl_light_large" "r" "3" "pn" "hy_geometric_steps_pearl" }
+            "1089" { "n" "#PaintKit_gs_mag7_bismuth_Tag" "i" "econ/default_generated/weapon_mag7_gs_mag7_bismuth_light_large" "r" "3" "pn" "gs_mag7_bismuth" }
+            "1132" { "n" "#PaintKit_cu_mag7_predictor_Tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_predictor_light_large" "r" "2" "pn" "cu_mag7_predictor" }
+            "1220" { "n" "#PaintKit_cu_mag7_insomnia_Tag" "i" "econ/default_generated/weapon_mag7_cu_mag7_insomnia_light_large" "r" "2" "pn" "cu_mag7_insomnia" }
+            "1245" { "n" "#PaintKit_gs_mag7_goold_Tag" "i" "econ/default_generated/weapon_mag7_gs_mag7_goold_light_large" "r" "2" "pn" "gs_mag7_goold" }
+        }
+        "28"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Negev" "i" "econ/weapons/base_weapons/weapon_negev" "r" "0" "pn" "default" }
+            "28" { "n" "#PaintKit_an_navy_Tag" "i" "econ/default_generated/weapon_negev_an_navy_light_large" "r" "2" "pn" "an_navy" }
+            "201" { "n" "#PaintKit_sp_palm_Tag" "i" "econ/default_generated/weapon_negev_sp_palm_bravo_light_large" "r" "1" "pn" "sp_palm_bravo" }
+            "240" { "n" "#PaintKit_hy_varicamo_desert_Tag" "i" "econ/default_generated/weapon_negev_hy_varicamo_desert_light_large" "r" "1" "pn" "hy_varicamo_desert" }
+            "285" { "n" "#PaintKit_sp_negev_turq_terrain_tag" "i" "econ/default_generated/weapon_negev_sp_negev_turq_terrain_light_large" "r" "2" "pn" "sp_negev_turq_terrain" }
+            "298" { "n" "#PaintKit_am_army_shine_Tag" "i" "econ/default_generated/weapon_negev_am_army_shine_light_large" "r" "0" "pn" "am_army_shine" }
+            "317" { "n" "#PaintKit_cu_bratatat_negev_Tag" "i" "econ/default_generated/weapon_negev_cu_bratatat_negev_light_large" "r" "2" "pn" "cu_bratatat_negev" }
+            "355" { "n" "#PaintKit_cu_titanstorm_tag" "i" "econ/default_generated/weapon_negev_cu_negev_titanstorm_light_large" "r" "2" "pn" "cu_negev_titanstorm" }
+            "369" { "n" "#PaintKit_sp_nuclear_pattern3_negev_Tag" "i" "econ/default_generated/weapon_negev_sp_nuclear_pattern3_negev_light_large" "r" "1" "pn" "sp_nuclear_pattern3_negev" }
+            "432" { "n" "#PaintKit_am_awp_glory_Tag" "i" "econ/default_generated/weapon_negev_am_negev_glory_light_large" "r" "2" "pn" "am_negev_glory" }
+            "483" { "n" "#PaintKit_cu_negev_annihilator_Tag" "i" "econ/default_generated/weapon_negev_cu_negev_annihilator_light_large" "r" "3" "pn" "cu_negev_annihilator" }
+            "514" { "n" "#PaintKit_cu_negev_impact_Tag" "i" "econ/default_generated/weapon_negev_cu_negev_impact_light_large" "r" "3" "pn" "cu_negev_impact" }
+            "610" { "n" "#PaintKit_hy_Negev_Dazzle_Tag" "i" "econ/default_generated/weapon_negev_hy_negev_dazzle_light_large" "r" "2" "pn" "hy_negev_dazzle" }
+            "698" { "n" "#PaintKit_sp_negev_lionfish_Tag" "i" "econ/default_generated/weapon_negev_sp_negev_lionfish_light_large" "r" "3" "pn" "sp_negev_lionfish" }
+            "763" { "n" "#PaintKit_gs_negev_thor_Tag" "i" "econ/default_generated/weapon_negev_gs_negev_thor_light_large" "r" "4" "pn" "gs_negev_thor" }
+            "783" { "n" "#PaintKit_hy_ducts_yellow_Tag" "i" "econ/default_generated/weapon_negev_hy_ducts_yellow_light_large" "r" "1" "pn" "hy_ducts_yellow" }
+            "920" { "n" "#PaintKit_hy_veneto_tan_Tag" "i" "econ/default_generated/weapon_negev_hy_veneto_tan_light_large" "r" "0" "pn" "hy_veneto_tan" }
+            "950" { "n" "#PaintKit_cu_negev_prototype_Tag" "i" "econ/default_generated/weapon_negev_cu_negev_prototype_light_large" "r" "2" "pn" "cu_negev_prototype" }
+            "958" { "n" "#PaintKit_cu_negev_ultralight_Tag" "i" "econ/default_generated/weapon_negev_cu_negev_ultralight_light_large" "r" "2" "pn" "cu_negev_ultralight" }
+            "1012" { "n" "#PaintKit_hy_phoenix_tags_red_Tag" "i" "econ/default_generated/weapon_negev_hy_phoenix_tags_red_light_large" "r" "2" "pn" "hy_phoenix_tags_red" }
+            "1043" { "n" "#PaintKit_cu_negev_devtexture_Tag" "i" "econ/default_generated/weapon_negev_cu_negev_devtexture_light_large" "r" "3" "pn" "cu_negev_devtexture" }
+            "1080" { "n" "#PaintKit_hy_vertigospray_Tag" "i" "econ/default_generated/weapon_negev_hy_vertigospray_light_large" "r" "2" "pn" "hy_vertigospray" }
+            "1152" { "n" "#PaintKit_cu_negev_clear_sky_Tag" "i" "econ/default_generated/weapon_negev_cu_negev_clear_sky_light_large" "r" "2" "pn" "cu_negev_clear_sky" }
+        }
+        "29"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Sawedoff" "i" "econ/weapons/base_weapons/weapon_sawedoff" "r" "0" "pn" "default" }
+            "5" { "n" "#PaintKit_hy_ddpat_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_ddpat_light_large" "r" "0" "pn" "hy_ddpat" }
+            "30" { "n" "#PaintKit_sp_snake_Tag" "i" "econ/default_generated/weapon_sawedoff_sp_snake_light_large" "r" "1" "pn" "sp_snake" }
+            "41" { "n" "#PaintKit_aq_copper_Tag" "i" "econ/default_generated/weapon_sawedoff_aq_copper_light_large" "r" "2" "pn" "aq_copper" }
+            "83" { "n" "#PaintKit_hy_ddpat_orange_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_ddpat_orange_light_large" "r" "3" "pn" "hy_ddpat_orange" }
+            "119" { "n" "#PaintKit_sp_spray_sage_Tag" "i" "econ/default_generated/weapon_sawedoff_sp_spray_desert_sage_light_large" "r" "0" "pn" "sp_spray_desert_sage" }
+            "171" { "n" "#PaintKit_sp_nukestripe_brown_Tag" "i" "econ/default_generated/weapon_sawedoff_sp_nukestripe_brown_light_large" "r" "0" "pn" "sp_nukestripe_brown" }
+            "204" { "n" "#PaintKit_hy_ali_tile_bravo_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_ali_tile_bravo_light_large" "r" "1" "pn" "hy_ali_tile_bravo" }
+            "246" { "n" "#PaintKit_aa_fade_metallic_Tag" "i" "econ/default_generated/weapon_sawedoff_aa_fade_metallic_light_large" "r" "2" "pn" "aa_fade_metallic" }
+            "250" { "n" "#PaintKit_hy_varicamo_red_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_varicamo_red_light_large" "r" "2" "pn" "hy_varicamo_red" }
+            "256" { "n" "#PaintKit_cu_sawedoff_octopump_tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_octopump_light_large" "r" "5" "pn" "cu_sawedoff_octopump" }
+            "323" { "n" "#PaintKit_aq_steel_bravo_Tag" "i" "econ/default_generated/weapon_sawedoff_aq_steel_light_large" "r" "1" "pn" "aq_steel" }
+            "345" { "n" "#PaintKit_cu_green_leather_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_green_leather_sawedoff_light_large" "r" "2" "pn" "cu_green_leather_sawedoff" }
+            "390" { "n" "#PaintKit_aq_sawedoff_blackgold_Tag" "i" "econ/default_generated/weapon_sawedoff_aq_sawedoff_blackgold_light_large" "r" "3" "pn" "aq_sawedoff_blackgold" }
+            "405" { "n" "#PaintKit_cu_sawedoff_deva_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_deva_light_large" "r" "3" "pn" "cu_sawedoff_deva" }
+            "434" { "n" "#PaintKit_cu_sawedoff_origami_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_origami_light_large" "r" "2" "pn" "cu_sawedoff_origami" }
+            "458" { "n" "#PaintKit_hy_bamboo_jungle_black_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_bamboo_jungle_black_light_large" "r" "0" "pn" "hy_bamboo_jungle_black" }
+            "517" { "n" "#PaintKit_gs_sawedoff_necromancer_Tag" "i" "econ/default_generated/weapon_sawedoff_gs_sawedoff_necromancer_light_large" "r" "2" "pn" "gs_sawedoff_necromancer" }
+            "552" { "n" "#PaintKit_gs_sawedoff_fubar_Tag" "i" "econ/default_generated/weapon_sawedoff_gs_sawedoff_fubar_light_large" "r" "2" "pn" "gs_sawedoff_fubar" }
+            "596" { "n" "#PaintKit_cu_sawed_off_lime_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawed_off_lime_light_large" "r" "3" "pn" "cu_sawed_off_lime" }
+            "638" { "n" "#PaintKit_cu_wp_sawedoff_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_wp_sawedoff_light_large" "r" "4" "pn" "cu_wp_sawedoff" }
+            "655" { "n" "#PaintKit_aq_sawedoff_zander2_Tag" "i" "econ/default_generated/weapon_sawedoff_aq_sawedoff_zander2_light_large" "r" "2" "pn" "aq_sawedoff_zander2" }
+            "673" { "n" "#PaintKit_aq_sawed-off_flower_Tag" "i" "econ/default_generated/weapon_sawedoff_aq_sawed-off_flower_light_large" "r" "2" "pn" "aq_sawed-off_flower" }
+            "720" { "n" "#PaintKit_cu_sawedoff_devourer_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_devourer_light_large" "r" "4" "pn" "cu_sawedoff_devourer" }
+            "797" { "n" "#PaintKit_aa_vertigo_red_Tag" "i" "econ/default_generated/weapon_sawedoff_aa_vertigo_red_light_large" "r" "2" "pn" "aa_vertigo_red" }
+            "814" { "n" "#PaintKit_cu_sawedoff_black_sand_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_black_sand_light_large" "r" "2" "pn" "cu_sawedoff_black_sand" }
+            "870" { "n" "#PaintKit_sp_palm_green_Tag" "i" "econ/default_generated/weapon_sawedoff_sp_palm_green_light_large" "r" "0" "pn" "sp_palm_green" }
+            "880" { "n" "#PaintKit_hy_desert_bloom_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_desert_bloom_light_large" "r" "0" "pn" "hy_desert_bloom" }
+            "953" { "n" "#PaintKit_cu_sawedoff_apocalypto_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_apocalypto_light_large" "r" "3" "pn" "cu_sawedoff_apocalypto" }
+            "1014" { "n" "#PaintKit_hy_tigers_tan_Tag" "i" "econ/default_generated/weapon_sawedoff_hy_tigers_tan_light_large" "r" "0" "pn" "hy_tigers_tan" }
+            "1140" { "n" "#PaintKit_cu_sawedoff_ouija_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_ouija_light_large" "r" "2" "pn" "cu_sawedoff_ouija" }
+            "1155" { "n" "#PaintKit_cu_sawedoff_kisslove_Tag" "i" "econ/default_generated/weapon_sawedoff_cu_sawedoff_kisslove_light_large" "r" "4" "pn" "cu_sawedoff_kisslove" }
+        }
+        "30"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Tec9" "i" "econ/weapons/base_weapons/weapon_tec9" "r" "0" "pn" "default" }
+            "2" { "n" "#PaintKit_so_olive_Tag" "i" "econ/default_generated/weapon_tec9_so_olive_light_large" "r" "0" "pn" "so_olive" }
+            "17" { "n" "#PaintKit_hy_ddpat_urb_Tag" "i" "econ/default_generated/weapon_tec9_hy_ddpat_urb_light_large" "r" "0" "pn" "hy_ddpat_urb" }
+            "36" { "n" "#PaintKit_am_ossify_Tag" "i" "econ/default_generated/weapon_tec9_am_ossify_light_large" "r" "2" "pn" "am_ossify" }
+            "159" { "n" "#PaintKit_aq_brass_Tag" "i" "econ/default_generated/weapon_tec9_aq_brass_light_large" "r" "2" "pn" "aq_brass" }
+            "179" { "n" "#PaintKit_sp_nukestripe_green_Tag" "i" "econ/default_generated/weapon_tec9_sp_nukestripe_green_tec9_light_large" "r" "3" "pn" "sp_nukestripe_green_tec9" }
+            "206" { "n" "#PaintKit_so_tornado_Tag" "i" "econ/default_generated/weapon_tec9_so_tornado_bravo_light_large" "r" "0" "pn" "so_tornado_bravo" }
+            "216" { "n" "#PaintKit_an_titanium30v_Tag" "i" "econ/default_generated/weapon_tec9_an_titanium30v_light_large" "r" "2" "pn" "an_titanium30v" }
+            "235" { "n" "#PaintKit_hy_varicamo_Tag" "i" "econ/default_generated/weapon_tec9_hy_varicamo_light_large" "r" "1" "pn" "hy_varicamo" }
+            "242" { "n" "#PaintKit_sp_mesh_army_Tag" "i" "econ/default_generated/weapon_tec9_sp_mesh_army_light_large" "r" "0" "pn" "sp_mesh_army" }
+            "248" { "n" "#PaintKit_am_crystallized_red_Tag" "i" "econ/default_generated/weapon_tec9_am_crystallized_light_large" "r" "3" "pn" "am_crystallized" }
+            "272" { "n" "#PaintKit_am_fluted_tec9_Tag" "i" "econ/default_generated/weapon_tec9_am_fluted_tec9_light_large" "r" "3" "pn" "am_fluted_tec9" }
+            "289" { "n" "#PaintKit_cu_sandstorm_tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_sandstorm_light_large" "r" "2" "pn" "cu_tec9_sandstorm" }
+            "303" { "n" "#PaintKit_cu_tec_isaac_tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_asiimov_light_large" "r" "2" "pn" "cu_tec9_asiimov" }
+            "374" { "n" "#PaintKit_hy_nuclear_skulls5_tec9_Tag" "i" "econ/default_generated/weapon_tec9_hy_nuclear_skulls5_tec9_light_large" "r" "2" "pn" "hy_nuclear_skulls5_tec9" }
+            "439" { "n" "#PaintKit_hy_hades_Tag" "i" "econ/default_generated/weapon_tec9_hy_hades_light_large" "r" "1" "pn" "hy_hades" }
+            "459" { "n" "#PaintKit_hy_bamboo_jungle_Tag" "i" "econ/default_generated/weapon_tec9_hy_bamboo_jungle_light_large" "r" "0" "pn" "hy_bamboo_jungle" }
+            "463" { "n" "#PaintKit_hy_geometric_steps_yellow_Tag" "i" "econ/default_generated/weapon_tec9_hy_geometric_steps_yellow_light_large" "r" "2" "pn" "hy_geometric_steps_yellow" }
+            "520" { "n" "#PaintKit_cu_tec9_avalanche_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_avalanche_light_large" "r" "3" "pn" "cu_tec9_avalanche" }
+            "539" { "n" "#PaintKit_gs_tec9_jambiya_Tag" "i" "econ/default_generated/weapon_tec9_gs_tec9_jambiya_light_large" "r" "2" "pn" "gs_tec9_jambiya" }
+            "555" { "n" "#PaintKit_am_tec9_redblast_Tag" "i" "econ/default_generated/weapon_tec9_am_tec9_redblast_light_large" "r" "3" "pn" "am_tec9_redblast" }
+            "599" { "n" "#PaintKit_am_tec_9_sea_salt_Tag" "i" "econ/default_generated/weapon_tec9_am_tec_9_sea_salt_light_large" "r" "2" "pn" "am_tec_9_sea_salt" }
+            "614" { "n" "#PaintKit_gs_TEC9_Supercharged_Tag" "i" "econ/default_generated/weapon_tec9_gs_tec9_supercharged_light_large" "r" "4" "pn" "gs_tec9_supercharged" }
+            "671" { "n" "#PaintKit_aq_tec9_chalk_pattern_Tag" "i" "econ/default_generated/weapon_tec9_aq_tec9_chalk_pattern_light_large" "r" "2" "pn" "aq_tec9_chalk_pattern" }
+            "684" { "n" "#PaintKit_cu_tec9_cracked_opal_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_cracked_opal_light_large" "r" "2" "pn" "cu_tec9_cracked_opal" }
+            "722" { "n" "#PaintKit_cu_tec9_snake_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_snake_light_large" "r" "2" "pn" "cu_tec9_snake" }
+            "733" { "n" "#PaintKit_sp_leaf_orange_Tag" "i" "econ/default_generated/weapon_tec9_sp_leaf_orange_light_large" "r" "1" "pn" "sp_leaf_orange" }
+            "738" { "n" "#PaintKit_hy_murano_orange_Tag" "i" "econ/default_generated/weapon_tec9_hy_murano_orange_light_large" "r" "1" "pn" "hy_murano_orange" }
+            "791" { "n" "#PaintKit_gs_tec9_envoy_Tag" "i" "econ/default_generated/weapon_tec9_gs_tec9_envoy_light_large" "r" "4" "pn" "gs_tec9_envoy" }
+            "795" { "n" "#PaintKit_hy_mesh_safetyorange_Tag" "i" "econ/default_generated/weapon_tec9_hy_mesh_safetyorange_light_large" "r" "2" "pn" "hy_mesh_safetyorange" }
+            "816" { "n" "#PaintKit_gs_tec9_fubar_Tag" "i" "econ/default_generated/weapon_tec9_gs_tec9_fubar_light_large" "r" "2" "pn" "gs_tec9_fubar" }
+            "839" { "n" "#PaintKit_cu_tec9_bamboo_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_bamboo_light_large" "r" "3" "pn" "cu_tec9_bamboo" }
+            "889" { "n" "#PaintKit_gs_tec9_decimator_Tag" "i" "econ/default_generated/weapon_tec9_gs_tec9_decimator_light_large" "r" "4" "pn" "gs_tec9_decimator" }
+            "905" { "n" "#PaintKit_cu_tec9_flash_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_flash_light_large" "r" "2" "pn" "cu_tec9_flash" }
+            "964" { "n" "#PaintKit_gs_tec9_guerilla_Tag" "i" "econ/default_generated/weapon_tec9_gs_tec9_guerilla_light_large" "r" "3" "pn" "gs_tec9_guerilla" }
+            "1010" { "n" "#PaintKit_hy_phoenix_tags_lilac_Tag" "i" "econ/default_generated/weapon_tec9_hy_phoenix_tags_lilac_light_large" "r" "0" "pn" "hy_phoenix_tags_lilac" }
+            "1024" { "n" "#PaintKit_hy_ancient_tiles_peach_Tag" "i" "econ/default_generated/weapon_tec9_hy_ancient_tiles_peach_light_large" "r" "2" "pn" "hy_ancient_tiles_peach" }
+            "1235" { "n" "#PaintKit_cu_tec9_freedom_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_freedom_light_large" "r" "2" "pn" "cu_tec9_freedom" }
+            "1252" { "n" "#PaintKit_cu_tec9_mummy_Tag" "i" "econ/default_generated/weapon_tec9_cu_tec9_mummy_light_large" "r" "2" "pn" "cu_tec9_mummy" }
+        }
+        "31"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Taser" "i" "econ/weapons/base_weapons/weapon_taser" "r" "0" "pn" "default" }
+        }
+        "32"
+        {
+            "0" { "n" "#SFUI_WPNHUD_HKP2000" "i" "econ/weapons/base_weapons/weapon_hkp2000" "r" "1" "pn" "default" }
+        }
+        "33"
+        {
+            "0" { "n" "#SFUI_WPNHUD_MP7" "i" "econ/weapons/base_weapons/weapon_mp7" "r" "0" "pn" "default" }
+            "5" { "n" "#PaintKit_hy_ddpat_Tag" "i" "econ/default_generated/weapon_mp7_hy_ddpat_light_large" "r" "0" "pn" "hy_ddpat" }
+            "11" { "n" "#PaintKit_hy_skulls_Tag" "i" "econ/default_generated/weapon_mp7_hy_skulls_light_large" "r" "2" "pn" "hy_skulls" }
+            "15" { "n" "#PaintKit_hy_gelpen_Tag" "i" "econ/default_generated/weapon_mp7_hy_gelpen_light_large" "r" "1" "pn" "hy_gelpen" }
+            "28" { "n" "#PaintKit_an_navy_Tag" "i" "econ/default_generated/weapon_mp7_an_navy_light_large" "r" "2" "pn" "an_navy" }
+            "102" { "n" "#PaintKit_so_whiteout_Tag" "i" "econ/default_generated/weapon_mp7_so_whiteout_light_large" "r" "2" "pn" "so_whiteout" }
+            "141" { "n" "#PaintKit_sp_tape_orange_Tag" "i" "econ/default_generated/weapon_mp7_sp_tape_orange_light_large" "r" "1" "pn" "sp_tape_orange" }
+            "175" { "n" "#PaintKit_sp_dapple_Tag" "i" "econ/default_generated/weapon_mp7_sp_dapple_light_large" "r" "0" "pn" "sp_dapple" }
+            "209" { "n" "#PaintKit_so_olive_Tag" "i" "econ/default_generated/weapon_mp7_so_olive_bravo_light_large" "r" "0" "pn" "so_olive_bravo" }
+            "213" { "n" "#PaintKit_am_ossify_blue_Tag" "i" "econ/default_generated/weapon_mp7_am_ossify_blue_light_large" "r" "3" "pn" "am_ossify_blue" }
+            "245" { "n" "#PaintKit_sp_spray_army_Tag" "i" "econ/default_generated/weapon_mp7_sp_spray_army_light_large" "r" "0" "pn" "sp_spray_army" }
+            "250" { "n" "#PaintKit_hy_varicamo_red_Tag" "i" "econ/default_generated/weapon_mp7_hy_varicamo_red_light_large" "r" "2" "pn" "hy_varicamo_red" }
+            "354" { "n" "#PaintKit_cu_mp7-commander_tag" "i" "econ/default_generated/weapon_mp7_cu_mp7-commander_light_large" "r" "2" "pn" "cu_mp7-commander" }
+            "365" { "n" "#PaintKit_hy_plaid1_Tag" "i" "econ/default_generated/weapon_mp7_hy_plaid1_light_large" "r" "0" "pn" "hy_plaid1" }
+            "423" { "n" "#PaintKit_aq_mp7_ultramodern_Tag" "i" "econ/default_generated/weapon_mp7_aq_mp7_ultramodern_light_large" "r" "2" "pn" "aq_mp7_ultramodern" }
+            "442" { "n" "#PaintKit_sp_labyrinth1_Tag" "i" "econ/default_generated/weapon_mp7_sp_labyrinth_light_large" "r" "0" "pn" "sp_labyrinth" }
+            "481" { "n" "#PaintKit_cu_mp7_nemsis_Tag" "i" "econ/default_generated/weapon_mp7_cu_mp7_nemsis_light_large" "r" "4" "pn" "cu_mp7_nemsis" }
+            "500" { "n" "#PaintKit_cu_mp7_classified_Tag" "i" "econ/default_generated/weapon_mp7_cu_mp7_classified_light_large" "r" "3" "pn" "cu_mp7_classified" }
+            "536" { "n" "#PaintKit_sp_mp7_impire_Tag" "i" "econ/default_generated/weapon_mp7_sp_mp7_impire_light_large" "r" "3" "pn" "sp_mp7_impire" }
+            "627" { "n" "#PaintKit_gs_final_pooldeadv2_Tag" "i" "econ/default_generated/weapon_mp7_gs_final_pooldeadv2_light_large" "r" "2" "pn" "gs_final_pooldeadv2" }
+            "649" { "n" "#PaintKit_sp_mp7_tribal_yellow_Tag" "i" "econ/default_generated/weapon_mp7_sp_mp7_tribal_yellow_light_large" "r" "2" "pn" "sp_mp7_tribal_yellow" }
+            "696" { "n" "#PaintKit_gs_mp7_bloodsport_Tag" "i" "econ/default_generated/weapon_mp7_gs_mp7_bloodsport_light_large" "r" "5" "pn" "gs_mp7_bloodsport" }
+            "719" { "n" "#PaintKit_gs_powercore_mp7_Tag" "i" "econ/default_generated/weapon_mp7_gs_powercore_mp7_light_large" "r" "3" "pn" "gs_powercore_mp7" }
+            "728" { "n" "#PaintKit_sp_bud_green_Tag" "i" "econ/default_generated/weapon_mp7_sp_bud_green_light_large" "r" "2" "pn" "sp_bud_green" }
+            "752" { "n" "#PaintKit_aa_fade_mp7_Tag" "i" "econ/default_generated/weapon_mp7_aa_fade_mp7_light_large" "r" "3" "pn" "aa_fade_mp7" }
+            "782" { "n" "#PaintKit_am_circuitboard_green_Tag" "i" "econ/default_generated/weapon_mp7_am_circuitboard_green_light_large" "r" "1" "pn" "am_circuitboard_green" }
+            "847" { "n" "#PaintKit_cu_mp7_racketeer_Tag" "i" "econ/default_generated/weapon_mp7_cu_mp7_racketeer_light_large" "r" "2" "pn" "cu_mp7_racketeer" }
+            "893" { "n" "#PaintKit_cu_mp7_replica_Tag" "i" "econ/default_generated/weapon_mp7_cu_mp7_replica_light_large" "r" "3" "pn" "cu_mp7_replica" }
+            "935" { "n" "#PaintKit_sp_zebracam_red_Tag" "i" "econ/default_generated/weapon_mp7_sp_zebracam_red_light_large" "r" "0" "pn" "sp_zebracam_red" }
+            "1007" { "n" "#PaintKit_am_heist_plans_yellow_Tag" "i" "econ/default_generated/weapon_mp7_am_heist_plans_yellow_light_large" "r" "1" "pn" "am_heist_plans_yellow" }
+            "1023" { "n" "#PaintKit_hy_drywood_green_Tag" "i" "econ/default_generated/weapon_mp7_hy_drywood_green_light_large" "r" "1" "pn" "hy_drywood_green" }
+            "1096" { "n" "#PaintKit_cu_mp7_khaki_Tag" "i" "econ/default_generated/weapon_mp7_cu_mp7_khaki_light_large" "r" "2" "pn" "cu_mp7_khaki" }
+            "1133" { "n" "#PaintKit_cu_mp7_fear_Tag" "i" "econ/default_generated/weapon_mp7_cu_mp7_fear_light_large" "r" "4" "pn" "cu_mp7_fear" }
+            "1246" { "n" "#PaintKit_gs_mp7_strone_Tag" "i" "econ/default_generated/weapon_mp7_gs_mp7_strone_light_large" "r" "0" "pn" "gs_mp7_strone" }
+        }
+        "34"
+        {
+            "0" { "n" "#SFUI_WPNHUD_MP9" "i" "econ/weapons/base_weapons/weapon_mp9" "r" "0" "pn" "default" }
+            "33" { "n" "#PaintKit_an_red_Tag" "i" "econ/default_generated/weapon_mp9_an_red_light_large" "r" "2" "pn" "an_red" }
+            "39" { "n" "#PaintKit_so_yellow_Tag" "i" "econ/default_generated/weapon_mp9_so_yellow_light_large" "r" "3" "pn" "so_yellow" }
+            "61" { "n" "#PaintKit_aa_vertigo_Tag" "i" "econ/default_generated/weapon_mp9_aa_vertigo_light_large" "r" "3" "pn" "aa_vertigo" }
+            "100" { "n" "#PaintKit_so_stormfront_Tag" "i" "econ/default_generated/weapon_mp9_so_stormfront_light_large" "r" "0" "pn" "so_stormfront" }
+            "141" { "n" "#PaintKit_sp_tape_orange_Tag" "i" "econ/default_generated/weapon_mp9_sp_tape_orange_light_large" "r" "1" "pn" "sp_tape_orange" }
+            "148" { "n" "#PaintKit_sp_short_tape_sand_Tag" "i" "econ/default_generated/weapon_mp9_sp_tape_short_sand_light_large" "r" "0" "pn" "sp_tape_short_sand" }
+            "199" { "n" "#PaintKit_sp_tape_dots_Tag" "i" "econ/default_generated/weapon_mp9_sp_tape_dots_bravo_light_large" "r" "0" "pn" "sp_tape_dots_bravo" }
+            "262" { "n" "#PaintKit_am_thorny_rose_mp9_tag" "i" "econ/default_generated/weapon_mp9_am_thorny_rose_mp9_light_large" "r" "3" "pn" "am_thorny_rose_mp9" }
+            "298" { "n" "#PaintKit_am_army_shine_Tag" "i" "econ/default_generated/weapon_mp9_am_army_shine_light_large" "r" "0" "pn" "am_army_shine" }
+            "329" { "n" "#PaintKit_am_metal_inlay_Tag" "i" "econ/default_generated/weapon_mp9_am_metal_inlay_light_large" "r" "2" "pn" "am_metal_inlay" }
+            "366" { "n" "#PaintKit_chy_plaid2_Tag" "i" "econ/default_generated/weapon_mp9_hy_plaid2_light_large" "r" "0" "pn" "hy_plaid2" }
+            "368" { "n" "#PaintKit_hy_nuclear_pattern2_mp9_Tag" "i" "econ/default_generated/weapon_mp9_hy_nuclear_pattern2_mp9_light_large" "r" "2" "pn" "hy_nuclear_pattern2_mp9" }
+            "386" { "n" "#PaintKit_cu_mp9_chevron_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_chevron_light_large" "r" "2" "pn" "cu_mp9_chevron" }
+            "403" { "n" "#PaintKit_cu_mp9_deadly_poison_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_deadly_poison_light_large" "r" "2" "pn" "cu_mp9_deadly_poison" }
+            "448" { "n" "#PaintKit_aa_pandora_Tag" "i" "econ/default_generated/weapon_mp9_aa_pandora_light_large" "r" "2" "pn" "aa_pandora" }
+            "482" { "n" "#PaintKit_am_mp9_nitrogen_Tag" "i" "econ/default_generated/weapon_mp9_am_mp9_nitrogen_light_large" "r" "3" "pn" "am_mp9_nitrogen" }
+            "549" { "n" "#PaintKit_am_mp9_bioleak_Tag" "i" "econ/default_generated/weapon_mp9_am_mp9_bioleak_light_large" "r" "2" "pn" "am_mp9_bioleak" }
+            "609" { "n" "#PaintKit_cu_MP9_Narcis_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_narcis_light_large" "r" "4" "pn" "cu_mp9_narcis" }
+            "630" { "n" "#PaintKit_aa_hide-mp9_Tag" "i" "econ/default_generated/weapon_mp9_aa_hide-mp9_light_large" "r" "2" "pn" "aa_hide-mp9" }
+            "679" { "n" "#PaintKit_cu_mp9_goo_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_goo_light_large" "r" "3" "pn" "cu_mp9_goo" }
+            "697" { "n" "#PaintKit_cu_mp9_black_sand_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_black_sand_light_large" "r" "2" "pn" "cu_mp9_black_sand" }
+            "715" { "n" "#PaintKit_cu_mp9_vein_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_vein_light_large" "r" "2" "pn" "cu_mp9_vein" }
+            "734" { "n" "#PaintKit_cu_mp9_island_floral_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_island_floral_light_large" "r" "4" "pn" "cu_mp9_island_floral" }
+            "755" { "n" "#PaintKit_hy_splatter3_Tag" "i" "econ/default_generated/weapon_mp9_hy_splatter3_light_large" "r" "0" "pn" "hy_splatter3" }
+            "804" { "n" "#PaintKit_gs_mp9_colony01_Tag" "i" "econ/default_generated/weapon_mp9_gs_mp9_colony01_light_large" "r" "2" "pn" "gs_mp9_colony01" }
+            "820" { "n" "#PaintKit_am_mirage_flowers_metalic_Tag" "i" "econ/default_generated/weapon_mp9_am_mirage_flowers_metalic_light_large" "r" "2" "pn" "am_mirage_flowers_metalic" }
+            "867" { "n" "#PaintKit_am_stained_glass_Tag" "i" "econ/default_generated/weapon_mp9_am_stained_glass_light_large" "r" "3" "pn" "am_stained_glass" }
+            "910" { "n" "#PaintKit_cu_mp9_hydra_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_hydra_light_large" "r" "4" "pn" "cu_mp9_hydra" }
+            "931" { "n" "#PaintKit_sp_moro_carving_yellow_Tag" "i" "econ/default_generated/weapon_mp9_sp_moro_carving_yellow_light_large" "r" "1" "pn" "sp_moro_carving_yellow" }
+            "1037" { "n" "#PaintKit_cu_mp9_food_chain_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_food_chain_light_large" "r" "4" "pn" "cu_mp9_food_chain" }
+            "1094" { "n" "#PaintKit_aa_mp9_fuji_pink_Tag" "i" "econ/default_generated/weapon_mp9_aa_mp9_fuji_pink_light_large" "r" "3" "pn" "aa_mp9_fuji_pink" }
+            "1134" { "n" "#PaintKit_gs_mp9_starlight_Tag" "i" "econ/default_generated/weapon_mp9_gs_mp9_starlight_light_large" "r" "5" "pn" "gs_mp9_starlight" }
+            "1225" { "n" "#PaintKit_cu_mp9_superlight_Tag" "i" "econ/default_generated/weapon_mp9_cu_mp9_superlight_light_large" "r" "2" "pn" "cu_mp9_superlight" }
+        }
+        "35"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Nova" "i" "econ/weapons/base_weapons/weapon_nova" "r" "0" "pn" "default" }
+            "3" { "n" "#PaintKit_so_red_Tag" "i" "econ/default_generated/weapon_nova_so_red_light_large" "r" "1" "pn" "so_red" }
+            "25" { "n" "#PaintKit_sp_leaves_Tag" "i" "econ/default_generated/weapon_nova_sp_leaves_light_large" "r" "0" "pn" "sp_leaves" }
+            "62" { "n" "#PaintKit_cu_spring_nova_Tag" "i" "econ/default_generated/weapon_nova_cu_spring_nova_light_large" "r" "4" "pn" "cu_spring_nova" }
+            "99" { "n" "#PaintKit_so_sand_Tag" "i" "econ/default_generated/weapon_nova_so_sand_light_large" "r" "0" "pn" "so_sand" }
+            "107" { "n" "#PaintKit_sp_mesh_arctic_contrast_Tag" "i" "econ/default_generated/weapon_nova_sp_mesh_arctic_contrast_light_large" "r" "0" "pn" "sp_mesh_arctic_contrast" }
+            "158" { "n" "#PaintKit_cu_walnut_nova_Tag" "i" "econ/default_generated/weapon_nova_cu_walnut_nova_light_large" "r" "0" "pn" "cu_walnut_nova" }
+            "164" { "n" "#PaintKit_hy_hunter_modern_Tag" "i" "econ/default_generated/weapon_nova_hy_hunter_modern_light_large" "r" "2" "pn" "hy_hunter_modern" }
+            "166" { "n" "#PaintKit_hy_hunter_blaze_orange_Tag" "i" "econ/default_generated/weapon_nova_hy_hunter_blaze_orange_light_large" "r" "2" "pn" "hy_hunter_blaze_orange" }
+            "170" { "n" "#PaintKit_sp_zebracam_Tag" "i" "econ/default_generated/weapon_nova_sp_zebracam_light_large" "r" "0" "pn" "sp_zebracam" }
+            "191" { "n" "#PaintKit_hy_seaside_bravo_Tag" "i" "econ/default_generated/weapon_nova_hy_seaside_bravo_light_large" "r" "2" "pn" "hy_seaside_bravo" }
+            "214" { "n" "#PaintKit_am_crumple_Tag" "i" "econ/default_generated/weapon_nova_am_crumple_light_large" "r" "3" "pn" "am_crumple" }
+            "225" { "n" "#PaintKit_sp_camo_wood_blue_Tag" "i" "econ/default_generated/weapon_nova_sp_camo_wood_blue_light_large" "r" "2" "pn" "sp_camo_wood_blue" }
+            "248" { "n" "#PaintKit_am_crystallized_red_Tag" "i" "econ/default_generated/weapon_nova_am_crystallized_light_large" "r" "3" "pn" "am_crystallized" }
+            "263" { "n" "#PaintKit_cu_skull_nova_tag" "i" "econ/default_generated/weapon_nova_cu_skull_nova_light_large" "r" "3" "pn" "cu_skull_nova" }
+            "286" { "n" "#PaintKit_cu_nova_antique_tag" "i" "econ/default_generated/weapon_nova_cu_nova_antique_light_large" "r" "4" "pn" "cu_nova_antique" }
+            "294" { "n" "#PaintKit_so_green_Tag" "i" "econ/default_generated/weapon_nova_so_green_light_large" "r" "1" "pn" "so_green" }
+            "298" { "n" "#PaintKit_am_army_shine_Tag" "i" "econ/default_generated/weapon_nova_am_army_shine_light_large" "r" "0" "pn" "am_army_shine" }
+            "299" { "n" "#PaintKit_am_oval_hex_Tag" "i" "econ/default_generated/weapon_nova_am_oval_hex_light_large" "r" "1" "pn" "am_oval_hex" }
+            "323" { "n" "#PaintKit_aq_steel_bravo_Tag" "i" "econ/default_generated/weapon_nova_aq_steel_light_large" "r" "1" "pn" "aq_steel" }
+            "356" { "n" "#PaintKit_cu_nova_koi_tag" "i" "econ/default_generated/weapon_nova_cu_nova_koi_light_large" "r" "3" "pn" "cu_nova_koi" }
+            "450" { "n" "#PaintKit_hy_zodiac1_Tag" "i" "econ/default_generated/weapon_nova_hy_zodiac1_light_large" "r" "0" "pn" "hy_zodiac1" }
+            "484" { "n" "#PaintKit_cu_nova_ranger_Tag" "i" "econ/default_generated/weapon_nova_cu_nova_ranger_light_large" "r" "2" "pn" "cu_nova_ranger" }
+            "537" { "n" "#PaintKit_cu_m4a1_hyper_beast_Tag" "i" "econ/default_generated/weapon_nova_cu_nova_hyperbeast_light_large" "r" "4" "pn" "cu_nova_hyperbeast" }
+            "590" { "n" "#PaintKit_aq_nova_sci_fi_Tag" "i" "econ/default_generated/weapon_nova_aq_nova_sci_fi_light_large" "r" "2" "pn" "aq_nova_sci_fi" }
+            "634" { "n" "#PaintKit_am_nova_sand_Tag" "i" "econ/default_generated/weapon_nova_am_nova_sand_light_large" "r" "3" "pn" "am_nova_sand" }
+            "699" { "n" "#PaintKit_gs_nova_anchorite_Tag" "i" "econ/default_generated/weapon_nova_gs_nova_anchorite_light_large" "r" "3" "pn" "gs_nova_anchorite" }
+            "716" { "n" "#PaintKit_cu_nova_toy_soldier_Tag" "i" "econ/default_generated/weapon_nova_cu_nova_toy_soldier_light_large" "r" "3" "pn" "cu_nova_toy_soldier" }
+            "746" { "n" "#PaintKit_am_veneto2_Tag" "i" "econ/default_generated/weapon_nova_am_veneto2_light_large" "r" "3" "pn" "am_veneto2" }
+            "785" { "n" "#PaintKit_hy_ducts_grey_Tag" "i" "econ/default_generated/weapon_nova_hy_ducts_grey_light_large" "r" "0" "pn" "hy_ducts_grey" }
+            "809" { "n" "#PaintKit_gs_nova_hunter_brute_Tag" "i" "econ/default_generated/weapon_nova_gs_nova_hunter_brute_light_large" "r" "2" "pn" "gs_nova_hunter_brute" }
+            "890" { "n" "#PaintKit_cu_nova_featherswing_Tag" "i" "econ/default_generated/weapon_nova_cu_nova_featherswing_light_large" "r" "2" "pn" "cu_nova_featherswing" }
+            "929" { "n" "#PaintKit_hy_torn_camo_paints_Tag" "i" "econ/default_generated/weapon_nova_hy_torn_camo_paints_light_large" "r" "2" "pn" "hy_torn_camo_paints" }
+            "987" { "n" "#PaintKit_cu_nova_polymer_Tag" "i" "econ/default_generated/weapon_nova_cu_nova_polymer_light_large" "r" "3" "pn" "cu_nova_polymer" }
+            "1051" { "n" "#PaintKit_sp_nova_wind_dispersal_Tag" "i" "econ/default_generated/weapon_nova_sp_nova_wind_dispersal_light_large" "r" "2" "pn" "sp_nova_wind_dispersal" }
+            "1077" { "n" "#PaintKit_hy_vertigoillusion_yellow_Tag" "i" "econ/default_generated/weapon_nova_hy_vertigoillusion_yellow_light_large" "r" "2" "pn" "hy_vertigoillusion_yellow" }
+            "1247" { "n" "#PaintKit_gs_nova_sobek_Tag" "i" "econ/default_generated/weapon_nova_gs_nova_sobek_light_large" "r" "3" "pn" "gs_nova_sobek" }
+        }
+        "36"
+        {
+            "0" { "n" "#SFUI_WPNHUD_P250" "i" "econ/weapons/base_weapons/weapon_p250" "r" "0" "pn" "default" }
+            "15" { "n" "#PaintKit_hy_gelpen_Tag" "i" "econ/default_generated/weapon_p250_hy_gelpen_light_large" "r" "1" "pn" "hy_gelpen" }
+            "27" { "n" "#PaintKit_sp_tape_Tag" "i" "econ/default_generated/weapon_p250_sp_tape_light_large" "r" "0" "pn" "sp_tape" }
+            "34" { "n" "#PaintKit_am_urban_Tag" "i" "econ/default_generated/weapon_p250_am_urban_light_large" "r" "1" "pn" "am_urban" }
+            "77" { "n" "#PaintKit_hy_forest_boreal_Tag" "i" "econ/default_generated/weapon_p250_hy_forest_boreal_light_large" "r" "0" "pn" "hy_forest_boreal" }
+            "78" { "n" "#PaintKit_hy_forest_night_Tag" "i" "econ/default_generated/weapon_p250_hy_forest_night_light_large" "r" "0" "pn" "hy_forest_night" }
+            "99" { "n" "#PaintKit_so_sand_Tag" "i" "econ/default_generated/weapon_p250_so_sand_light_large" "r" "0" "pn" "so_sand" }
+            "102" { "n" "#PaintKit_so_whiteout_Tag" "i" "econ/default_generated/weapon_p250_so_whiteout_light_large" "r" "2" "pn" "so_whiteout" }
+            "125" { "n" "#PaintKit_cu_xray_p250_Tag" "i" "econ/default_generated/weapon_p250_cu_xray_p250_light_large" "r" "3" "pn" "cu_xray_p250" }
+            "162" { "n" "#PaintKit_sp_splash_p250_Tag" "i" "econ/default_generated/weapon_p250_sp_splash_p250_light_large" "r" "3" "pn" "sp_splash_p250" }
+            "164" { "n" "#PaintKit_hy_hunter_modern_Tag" "i" "econ/default_generated/weapon_p250_hy_hunter_modern_light_large" "r" "2" "pn" "hy_hunter_modern" }
+            "168" { "n" "#PaintKit_sp_nukestripe_green_Tag" "i" "econ/default_generated/weapon_p250_sp_nukestripe_green_light_large" "r" "3" "pn" "sp_nukestripe_green" }
+            "207" { "n" "#PaintKit_hy_crumple_dark_bravo_Tag" "i" "econ/default_generated/weapon_p250_hy_crumple_dark_bravo_light_large" "r" "1" "pn" "hy_crumple_dark_bravo" }
+            "219" { "n" "#PaintKit_hy_redhex_Tag" "i" "econ/default_generated/weapon_p250_hy_redhex_light_large" "r" "2" "pn" "hy_redhex" }
+            "230" { "n" "#PaintKit_am_ddpatdense_silver_Tag" "i" "econ/default_generated/weapon_p250_am_ddpatdense_silver_light_large" "r" "2" "pn" "am_ddpatdense_silver" }
+            "258" { "n" "#PaintKit_cu_p250_refined_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_refined_light_large" "r" "4" "pn" "cu_p250_refined" }
+            "271" { "n" "#PaintKit_am_p250_beaded_paint_Tag" "i" "econ/default_generated/weapon_p250_am_p250_beaded_paint_light_large" "r" "4" "pn" "am_p250_beaded_paint" }
+            "295" { "n" "#PaintKit_cu_money_Tag" "i" "econ/default_generated/weapon_p250_cu_money_light_large" "r" "4" "pn" "cu_money" }
+            "358" { "n" "#PaintKit_cu_bittersweet_tag" "i" "econ/default_generated/weapon_p250_cu_bittersweet_light_large" "r" "3" "pn" "cu_bittersweet" }
+            "373" { "n" "#PaintKit_hy_nuclear_skulls4_p250_Tag" "i" "econ/default_generated/weapon_p250_hy_nuclear_skulls4_p250_light_large" "r" "1" "pn" "hy_nuclear_skulls4_p250" }
+            "388" { "n" "#PaintKit_aq_p250_cartel_Tag" "i" "econ/default_generated/weapon_p250_aq_p250_cartel_light_large" "r" "4" "pn" "aq_p250_cartel" }
+            "404" { "n" "#PaintKit_cu_p250_mandala_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_mandala_light_large" "r" "4" "pn" "cu_p250_mandala" }
+            "426" { "n" "#PaintKit_aq_p250_contour_Tag" "i" "econ/default_generated/weapon_p250_aq_p250_contour_light_large" "r" "2" "pn" "aq_p250_contour" }
+            "466" { "n" "#PaintKit_hy_kimono_diamonds_red_Tag" "i" "econ/default_generated/weapon_p250_hy_kimono_diamonds_red_light_large" "r" "1" "pn" "hy_kimono_diamonds_red" }
+            "467" { "n" "#PaintKit_sp_kimono_diamonds_Tag" "i" "econ/default_generated/weapon_p250_sp_kimono_diamonds_light_large" "r" "0" "pn" "sp_kimono_diamonds" }
+            "501" { "n" "#PaintKit_hy_p250_crackshot_Tag" "i" "econ/default_generated/weapon_p250_hy_p250_crackshot_light_large" "r" "3" "pn" "hy_p250_crackshot" }
+            "551" { "n" "#PaintKit_cu_p250_asiimov_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_asiimov_light_large" "r" "4" "pn" "cu_p250_asiimov" }
+            "592" { "n" "#PaintKit_gs_p250_metal_panels_Tag" "i" "econ/default_generated/weapon_p250_gs_p250_metal_panels_light_large" "r" "2" "pn" "gs_p250_metal_panels" }
+            "650" { "n" "#PaintKit_am_p250_sputnik_Tag" "i" "econ/default_generated/weapon_p250_am_p250_sputnik_light_large" "r" "2" "pn" "am_p250_sputnik" }
+            "668" { "n" "#PaintKit_cu_p250_axiom_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_axiom_light_large" "r" "3" "pn" "cu_p250_axiom" }
+            "678" { "n" "#PaintKit_cu_p250_cybercroc_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_cybercroc_light_large" "r" "5" "pn" "cu_p250_cybercroc" }
+            "741" { "n" "#PaintKit_am_ren_dark_Tag" "i" "econ/default_generated/weapon_p250_am_ren_dark_light_large" "r" "1" "pn" "am_ren_dark" }
+            "749" { "n" "#PaintKit_gs_p250_checker_Tag" "i" "econ/default_generated/weapon_p250_gs_p250_checker_light_large" "r" "3" "pn" "gs_p250_checker" }
+            "777" { "n" "#PaintKit_hy_blueprint_red_Tag" "i" "econ/default_generated/weapon_p250_hy_blueprint_red_light_large" "r" "0" "pn" "hy_blueprint_red" }
+            "786" { "n" "#PaintKit_hy_ducts_blue_Tag" "i" "econ/default_generated/weapon_p250_hy_ducts_blue_light_large" "r" "2" "pn" "hy_ducts_blue" }
+            "813" { "n" "#PaintKit_aa_p250_gravediggers_Tag" "i" "econ/default_generated/weapon_p250_aa_p250_gravediggers_light_large" "r" "3" "pn" "aa_p250_gravediggers" }
+            "825" { "n" "#PaintKit_sp_desert_skulls_dawn_Tag" "i" "econ/default_generated/weapon_p250_sp_desert_skulls_dawn_light_large" "r" "0" "pn" "sp_desert_skulls_dawn" }
+            "848" { "n" "#PaintKit_aq_p250_verdigris_Tag" "i" "econ/default_generated/weapon_p250_aq_p250_verdigris_light_large" "r" "2" "pn" "aq_p250_verdigris" }
+            "907" { "n" "#PaintKit_gs_p250_inferno_Tag" "i" "econ/default_generated/weapon_p250_gs_p250_inferno_light_large" "r" "3" "pn" "gs_p250_inferno" }
+            "928" { "n" "#PaintKit_hy_desert_multicam_Tag" "i" "econ/default_generated/weapon_p250_hy_desert_multicam_light_large" "r" "2" "pn" "hy_desert_multicam" }
+            "968" { "n" "#PaintKit_cu_p250_cassette_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_cassette_light_large" "r" "2" "pn" "cu_p250_cassette" }
+            "982" { "n" "#PaintKit_cu_p250_infect_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_infect_light_large" "r" "2" "pn" "cu_p250_infect" }
+            "1030" { "n" "#PaintKit_hy_tiger_Tag" "i" "econ/default_generated/weapon_p250_hy_p250_tiger_light_large" "r" "2" "pn" "hy_p250_tiger" }
+            "1044" { "n" "#PaintKit_gs_p250_cybershell_Tag" "i" "econ/default_generated/weapon_p250_gs_p250_cybershell_light_large" "r" "3" "pn" "gs_p250_cybershell" }
+            "1081" { "n" "#PaintKit_aa_vertigogeo_neon_Tag" "i" "econ/default_generated/weapon_p250_aa_vertigogeo_neon_light_large" "r" "3" "pn" "aa_vertigogeo_neon" }
+            "1153" { "n" "#PaintKit_gs_p250_visions_Tag" "i" "econ/default_generated/weapon_p250_gs_p250_visions_light_large" "r" "4" "pn" "gs_p250_visions" }
+            "1230" { "n" "#PaintKit_cu_p250_rebuilt_Tag" "i" "econ/default_generated/weapon_p250_cu_p250_rebuilt_light_large" "r" "2" "pn" "cu_p250_rebuilt" }
+            "1248" { "n" "#PaintKit_gs_p250_apep_Tag" "i" "econ/default_generated/weapon_p250_gs_p250_apep_light_large" "r" "4" "pn" "gs_p250_apep" }
+        }
+        "37"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Shield" "i" "econ/weapons/base_weapons/weapon_shield" "r" "0" "pn" "default" }
+        }
+        "38"
+        {
+            "0" { "n" "#SFUI_WPNHUD_SCAR20" "i" "econ/weapons/base_weapons/weapon_scar20" "r" "0" "pn" "default" }
+            "46" { "n" "#PaintKit_so_pmc_Tag" "i" "econ/default_generated/weapon_scar20_so_pmc_light_large" "r" "0" "pn" "so_pmc" }
+            "70" { "n" "#PaintKit_am_carbon_fiber_Tag" "i" "econ/default_generated/weapon_scar20_am_carbon_fiber_light_large" "r" "1" "pn" "am_carbon_fiber" }
+            "100" { "n" "#PaintKit_so_stormfront_Tag" "i" "econ/default_generated/weapon_scar20_so_stormfront_light_large" "r" "0" "pn" "so_stormfront" }
+            "116" { "n" "#PaintKit_sp_mesh_sand_Tag" "i" "econ/default_generated/weapon_scar20_sp_mesh_sand_light_large" "r" "0" "pn" "sp_mesh_sand" }
+            "157" { "n" "#PaintKit_sp_palm_Tag" "i" "econ/default_generated/weapon_scar20_sp_palm_light_large" "r" "1" "pn" "sp_palm" }
+            "159" { "n" "#PaintKit_aq_brass_Tag" "i" "econ/default_generated/weapon_scar20_aq_brass_light_large" "r" "2" "pn" "aq_brass" }
+            "165" { "n" "#PaintKit_hy_hunter_blaze_pink_Tag" "i" "econ/default_generated/weapon_scar20_hy_hunter_blaze_pink_light_large" "r" "4" "pn" "hy_hunter_blaze_pink" }
+            "196" { "n" "#PaintKit_an_emerald_bravo_Tag" "i" "econ/default_generated/weapon_scar20_an_emerald_bravo_light_large" "r" "3" "pn" "an_emerald_bravo" }
+            "232" { "n" "#PaintKit_hy_webs_Tag" "i" "econ/default_generated/weapon_scar20_hy_webs_darker_light_large" "r" "2" "pn" "hy_webs_darker" }
+            "298" { "n" "#PaintKit_am_army_shine_Tag" "i" "econ/default_generated/weapon_scar20_am_army_shine_light_large" "r" "0" "pn" "am_army_shine" }
+            "312" { "n" "#PaintKit_cu_cyrex_tag" "i" "econ/default_generated/weapon_scar20_cu_scar_cyrex_light_large" "r" "4" "pn" "cu_scar_cyrex" }
+            "391" { "n" "#PaintKit_cu_scar20_intervention_Tag" "i" "econ/default_generated/weapon_scar20_cu_scar20_intervention_light_large" "r" "4" "pn" "cu_scar20_intervention" }
+            "406" { "n" "#PaintKit_aq_scar20_leak_Tag" "i" "econ/default_generated/weapon_scar20_aq_scar20_leak_light_large" "r" "2" "pn" "aq_scar20_leak" }
+            "502" { "n" "#PaintKit_gs_scar20_peacemaker03_Tag" "i" "econ/default_generated/weapon_scar20_gs_scar20_peacemaker03_light_large" "r" "2" "pn" "gs_scar20_peacemaker03" }
+            "518" { "n" "#PaintKit_hy_scar20_jungler_Tag" "i" "econ/default_generated/weapon_scar20_hy_scar20_jungler_light_large" "r" "2" "pn" "hy_scar20_jungler" }
+            "597" { "n" "#PaintKit_gs_scar20_bloodsport_Tag" "i" "econ/default_generated/weapon_scar20_gs_scar20_bloodsport_light_large" "r" "4" "pn" "gs_scar20_bloodsport" }
+            "612" { "n" "#PaintKit_gs_SCAR20_Powercore_Tag" "i" "econ/default_generated/weapon_scar20_gs_scar20_powercore_light_large" "r" "3" "pn" "gs_scar20_powercore" }
+            "642" { "n" "#PaintKit_cu_blueprint_scar_Tag" "i" "econ/default_generated/weapon_scar20_cu_blueprint_scar_light_large" "r" "2" "pn" "cu_blueprint_scar" }
+            "685" { "n" "#PaintKit_hy_bizon_torn_green_Tag" "i" "econ/default_generated/weapon_scar20_hy_scar20_jungle_slipstream_light_large" "r" "2" "pn" "hy_scar20_jungle_slipstream" }
+            "865" { "n" "#PaintKit_hy_canals_tile_Tag" "i" "econ/default_generated/weapon_scar20_hy_canals_tile_light_large" "r" "0" "pn" "hy_canals_tile" }
+            "896" { "n" "#PaintKit_sp_scar20_striker_dust_Tag" "i" "econ/default_generated/weapon_scar20_sp_scar20_striker_dust_light_large" "r" "2" "pn" "sp_scar20_striker_dust" }
+            "914" { "n" "#PaintKit_cu_scar_assault_Tag" "i" "econ/default_generated/weapon_scar20_cu_scar_assault_light_large" "r" "2" "pn" "cu_scar_assault" }
+            "954" { "n" "#PaintKit_gs_scar20_enforcer_Tag" "i" "econ/default_generated/weapon_scar20_gs_scar20_enforcer_light_large" "r" "3" "pn" "gs_scar20_enforcer" }
+            "1028" { "n" "#PaintKit_hy_authority_purple_Tag" "i" "econ/default_generated/weapon_scar20_hy_authority_purple_light_large" "r" "2" "pn" "hy_authority_purple" }
+            "1139" { "n" "#PaintKit_sp_scar_chickenfight_Tag" "i" "econ/default_generated/weapon_scar20_sp_scar_chickenfight_light_large" "r" "2" "pn" "sp_scar_chickenfight" }
+            "1226" { "n" "#PaintKit_gs_scar_fragments_black_Tag" "i" "econ/default_generated/weapon_scar20_gs_scar_fragments_black_light_large" "r" "2" "pn" "gs_scar_fragments_black" }
+        }
+        "39"
+        {
+            "0" { "n" "#SFUI_WPNHUD_SG556" "i" "econ/weapons/base_weapons/weapon_sg556" "r" "0" "pn" "default" }
+            "28" { "n" "#PaintKit_an_navy_Tag" "i" "econ/default_generated/weapon_sg556_an_navy_light_large" "r" "2" "pn" "an_navy" }
+            "39" { "n" "#PaintKit_so_yellow_Tag" "i" "econ/default_generated/weapon_sg556_so_yellow_light_large" "r" "3" "pn" "so_yellow" }
+            "61" { "n" "#PaintKit_aa_vertigo_Tag" "i" "econ/default_generated/weapon_sg556_aa_vertigo_light_large" "r" "3" "pn" "aa_vertigo" }
+            "98" { "n" "#PaintKit_so_purple_Tag" "i" "econ/default_generated/weapon_sg556_so_purple_light_large" "r" "2" "pn" "so_purple" }
+            "101" { "n" "#PaintKit_so_tornado_Tag" "i" "econ/default_generated/weapon_sg556_so_tornado_light_large" "r" "0" "pn" "so_tornado" }
+            "136" { "n" "#PaintKit_sp_tape_dots_waves_Tag" "i" "econ/default_generated/weapon_sg556_sp_tape_dots_waves_light_large" "r" "0" "pn" "sp_tape_dots_waves" }
+            "186" { "n" "#PaintKit_sp_spray_waves_Tag" "i" "econ/default_generated/weapon_sg556_sp_spray_waves_bravo_light_large" "r" "2" "pn" "sp_spray_waves_bravo" }
+            "243" { "n" "#PaintKit_sp_mesh_python_Tag" "i" "econ/default_generated/weapon_sg556_sp_mesh_python_light_large" "r" "1" "pn" "sp_mesh_python" }
+            "247" { "n" "#PaintKit_aq_damascus_Tag" "i" "econ/default_generated/weapon_sg556_aq_damascus_sg553_light_large" "r" "2" "pn" "aq_damascus_sg553" }
+            "287" { "n" "#PaintKit_cu_famas_pulse_tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_pulse_light_large" "r" "3" "pn" "cu_sg553_pulse" }
+            "298" { "n" "#PaintKit_am_army_shine_Tag" "i" "econ/default_generated/weapon_sg556_am_army_shine_light_large" "r" "0" "pn" "am_army_shine" }
+            "363" { "n" "#PaintKit_cu_luggage_sg553_Tag" "i" "econ/default_generated/weapon_sg556_cu_luggage_sg553_light_large" "r" "1" "pn" "cu_luggage_sg553" }
+            "378" { "n" "#PaintKit_sp_nukestripe_maroon_Tag" "i" "econ/default_generated/weapon_sg556_sp_nukestripe_maroon_sg553_light_large" "r" "1" "pn" "sp_nukestripe_maroon_sg553" }
+            "487" { "n" "#PaintKit_cu_cyrex_tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_cyrex_light_large" "r" "4" "pn" "cu_sg553_cyrex" }
+            "519" { "n" "#PaintKit_gs_sg553_tiger_moth_Tag" "i" "econ/default_generated/weapon_sg556_gs_sg553_tiger_moth_light_large" "r" "3" "pn" "gs_sg553_tiger_moth" }
+            "553" { "n" "#PaintKit_cu_sg553_atlas_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_atlas_light_large" "r" "2" "pn" "cu_sg553_atlas" }
+            "598" { "n" "#PaintKit_cu_sg553_aerial_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_aerial_light_large" "r" "2" "pn" "cu_sg553_aerial" }
+            "613" { "n" "#PaintKit_cu_SG556_Triarch_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg556_triarch_light_large" "r" "3" "pn" "cu_sg556_triarch" }
+            "686" { "n" "#PaintKit_gs_sg553_phantom_Tag" "i" "econ/default_generated/weapon_sg556_gs_sg553_phantom_light_large" "r" "3" "pn" "gs_sg553_phantom" }
+            "702" { "n" "#PaintKit_sp_sg533_aloha_Tag" "i" "econ/default_generated/weapon_sg556_sp_sg533_aloha_light_large" "r" "2" "pn" "sp_sg533_aloha" }
+            "750" { "n" "#PaintKit_cu_sg553_rally_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_rally_light_large" "r" "4" "pn" "cu_sg553_rally" }
+            "765" { "n" "#PaintKit_aa_desert_bloom_bright_Tag" "i" "econ/default_generated/weapon_sg556_aa_desert_bloom_bright_light_large" "r" "2" "pn" "aa_desert_bloom_bright" }
+            "815" { "n" "#PaintKit_gs_sg553_over_heated_Tag" "i" "econ/default_generated/weapon_sg556_gs_sg553_over_heated_light_large" "r" "2" "pn" "gs_sg553_over_heated" }
+            "861" { "n" "#PaintKit_sp_asgard_wall_Tag" "i" "econ/default_generated/weapon_sg556_sp_asgard_wall_light_large" "r" "0" "pn" "sp_asgard_wall" }
+            "864" { "n" "#PaintKit_so_red_Tag" "i" "econ/default_generated/weapon_sg556_so_red_sg553_light_large" "r" "1" "pn" "so_red_sg553" }
+            "897" { "n" "#PaintKit_cu_sg553_reactor_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_reactor_light_large" "r" "4" "pn" "cu_sg553_reactor" }
+            "934" { "n" "#PaintKit_sp_desert_skulls_Tag" "i" "econ/default_generated/weapon_sg556_sp_desert_skulls_light_large" "r" "0" "pn" "sp_desert_skulls" }
+            "955" { "n" "#PaintKit_cu_sg553_darkwing_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_darkwing_light_large" "r" "3" "pn" "cu_sg553_darkwing" }
+            "966" { "n" "#PaintKit_gs_sg553_rusty_Tag" "i" "econ/default_generated/weapon_sg556_gs_sg553_rusty_light_large" "r" "2" "pn" "gs_sg553_rusty" }
+            "1022" { "n" "#PaintKit_aa_ruins_green_Tag" "i" "econ/default_generated/weapon_sg556_aa_ruins_green_light_large" "r" "0" "pn" "aa_ruins_green" }
+            "1048" { "n" "#PaintKit_gs_sg553_deathmetal_Tag" "i" "econ/default_generated/weapon_sg556_gs_sg553_deathmetal_light_large" "r" "2" "pn" "gs_sg553_deathmetal" }
+            "1084" { "n" "#PaintKit_cu_sg553_caution_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_caution_light_large" "r" "4" "pn" "cu_sg553_caution" }
+            "1151" { "n" "#PaintKit_cu_sg553_cyber_dragon_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_cyber_dragon_light_large" "r" "3" "pn" "cu_sg553_cyber_dragon" }
+            "1234" { "n" "#PaintKit_cu_sg553_cyberforce_Tag" "i" "econ/default_generated/weapon_sg556_cu_sg553_cyberforce_light_large" "r" "2" "pn" "cu_sg553_cyberforce" }
+        }
+        "40"
+        {
+            "0" { "n" "#SFUI_WPNHUD_SSG08" "i" "econ/weapons/base_weapons/weapon_ssg08" "r" "0" "pn" "default" }
+            "26" { "n" "#PaintKit_sp_short_tape_Tag" "i" "econ/default_generated/weapon_ssg08_sp_short_tape_light_large" "r" "0" "pn" "sp_short_tape" }
+            "60" { "n" "#PaintKit_am_zebra_dark_Tag" "i" "econ/default_generated/weapon_ssg08_am_zebra_dark_light_large" "r" "2" "pn" "am_zebra_dark" }
+            "70" { "n" "#PaintKit_am_carbon_fiber_Tag" "i" "econ/default_generated/weapon_ssg08_am_carbon_fiber_light_large" "r" "1" "pn" "am_carbon_fiber" }
+            "96" { "n" "#PaintKit_so_moss_Tag" "i" "econ/default_generated/weapon_ssg08_so_moss_light_large" "r" "0" "pn" "so_moss" }
+            "99" { "n" "#PaintKit_so_sand_Tag" "i" "econ/default_generated/weapon_ssg08_so_sand_light_large" "r" "0" "pn" "so_sand" }
+            "147" { "n" "#PaintKit_sp_short_tape_jungle_Tag" "i" "econ/default_generated/weapon_ssg08_sp_tape_short_jungle_light_large" "r" "0" "pn" "sp_tape_short_jungle" }
+            "200" { "n" "#PaintKit_hy_mayan_dreams_bravo_Tag" "i" "econ/default_generated/weapon_ssg08_hy_mayan_dreams_bravo_light_large" "r" "1" "pn" "hy_mayan_dreams_bravo" }
+            "222" { "n" "#PaintKit_cu_shark_Tag" "i" "econ/default_generated/weapon_ssg08_cu_shark_light_large" "r" "5" "pn" "cu_shark" }
+            "233" { "n" "#PaintKit_sp_palm_shadow_Tag" "i" "econ/default_generated/weapon_ssg08_sp_palm_shadow_light_large" "r" "1" "pn" "sp_palm_shadow" }
+            "253" { "n" "#PaintKit_aa_fade_grassland_Tag" "i" "econ/default_generated/weapon_ssg08_aa_fade_grassland_light_large" "r" "2" "pn" "aa_fade_grassland" }
+            "304" { "n" "#PaintKit_cu_immortal_ssg08_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_immortal_light_large" "r" "2" "pn" "cu_ssg08_immortal" }
+            "319" { "n" "#PaintKit_hy_ssg08_marker_Tag" "i" "econ/default_generated/weapon_ssg08_hy_ssg08_marker_light_large" "r" "2" "pn" "hy_ssg08_marker" }
+            "361" { "n" "#PaintKit_aq_leviathan_tag" "i" "econ/default_generated/weapon_ssg08_aq_leviathan_light_large" "r" "2" "pn" "aq_leviathan" }
+            "503" { "n" "#PaintKit_cu_ssg08_technicality_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_technicality_light_large" "r" "4" "pn" "cu_ssg08_technicality" }
+            "538" { "n" "#PaintKit_cu_ssg08_necropos_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_necropos_light_large" "r" "2" "pn" "cu_ssg08_necropos" }
+            "554" { "n" "#PaintKit_gs_ssg08_armacore_Tag" "i" "econ/default_generated/weapon_ssg08_gs_ssg08_armacore_light_large" "r" "3" "pn" "gs_ssg08_armacore" }
+            "624" { "n" "#PaintKit_cu_ssg08_dragonfire_scope_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_dragonfire_scope_light_large" "r" "5" "pn" "cu_ssg08_dragonfire_scope" }
+            "670" { "n" "#PaintKit_cu_ssg08_deathshead_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_deathshead_light_large" "r" "3" "pn" "cu_ssg08_deathshead" }
+            "743" { "n" "#PaintKit_hy_ren_orange_Tag" "i" "econ/default_generated/weapon_ssg08_hy_ren_orange_light_large" "r" "2" "pn" "hy_ren_orange" }
+            "751" { "n" "#PaintKit_gs_ssg08_checker_Tag" "i" "econ/default_generated/weapon_ssg08_gs_ssg08_checker_light_large" "r" "2" "pn" "gs_ssg08_checker" }
+            "762" { "n" "#PaintKit_so_rune_stone_Tag" "i" "econ/default_generated/weapon_ssg08_so_rune_stone_light_large" "r" "0" "pn" "so_rune_stone" }
+            "868" { "n" "#PaintKit_hy_flowers_stmarc_Tag" "i" "econ/default_generated/weapon_ssg08_hy_flowers_stmarc_light_large" "r" "3" "pn" "hy_flowers_stmarc" }
+            "899" { "n" "#PaintKit_cu_ssg08_tickler_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_tickler_light_large" "r" "4" "pn" "cu_ssg08_tickler" }
+            "935" { "n" "#PaintKit_sp_zebracam_red_Tag" "i" "econ/default_generated/weapon_ssg08_sp_zebracam_red_light_large" "r" "0" "pn" "sp_zebracam_red" }
+            "956" { "n" "#PaintKit_cu_ssg08_fever_dream_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_fever_dream_light_large" "r" "3" "pn" "cu_ssg08_fever_dream" }
+            "967" { "n" "#PaintKit_cu_ssg08_mainframe_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_mainframe_light_large" "r" "2" "pn" "cu_ssg08_mainframe" }
+            "989" { "n" "#PaintKit_cu_ssg08_chromatic_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_chromatic_light_large" "r" "3" "pn" "cu_ssg08_chromatic" }
+            "996" { "n" "#PaintKit_am_intelligence_orange_Tag" "i" "econ/default_generated/weapon_ssg08_am_intelligence_orange_light_large" "r" "2" "pn" "am_intelligence_orange" }
+            "1052" { "n" "#PaintKit_cu_ssg08_scorpion_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg08_scorpion_light_large" "r" "4" "pn" "cu_ssg08_scorpion" }
+            "1060" { "n" "#PaintKit_hy_trainarchitect_green_Tag" "i" "econ/default_generated/weapon_ssg08_hy_trainarchitect_green_light_large" "r" "2" "pn" "hy_trainarchitect_green" }
+            "1101" { "n" "#PaintKit_cu_ssg_overtake_Tag" "i" "econ/default_generated/weapon_ssg08_cu_ssg_overtake_light_large" "r" "4" "pn" "cu_ssg_overtake" }
+            "1251" { "n" "#PaintKit_gs_ssg08_anubis_Tag" "i" "econ/default_generated/weapon_ssg08_gs_ssg08_anubis_light_large" "r" "1" "pn" "gs_ssg08_anubis" }
+        }
+        "41"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Knife" "i" "" "r" "0" "pn" "default" }
+        }
+        "42"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Knife" "i" "econ/weapons/base_weapons/weapon_knife" "r" "0" "pn" "default" }
+        }
+        "43"
+        {
+            "0" { "n" "#SFUI_WPNHUD_FLASHBANG" "i" "econ/weapons/base_weapons/weapon_flashbang" "r" "0" "pn" "default" }
+        }
+        "44"
+        {
+            "0" { "n" "#SFUI_WPNHUD_HE_Grenade" "i" "econ/weapons/base_weapons/weapon_hegrenade" "r" "0" "pn" "default" }
+        }
+        "45"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Smoke_Grenade" "i" "econ/weapons/base_weapons/weapon_smokegrenade" "r" "0" "pn" "default" }
+        }
+        "46"
+        {
+            "0" { "n" "#SFUI_WPNHUD_MOLOTOV" "i" "econ/weapons/base_weapons/weapon_molotov" "r" "0" "pn" "default" }
+        }
+        "47"
+        {
+            "0" { "n" "#SFUI_WPNHUD_DECOY" "i" "econ/weapons/base_weapons/weapon_decoy" "r" "0" "pn" "default" }
+        }
+        "48"
+        {
+            "0" { "n" "#SFUI_WPNHUD_IncGrenade" "i" "econ/weapons/base_weapons/weapon_incgrenade" "r" "0" "pn" "default" }
+        }
+        "49"
+        {
+            "0" { "n" "#SFUI_WPNHUD_C4" "i" "econ/weapons/base_weapons/weapon_c4" "r" "0" "pn" "default" }
+        }
+        "57"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Healthshot" "i" "econ/weapons/base_weapons/weapon_healthshot" "r" "0" "pn" "default" }
+        }
+        "59"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Knife_T" "i" "econ/weapons/base_weapons/weapon_knife" "r" "0" "pn" "default" }
+        }
+        "60"
+        {
+            "0" { "n" "#SFUI_WPNHUD_M4_SILENCER" "i" "econ/weapons/base_weapons/weapon_m4a1" "r" "1" "pn" "default" }
+            "8" { "n" "#PaintKit_hy_desert_Tag" "i" "econ/default_generated/weapon_m4a1_hy_desert_light_large" "r" "0" "pn" "hy_desert" }
+            "16" { "n" "#PaintKit_hy_v_tiger_Tag" "i" "econ/default_generated/weapon_m4a1_hy_v_tiger_light_large" "r" "0" "pn" "hy_v_tiger" }
+            "17" { "n" "#PaintKit_hy_ddpat_urb_Tag" "i" "econ/default_generated/weapon_m4a1_hy_ddpat_urb_light_large" "r" "0" "pn" "hy_ddpat_urb" }
+            "101" { "n" "#PaintKit_so_tornado_Tag" "i" "econ/default_generated/weapon_m4a1_so_tornado_light_large" "r" "0" "pn" "so_tornado" }
+            "155" { "n" "#PaintKit_cu_bullet_rain_m4a1_Tag" "i" "econ/default_generated/weapon_m4a1_cu_bullet_rain_m4a1_light_large" "r" "5" "pn" "cu_bullet_rain_m4a1" }
+            "164" { "n" "#PaintKit_hy_hunter_modern_Tag" "i" "econ/default_generated/weapon_m4a1_hy_hunter_modern_light_large" "r" "2" "pn" "hy_hunter_modern" }
+            "167" { "n" "#PaintKit_sp_nukestripe_orange_Tag" "i" "econ/default_generated/weapon_m4a1_sp_nukestripe_orange_light_large" "r" "1" "pn" "sp_nukestripe_orange" }
+            "176" { "n" "#PaintKit_sp_zebracam_bw_Tag" "i" "econ/default_generated/weapon_m4a1_sp_zebracam_bw_light_large" "r" "1" "pn" "sp_zebracam_bw" }
+            "187" { "n" "#PaintKit_sp_star_bravo_Tag" "i" "econ/default_generated/weapon_m4a1_sp_star_bravo_light_large" "r" "2" "pn" "sp_star_bravo" }
+            "215" { "n" "#PaintKit_cu_xray_m4_Tag" "i" "econ/default_generated/weapon_m4a1_cu_xray_m4_light_large" "r" "5" "pn" "cu_xray_m4" }
+            "255" { "n" "#PaintKit_cu_m4_asimov_tag" "i" "econ/default_generated/weapon_m4a1_cu_m4_asimov_light_large" "r" "4" "pn" "cu_m4_asimov" }
+            "336" { "n" "#PaintKit_cu_titanstorm_tag" "i" "econ/default_generated/weapon_m4a1_cu_titanstorm_light_large" "r" "4" "pn" "cu_titanstorm" }
+            "384" { "n" "#PaintKit_cu_m4a4_griffin_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_griffin_light_large" "r" "2" "pn" "cu_m4a4_griffin" }
+            "400" { "n" "#PaintKit_cu_m4a4_ancestral_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_ancestral_light_large" "r" "3" "pn" "cu_m4a4_ancestral" }
+            "449" { "n" "#PaintKit_cu_poseidon_Tag" "i" "econ/default_generated/weapon_m4a1_cu_poseidon_light_large" "r" "3" "pn" "cu_poseidon" }
+            "471" { "n" "#PaintKit_am_kimono_sunrise_Tag" "i" "econ/default_generated/weapon_m4a1_am_kimono_sunrise_light_large" "r" "2" "pn" "am_kimono_sunrise" }
+            "480" { "n" "#PaintKit_cu_m4a4_evil_daimyo_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_evil_daimyo_light_large" "r" "2" "pn" "cu_m4a4_evil_daimyo" }
+            "512" { "n" "#PaintKit_gs_m4a4_royal_squire_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_royal_squire_light_large" "r" "4" "pn" "gs_m4a4_royal_squire" }
+            "533" { "n" "#PaintKit_gs_m4a4_pioneer_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_pioneer_light_large" "r" "4" "pn" "gs_m4a4_pioneer" }
+            "588" { "n" "#PaintKit_cu_m4a4_desolate_space_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_desolate_space_light_large" "r" "3" "pn" "cu_m4a4_desolate_space" }
+            "632" { "n" "#PaintKit_gs_m4a4_sector_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_sector_light_large" "r" "4" "pn" "gs_m4a4_sector" }
+            "664" { "n" "#PaintKit_cu_m4a4_hellfire_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_hellfire_light_large" "r" "3" "pn" "cu_m4a4_hellfire" }
+            "695" { "n" "#PaintKit_cu_m4a4_neo_noir_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_neo_noir_light_large" "r" "4" "pn" "cu_m4a4_neo_noir" }
+            "730" { "n" "#PaintKit_sp_bud_blue_Tag" "i" "econ/default_generated/weapon_m4a1_sp_bud_blue_light_large" "r" "0" "pn" "sp_bud_blue" }
+            "780" { "n" "#PaintKit_am_circuitboard_silver_Tag" "i" "econ/default_generated/weapon_m4a1_am_circuitboard_silver_light_large" "r" "0" "pn" "am_circuitboard_silver" }
+            "793" { "n" "#PaintKit_hy_red_hex_Tag" "i" "econ/default_generated/weapon_m4a1_hy_red_hex_light_large" "r" "1" "pn" "hy_red_hex" }
+            "811" { "n" "#PaintKit_gs_m4a4_chopper_ghost_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_chopper_ghost_light_large" "r" "1" "pn" "gs_m4a4_chopper_ghost" }
+            "844" { "n" "#PaintKit_gs_m4a4_emperor_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_emperor_light_large" "r" "4" "pn" "gs_m4a4_emperor" }
+            "926" { "n" "#PaintKit_hy_ddpat_urban_red_Tag" "i" "econ/default_generated/weapon_m4a1_hy_ddpat_urban_red_light_large" "r" "2" "pn" "hy_ddpat_urban_red" }
+            "971" { "n" "#PaintKit_cu_m4a4_queenfairy_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_queenfairy_light_large" "r" "3" "pn" "cu_m4a4_queenfairy" }
+            "985" { "n" "#PaintKit_cu_m4a4_cyberpunk_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_cyberpunk_light_large" "r" "3" "pn" "cu_m4a4_cyberpunk" }
+            "993" { "n" "#PaintKit_cu_csgo_camo_Tag" "i" "econ/default_generated/weapon_m4a1_cu_csgo_camo_light_large" "r" "1" "pn" "cu_csgo_camo" }
+            "1041" { "n" "#PaintKit_cu_m4a4_love_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_love_light_large" "r" "4" "pn" "cu_m4a4_love" }
+            "1063" { "n" "#PaintKit_gs_m4a4_coalition_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_coalition_light_large" "r" "4" "pn" "gs_m4a4_coalition" }
+            "1097" { "n" "#PaintKit_gs_m4_flowers_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4_flowers_light_large" "r" "2" "pn" "gs_m4_flowers" }
+            "1149" { "n" "#PaintKit_cu_m4a4_elite_tactical_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_elite_tactical_light_large" "r" "1" "pn" "cu_m4a4_elite_tactical" }
+            "1228" { "n" "#PaintKit_cu_m4a4_temukau_Tag" "i" "econ/default_generated/weapon_m4a1_cu_m4a4_temukau_light_large" "r" "4" "pn" "cu_m4a4_temukau" }
+            "1255" { "n" "#PaintKit_gs_m4a4_ra_Tag" "i" "econ/default_generated/weapon_m4a1_gs_m4a4_ra_light_large" "r" "4" "pn" "gs_m4a4_ra" }
+        }
+        "61"
+        {
+            "0" { "n" "#SFUI_WPNHUD_USP_SILENCER" "i" "econ/weapons/base_weapons/weapon_hkp2000" "r" "1" "pn" "default" }
+            "21" { "n" "#PaintKit_hy_granite_Tag" "i" "econ/default_generated/weapon_hkp2000_hy_granite_light_large" "r" "0" "pn" "hy_granite" }
+            "32" { "n" "#PaintKit_an_silver_Tag" "i" "econ/default_generated/weapon_hkp2000_an_silver_light_large" "r" "1" "pn" "an_silver" }
+            "71" { "n" "#PaintKit_am_scorpion_p2000_Tag" "i" "econ/default_generated/weapon_hkp2000_am_scorpion_p2000_light_large" "r" "2" "pn" "am_scorpion_p2000" }
+            "95" { "n" "#PaintKit_so_grassland_Tag" "i" "econ/default_generated/weapon_hkp2000_so_grassland_light_large" "r" "0" "pn" "so_grassland" }
+            "104" { "n" "#PaintKit_sp_leaves_grassland_Tag" "i" "econ/default_generated/weapon_hkp2000_sp_leaves_grassland_light_large" "r" "0" "pn" "sp_leaves_grassland" }
+            "184" { "n" "#PaintKit_cu_favela_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_favela_p2000_light_large" "r" "3" "pn" "cu_favela_p2000" }
+            "211" { "n" "#PaintKit_am_ossify_blue_Tag" "i" "econ/default_generated/weapon_hkp2000_am_ossify_blue_p2000_bravo_light_large" "r" "3" "pn" "am_ossify_blue_p2000_bravo" }
+            "246" { "n" "#PaintKit_aa_fade_metallic_Tag" "i" "econ/default_generated/weapon_hkp2000_aa_fade_metallic_light_large" "r" "2" "pn" "aa_fade_metallic" }
+            "275" { "n" "#PaintKit_hy_poly_camo_Tag" "i" "econ/default_generated/weapon_hkp2000_hy_poly_camo_light_large" "r" "1" "pn" "hy_poly_camo" }
+            "327" { "n" "#PaintKit_am_chainmail_Tag" "i" "econ/default_generated/weapon_hkp2000_am_chainmail_light_large" "r" "1" "pn" "am_chainmail" }
+            "338" { "n" "#PaintKit_cu_famas_pulse_tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_pulse_light_large" "r" "1" "pn" "cu_p2000_pulse" }
+            "346" { "n" "#PaintKit_cu_luggage_p2000_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_luggage_p2000_light_large" "r" "0" "pn" "cu_luggage_p2000" }
+            "357" { "n" "#PaintKit_cu_p2000_ivory_tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_ivory_light_large" "r" "1" "pn" "cu_p2000_ivory" }
+            "389" { "n" "#PaintKit_cu_p2000_fire_elemental_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_fire_elemental_light_large" "r" "4" "pn" "cu_p2000_fire_elemental" }
+            "443" { "n" "#PaintKit_sp_labyrinth2_Tag" "i" "econ/default_generated/weapon_hkp2000_sp_labyrinth2_light_large" "r" "0" "pn" "sp_labyrinth2" }
+            "485" { "n" "#PaintKit_aq_p2000_boom_Tag" "i" "econ/default_generated/weapon_hkp2000_aq_p2000_boom_light_large" "r" "2" "pn" "aq_p2000_boom" }
+            "515" { "n" "#PaintKit_am_p2000_imperial_red_Tag" "i" "econ/default_generated/weapon_hkp2000_am_p2000_imperial_red_light_large" "r" "1" "pn" "am_p2000_imperial_red" }
+            "550" { "n" "#PaintKit_hy_p2000_oceani_Tag" "i" "econ/default_generated/weapon_hkp2000_hy_p2000_oceani_light_large" "r" "1" "pn" "hy_p2000_oceani" }
+            "591" { "n" "#PaintKit_gs_p2000_imperial_dragon_Tag" "i" "econ/default_generated/weapon_hkp2000_gs_p2000_imperial_dragon_light_large" "r" "3" "pn" "gs_p2000_imperial_dragon" }
+            "635" { "n" "#PaintKit_gs_p2000-sport_Tag" "i" "econ/default_generated/weapon_hkp2000_gs_p2000-sport_light_large" "r" "1" "pn" "gs_p2000-sport" }
+            "667" { "n" "#PaintKit_cu_p2000_hunter_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_hunter_light_large" "r" "2" "pn" "cu_p2000_hunter" }
+            "700" { "n" "#PaintKit_cu_p2000_urban_hazard_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_urban_hazard_light_large" "r" "1" "pn" "cu_p2000_urban_hazard" }
+            "894" { "n" "#PaintKit_cu_p2000_obsidian_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_obsidian_light_large" "r" "2" "pn" "cu_p2000_obsidian" }
+            "951" { "n" "#PaintKit_aq_p2000_acid_clover_Tag" "i" "econ/default_generated/weapon_hkp2000_aq_p2000_acid_clover_light_large" "r" "2" "pn" "aq_p2000_acid_clover" }
+            "960" { "n" "#PaintKit_aq_p2000_lost_world_Tag" "i" "econ/default_generated/weapon_hkp2000_aq_p2000_lost_world_light_large" "r" "1" "pn" "aq_p2000_lost_world" }
+            "997" { "n" "#PaintKit_am_numbers_red_blue_Tag" "i" "econ/default_generated/weapon_hkp2000_am_numbers_red_blue_light_large" "r" "1" "pn" "am_numbers_red_blue" }
+            "1019" { "n" "#PaintKit_am_black_panther_Tag" "i" "econ/default_generated/weapon_hkp2000_am_black_panther_light_large" "r" "0" "pn" "am_black_panther" }
+            "1055" { "n" "#PaintKit_aa_spacerace_orange_Tag" "i" "econ/default_generated/weapon_hkp2000_aa_spacerace_orange_light_large" "r" "2" "pn" "aa_spacerace_orange" }
+            "1138" { "n" "#PaintKit_cu_p2k_flying_dream_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2k_flying_dream_light_large" "r" "1" "pn" "cu_p2k_flying_dream" }
+            "1224" { "n" "#PaintKit_cu_p2000_decline_Tag" "i" "econ/default_generated/weapon_hkp2000_cu_p2000_decline_light_large" "r" "3" "pn" "cu_p2000_decline" }
+        }
+        "63"
+        {
+            "0" { "n" "#SFUI_WPNHUD_CZ75" "i" "econ/weapons/base_weapons/weapon_p250" "r" "0" "pn" "default" }
+        }
+        "64"
+        {
+            "0" { "n" "#SFUI_WPNHUD_REVOLVER" "i" "econ/weapons/base_weapons/weapon_deagle" "r" "0" "pn" "default" }
+            "17" { "n" "#PaintKit_hy_ddpat_urb_Tag" "i" "econ/default_generated/weapon_deagle_hy_ddpat_urb_light_large" "r" "0" "pn" "hy_ddpat_urb" }
+            "37" { "n" "#PaintKit_aa_flames_Tag" "i" "econ/default_generated/weapon_deagle_aa_flames_light_large" "r" "2" "pn" "aa_flames" }
+            "40" { "n" "#PaintKit_so_night_Tag" "i" "econ/default_generated/weapon_deagle_so_night_light_large" "r" "0" "pn" "so_night" }
+            "61" { "n" "#PaintKit_aa_vertigo_Tag" "i" "econ/default_generated/weapon_deagle_aa_vertigo_light_large" "r" "3" "pn" "aa_vertigo" }
+            "90" { "n" "#PaintKit_hy_sediment_Tag" "i" "econ/default_generated/weapon_deagle_hy_mottled_sand_light_large" "r" "0" "pn" "hy_mottled_sand" }
+            "185" { "n" "#PaintKit_am_scales_bravo_Tag" "i" "econ/default_generated/weapon_deagle_am_scales_bravo_light_large" "r" "4" "pn" "am_scales_bravo" }
+            "231" { "n" "#PaintKit_am_ddpatdense_peacock_Tag" "i" "econ/default_generated/weapon_deagle_am_ddpatdense_peacock_light_large" "r" "3" "pn" "am_ddpatdense_peacock" }
+            "232" { "n" "#PaintKit_hy_webs_Tag" "i" "econ/default_generated/weapon_deagle_hy_webs_darker_light_large" "r" "2" "pn" "hy_webs_darker" }
+            "237" { "n" "#PaintKit_hy_varicamo_urban_Tag" "i" "econ/default_generated/weapon_deagle_hy_varicamo_urban_light_large" "r" "1" "pn" "hy_varicamo_urban" }
+            "273" { "n" "#PaintKit_aq_engraved_deagle_Tag" "i" "econ/default_generated/weapon_deagle_aq_engraved_deagle_light_large" "r" "2" "pn" "aq_engraved_deagle" }
+            "296" { "n" "#PaintKit_am_crystallized_dark_Tag" "i" "econ/default_generated/weapon_deagle_am_crystallized_dark_light_large" "r" "1" "pn" "am_crystallized_dark" }
+            "328" { "n" "#PaintKit_aq_handcannon_Tag" "i" "econ/default_generated/weapon_deagle_aq_handcannon_light_large" "r" "2" "pn" "aq_handcannon" }
+            "347" { "n" "#PaintKit_aq_pilot_deagle_Tag" "i" "econ/default_generated/weapon_deagle_aq_pilot_deagle_light_large" "r" "2" "pn" "aq_pilot_deagle" }
+            "351" { "n" "#PaintKit_cu_deagle_aureus_tag" "i" "econ/default_generated/weapon_deagle_cu_deagle_aureus_light_large" "r" "3" "pn" "cu_deagle_aureus" }
+            "397" { "n" "#PaintKit_aq_deagle_naga_Tag" "i" "econ/default_generated/weapon_deagle_aq_deagle_naga_light_large" "r" "2" "pn" "aq_deagle_naga" }
+            "425" { "n" "#PaintKit_am_bronze_sparkle_Tag" "i" "econ/default_generated/weapon_deagle_am_bronze_sparkle_light_large" "r" "1" "pn" "am_bronze_sparkle" }
+            "468" { "n" "#PaintKit_am_seastorm_Tag" "i" "econ/default_generated/weapon_deagle_am_seastorm_light_large" "r" "0" "pn" "am_seastorm" }
+            "469" { "n" "#PaintKit_am_seastorm_blood_Tag" "i" "econ/default_generated/weapon_deagle_am_seastorm_blood_light_large" "r" "2" "pn" "am_seastorm_blood" }
+            "470" { "n" "#PaintKit_am_seastorm_shojo_Tag" "i" "econ/default_generated/weapon_deagle_am_seastorm_shojo_light_large" "r" "2" "pn" "am_seastorm_shojo" }
+            "509" { "n" "#PaintKit_aq_deagle_corinthian_Tag" "i" "econ/default_generated/weapon_deagle_aq_deagle_corinthian_light_large" "r" "1" "pn" "aq_deagle_corinthian" }
+            "527" { "n" "#PaintKit_aq_deserteagle_kumichodragon_Tag" "i" "econ/default_generated/weapon_deagle_aq_deserteagle_kumichodragon_light_large" "r" "3" "pn" "aq_deserteagle_kumichodragon" }
+            "603" { "n" "#PaintKit_aq_Desert_Eagle_Constable_Tag" "i" "econ/default_generated/weapon_deagle_aq_desert_eagle_constable_light_large" "r" "2" "pn" "aq_desert_eagle_constable" }
+            "645" { "n" "#PaintKit_cu_desert_eagle_corroden_Tag" "i" "econ/default_generated/weapon_deagle_cu_desert_eagle_corroden_light_large" "r" "1" "pn" "cu_desert_eagle_corroden" }
+            "711" { "n" "#PaintKit_gs_deagle_aggressor_Tag" "i" "econ/default_generated/weapon_deagle_gs_deagle_aggressor_light_large" "r" "4" "pn" "gs_deagle_aggressor" }
+            "757" { "n" "#PaintKit_am_jorm_green_Tag" "i" "econ/default_generated/weapon_deagle_am_jorm_green_light_large" "r" "2" "pn" "am_jorm_green" }
+            "764" { "n" "#PaintKit_gs_deagle_fennec_Tag" "i" "econ/default_generated/weapon_deagle_gs_deagle_fennec_light_large" "r" "3" "pn" "gs_deagle_fennec" }
+            "805" { "n" "#PaintKit_gs_deagle_mecha_Tag" "i" "econ/default_generated/weapon_deagle_gs_deagle_mecha_light_large" "r" "3" "pn" "gs_deagle_mecha" }
+            "841" { "n" "#PaintKit_gs_deagle_exo_Tag" "i" "econ/default_generated/weapon_deagle_gs_deagle_exo_light_large" "r" "2" "pn" "gs_deagle_exo" }
+            "945" { "n" "#PaintKit_cu_deagle_replica_Tag" "i" "econ/default_generated/weapon_deagle_cu_deagle_replica_light_large" "r" "1" "pn" "cu_deagle_replica" }
+            "962" { "n" "#PaintKit_cu_printstream_Tag" "i" "econ/default_generated/weapon_deagle_cu_deag_printstream_light_large" "r" "4" "pn" "cu_deag_printstream" }
+            "992" { "n" "#PaintKit_am_numbers_bronze_Tag" "i" "econ/default_generated/weapon_deagle_am_numbers_bronze_light_large" "r" "0" "pn" "am_numbers_bronze" }
+            "1006" { "n" "#PaintKit_am_heist_plans_purple_Tag" "i" "econ/default_generated/weapon_deagle_am_heist_plans_purple_light_large" "r" "1" "pn" "am_heist_plans_purple" }
+            "1050" { "n" "#PaintKit_cu_deag_trigger_discipline_Tag" "i" "econ/default_generated/weapon_deagle_cu_deag_trigger_discipline_light_large" "r" "2" "pn" "cu_deag_trigger_discipline" }
+            "1056" { "n" "#PaintKit_sp_spacerace_blue_Tag" "i" "econ/default_generated/weapon_deagle_sp_spacerace_blue_light_large" "r" "1" "pn" "sp_spacerace_blue" }
+            "1090" { "n" "#PaintKit_cu_deagle_kitch_Tag" "i" "econ/default_generated/weapon_deagle_cu_deagle_kitch_light_large" "r" "4" "pn" "cu_deagle_kitch" }
+        }
+        "68"
+        {
+            "0" { "n" "#SFUI_WPNHUD_TAGrenade" "i" "econ/weapons/base_weapons/weapon_tagrenade" "r" "0" "pn" "default" }
+        }
+        "69"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Fists" "i" "econ/weapons/base_weapons/weapon_fists" "r" "0" "pn" "default" }
+        }
+        "70"
+        {
+            "0" { "n" "#SFUI_WPNHUD_BreachCharge" "i" "econ/weapons/base_weapons/weapon_breachcharge" "r" "0" "pn" "default" }
+        }
+        "72"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Tablet" "i" "econ/weapons/base_weapons/weapon_tablet" "r" "0" "pn" "default" }
+        }
+        "74"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Knife" "i" "econ/weapons/base_weapons/weapon_melee" "r" "0" "pn" "default" }
+        }
+        "75"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Axe" "i" "econ/weapons/base_weapons/weapon_melee" "r" "0" "pn" "default" }
+        }
+        "76"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Hammer" "i" "econ/weapons/base_weapons/weapon_melee" "r" "0" "pn" "default" }
+        }
+        "78"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Spanner" "i" "econ/weapons/base_weapons/weapon_melee" "r" "0" "pn" "default" }
+        }
+        "80"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Knife_Ghost" "i" "econ/weapons/base_weapons/weapon_knife" "r" "0" "pn" "default" }
+        }
+        "81"
+        {
+            "0" { "n" "#SFUI_WPNHUD_FIREBOMB" "i" "econ/weapons/base_weapons/weapon_molotov" "r" "0" "pn" "default" }
+        }
+        "82"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Diversion" "i" "econ/weapons/base_weapons/weapon_decoy" "r" "0" "pn" "default" }
+        }
+        "83"
+        {
+            "0" { "n" "#SFUI_WPNHUD_frag_Grenade" "i" "econ/weapons/base_weapons/weapon_hegrenade" "r" "0" "pn" "default" }
+        }
+        "84"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Snowball" "i" "econ/weapons/base_weapons/weapon_snowball" "r" "0" "pn" "default" }
+        }
+        "85"
+        {
+            "0" { "n" "#SFUI_WPNHUD_BUMPMINE" "i" "econ/weapons/base_weapons/weapon_bumpmine" "r" "0" "pn" "default" }
+        }
+        "500"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeBayonet" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "503"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeCSS" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "505"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeFlip" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "506"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeGut" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "507"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeKaram" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "508"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeM9" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "509"
+        {
+            "0" { "n" "#SFUI_WPNHUD_KnifeTactical" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "512"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_falchion_advanced" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "514"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_survival_bowie" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "515"
+        {
+            "0" { "n" "#SFUI_WPNHUD_Knife_Butterfly" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "516"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_push" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "517"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_cord" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "518"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_canis" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "519"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_ursus" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "520"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_gypsy_jackknife" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "521"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_outdoor" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "522"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_stiletto" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "523"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_widowmaker" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+        "525"
+        {
+            "0" { "n" "#SFUI_WPNHUD_knife_skeleton" "i" "econ/weapons/base_weapons/weapon_knife" "r" "5" "pn" "default" }
+        }
+    }
+    "slots"
+    {
+        "c4"
+        {
+            "49" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "equipment2"
+        {
+            "31" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "grenade0"
+        {
+            "48" { "t" "1" "ct" "1" "dflt" "1" }
+            "46" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "grenade1"
+        {
+            "47" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "grenade2"
+        {
+            "43" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "grenade3"
+        {
+            "44" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "grenade4"
+        {
+            "45" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "heavy0"
+        {
+            "35" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "heavy1"
+        {
+            "25" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "heavy2"
+        {
+            "27" { "t" "1" "ct" "1" "dflt" "1" }
+            "29" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "heavy3"
+        {
+            "14" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "heavy4"
+        {
+            "28" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "heavy5"
+        {
+            "37" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "melee"
+        {
+            "523" { "t" "1" "ct" "0" "dflt" "0" }
+            "500" { "t" "1" "ct" "0" "dflt" "0" }
+            "515" { "t" "1" "ct" "0" "dflt" "0" }
+            "516" { "t" "1" "ct" "0" "dflt" "0" }
+            "522" { "t" "1" "ct" "0" "dflt" "0" }
+            "521" { "t" "1" "ct" "0" "dflt" "0" }
+            "520" { "t" "1" "ct" "0" "dflt" "0" }
+            "509" { "t" "1" "ct" "0" "dflt" "0" }
+            "59" { "t" "1" "ct" "0" "dflt" "1" }
+            "517" { "t" "1" "ct" "0" "dflt" "0" }
+            "518" { "t" "1" "ct" "0" "dflt" "0" }
+            "519" { "t" "1" "ct" "0" "dflt" "0" }
+            "507" { "t" "1" "ct" "0" "dflt" "0" }
+            "525" { "t" "1" "ct" "0" "dflt" "0" }
+            "514" { "t" "1" "ct" "0" "dflt" "0" }
+            "503" { "t" "1" "ct" "0" "dflt" "0" }
+            "512" { "t" "1" "ct" "0" "dflt" "0" }
+            "508" { "t" "1" "ct" "0" "dflt" "0" }
+            "505" { "t" "1" "ct" "0" "dflt" "0" }
+            "506" { "t" "1" "ct" "0" "dflt" "0" }
+            "42" { "t" "1" "ct" "1" "dflt" "1" }
+        }
+        "none"
+        {
+            "78" { "t" "1" "ct" "0" "dflt" "0" }
+            "76" { "t" "1" "ct" "0" "dflt" "0" }
+            "83" { "t" "1" "ct" "0" "dflt" "0" }
+            "82" { "t" "1" "ct" "0" "dflt" "0" }
+            "85" { "t" "1" "ct" "0" "dflt" "0" }
+            "69" { "t" "1" "ct" "0" "dflt" "0" }
+            "57" { "t" "1" "ct" "0" "dflt" "0" }
+            "81" { "t" "1" "ct" "0" "dflt" "0" }
+            "80" { "t" "1" "ct" "0" "dflt" "1" }
+            "74" { "t" "1" "ct" "1" "dflt" "0" }
+            "72" { "t" "1" "ct" "0" "dflt" "0" }
+            "70" { "t" "1" "ct" "0" "dflt" "0" }
+            "68" { "t" "1" "ct" "0" "dflt" "0" }
+            "75" { "t" "1" "ct" "0" "dflt" "0" }
+            "84" { "t" "1" "ct" "0" "dflt" "0" }
+            "41" { "t" "1" "ct" "1" "dflt" "0" }
+        }
+        "rifle0"
+        {
+            "10" { "t" "1" "ct" "1" "dflt" "1" }
+            "13" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "rifle1"
+        {
+            "60" { "t" "1" "ct" "1" "dflt" "0" }
+            "16" { "t" "1" "ct" "1" "dflt" "1" }
+            "7" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "rifle2"
+        {
+            "40" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "rifle3"
+        {
+            "8" { "t" "1" "ct" "1" "dflt" "1" }
+            "39" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "rifle4"
+        {
+            "9" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "rifle5"
+        {
+            "38" { "t" "1" "ct" "1" "dflt" "1" }
+            "11" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "secondary0"
+        {
+            "4" { "t" "1" "ct" "0" "dflt" "1" }
+            "61" { "t" "1" "ct" "1" "dflt" "0" }
+            "32" { "t" "1" "ct" "1" "dflt" "1" }
+        }
+        "secondary1"
+        {
+            "2" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "secondary2"
+        {
+            "20" { "t" "1" "ct" "0" "dflt" "0" }
+            "36" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "secondary3"
+        {
+            "63" { "t" "1" "ct" "0" "dflt" "0" }
+            "30" { "t" "1" "ct" "0" "dflt" "1" }
+            "3" { "t" "1" "ct" "1" "dflt" "1" }
+        }
+        "secondary4"
+        {
+            "1" { "t" "1" "ct" "0" "dflt" "1" }
+            "64" { "t" "1" "ct" "0" "dflt" "0" }
+        }
+        "smg0"
+        {
+            "17" { "t" "1" "ct" "0" "dflt" "1" }
+            "34" { "t" "1" "ct" "1" "dflt" "1" }
+        }
+        "smg1"
+        {
+            "23" { "t" "1" "ct" "0" "dflt" "0" }
+            "33" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "smg2"
+        {
+            "24" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "smg3"
+        {
+            "19" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+        "smg4"
+        {
+            "26" { "t" "1" "ct" "0" "dflt" "1" }
+        }
+    }
+}
