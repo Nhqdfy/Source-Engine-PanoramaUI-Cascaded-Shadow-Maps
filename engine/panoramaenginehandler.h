@@ -165,6 +165,11 @@ private:
 	panorama::IUIWindow *m_pTestWindow;
 	panorama::IUIWindow *m_pMenuWindow;
 
+	// SE port (2026-09-22): -panoramatest 的测试视图要**推迟**创建（值 = 倒计时帧数）。
+	// 在 Init() 里立即建会让该视图的所有文字渲染成占位色块（字体图集上传时机不对），
+	// 详情见 panoramaenginehandler.cpp 里 Init / RunFrame 的注释。
+	int m_nSECreateTestViewDelay;
+
 	int m_nMainWindowWidth;
 	int m_nMainWindowHeight;
 

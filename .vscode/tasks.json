@@ -2043,6 +2043,341 @@
 				"_gitcommit3.ps1"
 			],
 			"group": "none"
+		},
+		{
+			"label": "SE rebuild after reset",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_build_backpack.ps1"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "SE backpack cleanup+state",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_clean.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE rebuild retry after PDB error",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_rebuild4.ps1"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "SE check game dir",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_gamedir.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE deploy in-game panel content",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_deploy_ingame_panel.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE FULL rebuild (clean+configure+build)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_full_rebuild_bp.ps1"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "SE rebuild progress",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_progress.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE deploy full build",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_deploy_full_build.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE in-game panel test (DO NOT CLOSE GAME ~90s)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_ingame_panel_test.ps1",
+				"-Settle",
+				"60"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE fix bin (restore missing dlls)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_fixbin.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE find third-party dlls",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_find_dlls.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE add non-build dlls",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_adddlls.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE fix SDL2 bitness",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_sdl_fix.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE in-game panel test 2 (DO NOT CLOSE GAME ~90s)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_ingame_panel_test.ps1",
+				"-Settle",
+				"60"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE in-game panel test 3 (DO NOT CLOSE GAME ~90s)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_ingame_panel_test.ps1",
+				"-Settle",
+				"60"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE rebuild done check",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bp_progress.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE redeploy in-game panel",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_deploy_ingame_panel.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE dpanel",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_dpanel.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE font check",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_fontchk.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE font history",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_fonthist.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE font commits",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_fontcommits.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE dll stat",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_dllstat.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE rebuild engine (testview delay)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_build_backpack.ps1"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "SE bb build",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bb.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "SE bbd check+deploy",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"d:\\Source-Engine-Panorama-UI-3\\build\\_bbd.ps1"
+			],
+			"problemMatcher": []
 		}
 	]
 }

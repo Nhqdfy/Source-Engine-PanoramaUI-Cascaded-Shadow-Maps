@@ -3005,6 +3005,114 @@ void CMaterialSystem::ResetPanoramaRenderState()
 // what the panorama text shader samples anyway (it reads .a), and it needs no conversion at all.
 static const ImageFormat kPanoramaAlphaFormat = IMAGE_FORMAT_RGBA8888;
 
+// SE port (2026-09-22, bring-up aid): the port's text renders as solid colour blocks in the
+// hosted in-game view.  Solid blocks mean the sampler reads alpha == 1 everywhere, and the only
+// way the atlas can be opaque is if the device copy is not our coverage - so this records what
+// the CPU copy holds every time it is uploaded or re-downloaded.
+//
+//   se_atlas_marker 0 = normal
+//                   1 = fill the CPU atlas with opaque red before it is first downloaded
+//                   2 = fill it with a horizontal alpha ramp
+// (any non-zero value makes the atlas unmistakable on screen: red bars mean our bytes reached
+// the device, label-coloured bars mean the device is showing something else entirely).
+static ConVar se_atlas_marker( "se_atlas_marker", "0", FCVAR_NONE,
+	"panorama font atlas bring-up marker: 0=off 1=opaque red 2=alpha ramp" );
+
+// Companion diagnostic: write the CPU atlas out as a BMP (grayscale coverage) so the packing can
+// be inspected directly.  Dumps at most one image every couple of seconds, so a run leaves a
+// short time series instead of one giant file.
+static ConVar se_atlas_dump( "se_atlas_dump", "0", FCVAR_NONE,
+	"panorama font atlas bring-up dump: 0=off 1=write D:\\cstrike\\se_atlas_N.bmp" );
+
+static void SEProbeAtlas( const char *pFmt, ... )
+{
+	FILE *fp = fopen( "D:\\cstrike\\se_atlas_probe.txt", "a" );
+	if ( !fp )
+		return;
+
+	va_list args;
+	va_start( args, pFmt );
+	vfprintf( fp, pFmt, args );
+	va_end( args );
+
+	fflush( fp );
+	fclose( fp );
+}
+
+// The CPU atlas is RGBA8888 with the coverage in every channel, so the alpha byte is the truth.
+static void SEProbeAtlasStats( const char *pchWhat, int nCall, const unsigned char *pBits, int nWidth, int nHeight )
+{
+	if ( !pBits || nWidth <= 0 || nHeight <= 0 )
+	{
+		SEProbeAtlas( "%s #%d bits=%p size=%dx%d (no bits)\n", pchWhat, nCall, (const void *)pBits, nWidth, nHeight );
+		return;
+	}
+
+	const int nPixels = nWidth * nHeight;
+	int nNonZero = 0, nMin = 255, nMax = 0;
+	for ( int i = 0; i < nPixels; ++i )
+	{
+		const unsigned char nAlpha = pBits[ i * 4 + 3 ];
+		if ( nAlpha )
+			++nNonZero;
+		if ( nAlpha < nMin )
+			nMin = nAlpha;
+		if ( nAlpha > nMax )
+			nMax = nAlpha;
+	}
+
+	SEProbeAtlas( "%s #%d bits=%p size=%dx%d nonzero=%d min=%d max=%d\n",
+		pchWhat, nCall, (const void *)pBits, nWidth, nHeight, nNonZero, nMin, nMax );
+}
+
+// SE port (2026-09-22, bring-up aid): dump the CPU copy of the font atlas (which is exactly what
+// is handed to IShaderAPI::TexImage2D) to a BMP, so the packing can be looked at instead of
+// guessed at.  Coverage is written as a grey image, 1:1, bottom-up as BMP wants it.
+static void SEDumpAtlasBMP( const char *pchPath, const unsigned char *pBits, int nWidth, int nHeight )
+{
+	if ( !pBits || nWidth <= 0 || nHeight <= 0 )
+		return;
+
+	FILE *fp = fopen( pchPath, "wb" );
+	if ( !fp )
+		return;
+
+	const int nRowBytes = nWidth * 3;
+	const int nPad = ( 4 - ( nRowBytes % 4 ) ) % 4;
+	const int nImageBytes = ( nRowBytes + nPad ) * nHeight;
+	const int nFileBytes = 54 + nImageBytes;
+
+	unsigned char header[ 54 ];
+	memset( header, 0, sizeof( header ) );
+	header[ 0 ] = 'B'; header[ 1 ] = 'M';
+	*(int *)( header + 2 ) = nFileBytes;
+	*(int *)( header + 10 ) = 54;
+	*(int *)( header + 14 ) = 40;
+	*(int *)( header + 18 ) = nWidth;
+	*(int *)( header + 22 ) = nHeight;
+	*(short *)( header + 26 ) = 1;
+	*(short *)( header + 28 ) = 24;
+	*(int *)( header + 34 ) = nImageBytes;
+	fwrite( header, 1, sizeof( header ), fp );
+
+	unsigned char *pRow = new unsigned char[ nRowBytes + nPad ];
+	for ( int y = nHeight - 1; y >= 0; --y )
+	{
+		memset( pRow, 0, nRowBytes + nPad );
+		for ( int x = 0; x < nWidth; ++x )
+		{
+			const unsigned char nCoverage = pBits[ ( y * nWidth + x ) * 4 + 3 ];
+			pRow[ x * 3 + 0 ] = nCoverage;
+			pRow[ x * 3 + 1 ] = nCoverage;
+			pRow[ x * 3 + 2 ] = nCoverage;
+		}
+		fwrite( pRow, 1, nRowBytes + nPad, fp );
+	}
+
+	delete[] pRow;
+	fclose( fp );
+}
+
 class CPanoramaAlphaRegen : public ITextureRegenerator
 {
 public:
@@ -3124,6 +3232,19 @@ public:
 		if ( !m_pBits || !pVTFTexture )
 			return;
 
+		// SE port (2026-09-22): this is the "the material system re-downloaded the procedural
+		// texture" path.  If the device ever shows the procedural *error* texture (opaque alpha =
+		// solid text blocks) then either this never ran, or what it wrote is not our coverage.
+		{
+			static int s_nSEAtlasRegenProbe = 0;
+			if ( s_nSEAtlasRegenProbe < 40 )
+			{
+				++s_nSEAtlasRegenProbe;
+				SEProbeAtlasStats( "ATLASREGEN", s_nSEAtlasRegenProbe, m_pBits, m_nWidth, m_nHeight );
+				SEProbeAtlas( "   vtf=%dx%d fmt=%d\n", (int)pVTFTexture->Width(), (int)pVTFTexture->Height(), (int)pVTFTexture->Format() );
+			}
+		}
+
 		// The panorama text shader samples the *alpha* channel of the atlas (see the ALPHA branch of
 		// panoramafancy_ps30.fxc), so the coverage has to be written as alpha - which also means this
 		// works whether the scratch VTF came out as A8 or as A8R8G8B8.
@@ -3177,7 +3298,11 @@ public:
 			for ( int x = 0; x < nCopyWidth; ++x )
 			{
 				pixelWriter.Seek( x, y );
-				pixelWriter.WritePixel( 0, 0, 0, m_pBits[ y * m_nWidth + x ] );
+				// SE port fix (2026-09-22): this read the CPU copy as if it were 1 byte per pixel.
+				// It is RGBA8888, so that indexed the first quarter of the buffer (the red channel
+				// of the first rows) and wrote scrambled coverage into the downloaded texture -
+				// i.e. any re-download replaced the real glyph mask with garbage.
+				pixelWriter.WritePixel( 0, 0, 0, m_pBits[ ( y * m_nWidth + x ) * 4 + 3 ] );
 			}
 		}
 	}
@@ -3216,6 +3341,33 @@ static bool SEUploadPanoramaAlphaAtlas( ITexture *pTexture, const unsigned char 
 	if ( !pTexture || !pBits || !g_pShaderAPI )
 		return false;
 
+	// SE port (2026-09-22): every glyph upload goes through here; log the first ones so a run can
+	// be told apart from "the upload never happened" (which leaves the device on the procedural
+	// error texture -> opaque -> the text draws as solid blocks).
+	{
+		static int s_nSEAtlasUploadProbe = 0;
+		if ( s_nSEAtlasUploadProbe < 60 )
+		{
+			++s_nSEAtlasUploadProbe;
+			SEProbeAtlasStats( "ATLASUP", s_nSEAtlasUploadProbe, pBits, nWidth, nHeight );
+		}
+	}
+
+	if ( se_atlas_dump.GetBool() )
+	{
+		static double s_flSELastAtlasDump = -1000.0;
+		static int s_nSEAtlasDump = 0;
+		if ( s_nSEAtlasDump < 12 && ( Plat_FloatTime() - s_flSELastAtlasDump ) > 2.0 )
+		{
+			s_flSELastAtlasDump = Plat_FloatTime();
+			++s_nSEAtlasDump;
+			char szPath[ 128 ];
+			V_sprintf_safe( szPath, "D:\\cstrike\\se_atlas_%d.bmp", s_nSEAtlasDump );
+			SEDumpAtlasBMP( szPath, pBits, nWidth, nHeight );
+			SEProbeAtlas( "ATLASDUMP #%d -> %s\n", s_nSEAtlasDump, szPath );
+		}
+	}
+
 	ITextureInternal *pInternal = (ITextureInternal *)pTexture;
 	g_pShaderAPI->ModifyTexture( pInternal->GetTextureHandle( 0 ) );
 	g_pShaderAPI->TexImage2D( 0, 0, kPanoramaAlphaFormat, 0, nWidth, nHeight, kPanoramaAlphaFormat, false, (void *)pBits );
@@ -3252,6 +3404,20 @@ ITexture *CMaterialSystem::CreatePanoramaAlphaTexture( const char *pDebugName, i
 	// reproduces our CPU copy of the atlas instead.
 	pTexture->SetTextureRegenerator( pRegen );
 
+	// SE port (2026-09-22, bring-up aid): optional unmistakable fill (see se_atlas_marker).
+	{
+		const char *pchMarker = se_atlas_marker.GetString();
+		if ( pchMarker && pchMarker[0] != '0' && pchMarker[0] != '\0' )
+		{
+			if ( pchMarker[0] == '2' )
+				pRegen->FillAlphaRamp();
+			else
+				pRegen->FillRGBA( 255, 0, 0, 255 );
+
+			SEProbeAtlas( "ATLASMARK name=%s size=%dx%d marker=%s\n", pDebugName, nWidth, nHeight, pchMarker );
+		}
+	}
+
 	// Make the texture exist on the device and upload the (transparent) initial atlas.  Same partial
 	// download as the per-rect updates below - see the note in UpdatePanoramaAlphaTexture.
 	Rect_t wholeRect;
@@ -3276,6 +3442,20 @@ bool CMaterialSystem::UpdatePanoramaAlphaTexture( ITexture *pTexture, int xOffse
 
 	CPanoramaAlphaRegen *pRegen = s_MapPanoramaAlphaRegen[ iRegen ];
 	pRegen->WriteRect( xOffset, yOffset, nWidth, nHeight, pImageData );
+
+	// SE port (2026-09-22, bring-up aid): the marker has to be re-applied *after* every write,
+	// because S1Wrapper_CreateAlphaTexture clears the freshly created atlas to transparent, which
+	// would wipe a marker applied at creation time.
+	{
+		const char *pchMarker = se_atlas_marker.GetString();
+		if ( pchMarker && pchMarker[0] != '0' && pchMarker[0] != '\0' )
+		{
+			if ( pchMarker[0] == '2' )
+				pRegen->FillAlphaRamp();
+			else
+				pRegen->FillRGBA( 255, 0, 0, 255 );
+		}
+	}
 
 	// SE port: push the whole atlas with IShaderAPI::TexImage2D.  The per-rect ITexture::Download() path
 	// that this used to use only ever moved a small slab of the atlas to the device (measured: one call

@@ -3,12 +3,63 @@
 	SE port test layout.
 
 	The hosted panorama UI loads this through file://{resources}/layout/test.xml, which the panorama
-	file system maps to <mod>/panorama/layout/test.xml (see panorama/input/uiinput.cpp).  It is
-	deliberately self-contained: inline styles only, no images, no fonts and no .css - so it renders
+	file system maps to <mod>/panorama/layout/test.xml (see panorama/input/uiinput.cpp).
+	It is deliberately self-contained: inline styles only, no images, no fonts and no .css - so it renders
 	even though this port has no CS:GO page content, no materials and (for now) no text services.
+
+	2026-09-22: 内容换成"地图内面板测试"（见 se_ingame_panel.xml / se_ingame_panel.js）。
+	原因：托管视图里只有**测试视图**进游戏关卡时不会被自动隐藏（主菜单视图在 cl.IsActive()
+	时会被 SetVisible(false)），所以"地图内叠加效果"的验证都走 -panoramatest / panorama_test。
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	SE port test layout —— 2026-09-22 诊断版。
+
+	背景：`-panoramatest`（测试视图）里我们的面板文字全是占位色块，但同一个 mod 里用
+	`+panorama_menu se_font_test.xml`（主菜单视图）加载时，Stratum2 / Noto Sans SC 的中英日文
+	都正常。两个可疑差异：
+	  ① 视图不同（菜单视图 vs 测试视图）
+	  ② 我们原来用 <Frame src="...se_ingame_panel.xml"/> 嵌进去，而 se_font_test.xml 是直接标签
+
+	所以这里把两件事拆开：
+	  A 段：与 se_font_test.xml **一模一样**的字体行（同样族名、同样文字），但跑在测试视图里
+	  B 段：原面板内容，**直接写**（不经 Frame）
+	一张截图就能定性：A 有字 → 字体/视图正常，问题在 Frame 或面板写法；A 也是色块 → 测试视图
+	这条渲染路径本身有问题（与我们的内容无关）。
 -->
 <root>
-	<Panel style="width: 100%; height: 100%; flow-children: down; background-color: #ff00ffff;">
-		<Panel style="width: 360px; height: 220px; margin: 40px; background-color: #00ff00ff;" />
+	<scripts>
+		<include src="file://{resources}/scripts/se_ingame_panel.js" />
+	</scripts>
+
+	<!-- 注意：根面板不能带 id（panorama: Top most panel should not have an ID） -->
+	<Panel style="width: 100%; height: 100%; font-family: Stratum2, 'Noto Sans SC';">
+
+		<!-- ===== A 段：与 se_font_test.xml 完全相同的对照行 ===== -->
+		<Label style="x: 40px; y: 330px; font-family: Stratum2; font-size: 28px; color: #ffd54fff;"
+			   text="A control Stratum2 - ABC abc 0123456789" />
+		<Label style="x: 40px; y: 370px; font-family: 'Noto Sans SC'; font-size: 24px; color: #4fc3f7ff;"
+			   text="A control Noto Sans SC - 中文字体测试 日本語" />
+
+		<!-- ===== B 段：原面板内容，直接写（不经 Frame） ===== -->
+		<Panel id="SeIgBox" style="x: 40px; y: 40px; width: 470px; height: 250px; background-color: #000000a6; border: 2px solid #00ff88ff; flow-children: down;">
+			<Label style="margin: 10px 14px 2px 14px; font-family: Stratum2, 'Noto Sans SC'; font-size: 22px; color: #00ff88ff;" text="SE panel test / SE 面板测试" />
+			<Label id="SeIgInfo" style="margin: 2px 14px; font-family: Stratum2, 'Noto Sans SC'; font-size: 16px; color: #ffffffff;" text="tick 1 / 心跳等待中..." />
+			<Label id="SeIgInfo2" style="margin: 2px 14px; font-family: Stratum2, 'Noto Sans SC'; font-size: 15px; color: #c3ccd4ff;" text="size / 尺寸" />
+			<Panel style="width: 100%; height: fill; flow-children: right;">
+				<Panel style="width: 64px; height: 64px; margin: 14px; background-color: #ff3b30ff;" />
+				<Panel style="width: 64px; height: 64px; margin: 14px; background-color: #34c759ff;" />
+				<Panel style="width: 64px; height: 64px; margin: 14px; background-color: #0a84ffff;" />
+			</Panel>
+		</Panel>
+
+		<!-- 屏幕正中：准星位置的标记框 -->
+		<Panel style="align: center center; width: 160px; height: 160px; border: 2px solid #ff3b30cc;" />
+
+		<!-- 右上角色块 -->
+		<Panel style="x: 100%-80px; y: 24px; width: 48px; height: 48px; background-color: #ffcc00ff;" />
+
+		<!-- 左下角细长条 -->
+		<Panel style="x: 24px; y: 100%-40px; width: 320px; height: 16px; background-color: #af52deff;" />
 	</Panel>
 </root>

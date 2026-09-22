@@ -279,8 +279,52 @@ static ConVar s_convarSEPortOpaqueBlend( "se_port_opaque_blend", "0" );
 
 // SE port: the attributes the shader reads back through $renderattr live here rather than in the render
 // context, because the material (which holds the var) outlives the context.  See irendercontext.h.
-CRenderAttributes CRenderContext::m_apSEAttrStore[ SE_ATTR_STORE_COUNT ];
-bool CRenderContext::m_abSEAttrStoreValid[ SE_ATTR_STORE_COUNT ] = { false, false };
+//
+// One entry per draw, recycled at the next frame boundary: the store has to survive until the material
+// system has submitted the draws that reference it (the wrapper's draws are batched, so the shader runs
+// after the whole run of CSource2Surface::DrawFancyQuad() calls, not during them).
+// The store is one flat array that is allocated exactly once: the entries are handed out to the material
+// through $renderattr and read by the shader later, so their addresses must never move.  (A growable
+// container is therefore wrong here - its growth reallocates and leaves every previously handed out
+// pointer dangling, which crashed the game the first time this was tried.)
+static CRenderAttributes *s_pSEAttrStore = NULL;
+static int s_nSEAttrStoreNext = 0;
+static double s_flSEAttrStoreRecycled = -1000.0;
+
+// Upper bound so a pathological frame cannot use unlimited storage.  The port's own test views submit
+// well under a thousand panorama draws per frame; beyond this the oldest entries are reused.
+enum { SE_ATTR_STORE_MAX = 8192 };
+
+CRenderAttributes *CRenderContext::SENewAttrStoreEntry( const CRenderAttributes *pAttributes )
+{
+	if ( !pAttributes )
+		return NULL;
+
+	if ( !s_pSEAttrStore )
+		s_pSEAttrStore = new CRenderAttributes[ SE_ATTR_STORE_MAX ];
+
+	if ( s_nSEAttrStoreNext >= SE_ATTR_STORE_MAX )
+		s_nSEAttrStoreNext = 0;
+
+	CRenderAttributes *pEntry = &s_pSEAttrStore[ s_nSEAttrStoreNext++ ];
+	*pEntry = *pAttributes;
+	return pEntry;
+}
+
+void CRenderContext::SERecycleAttrStore()
+{
+	// Called from CSource2Surface::BeginFrame, i.e. once per surface and per frame.  Several surfaces
+	// start a frame within the same millisecond, so only the first call of a frame may recycle -
+	// otherwise the second surface's BeginFrame would drop the entries the first one had just written
+	// (and both write into the same static store).
+	const double flNow = Plat_FloatTime();
+	if ( ( flNow - s_flSEAttrStoreRecycled ) < 0.004 )
+		return;
+
+	s_flSEAttrStoreRecycled = flNow;
+	s_nSEAttrStoreNext = 0;
+}
+
 int				CRenderContext::m_nScissorRects = 0;
 ResourceData_t	CRenderContext::m_backBufferResourceData = { 0, RESOURCE_TYPE_BACKBUFFER };
 HRenderTexture	CRenderContext::m_hCurrentRT = &CRenderContext::m_backBufferResourceData;

@@ -339,6 +339,7 @@ CPanoramaEngineHandler::CPanoramaEngineHandler()
 	m_pUIEngine = NULL;
 	m_pTestWindow = NULL;
 	m_pMenuWindow = NULL;
+	m_nSECreateTestViewDelay = 0;
 	m_nMainWindowWidth = 0;
 	m_nMainWindowHeight = 0;
 
@@ -1070,9 +1071,19 @@ InitReturnVal_t CPanoramaEngineHandler::Init()
 	// hand-written layout (mods/panorama_test/panorama/layout/test.xml, i.e.
 	// file://{resources}/layout/test.xml inside the mounted mod).  Enabled with -panoramatest, or at
 	// runtime with the "panorama_test" console command.
+	// SE port (2026-09-22): 测试视图推迟到 RunFrame 里建（记个倒计时，跑过若干帧之后再建）。
+	//
+	// 历史：当初在 Init() 里立即建（-panoramatest），观察到"所有文字渲染成占位实心色块"，
+	// 当时的猜测是"字体图集的上传路径还没走通"。**该猜测已被证伪**（2026-09-22）：延迟创建生效后
+	// 色块依旧，真正的原因是 render attributes 的交接——移植版把 CS:GO 的"每次绘制一份属性"
+	// 降级成按材质分的两个静态槽，文字 quad 被当成无纹理绘制。详见 docs/已完成任务记录.md 第 12 节
+	// 与 docs/临时方案与待改项.md 第 7 节（修复在 panorama_s1wrapper/wrap_render.cpp +
+	// wrap_rendercontext.cpp）。
+	//
+	// 这个延迟本身无害（也顺手避开了"视图建得太早时子面板还没准备好"那类时序问题），保留。
 	if ( CommandLine()->CheckParm( "-panoramatest" ) )
 	{
-		CreatePanoramaTestView();
+		m_nSECreateTestViewDelay = 30;		// 约 0.5 秒 @60fps
 	}
 
 #if ( PLATFORM_WINDOWS && DEVELOPMENT_ONLY ) && !defined (DX_TO_GL_ABSTRACTION)
@@ -1172,6 +1183,16 @@ bool CPanoramaEngineHandler::IsInECOMode() const
 //-----------------------------------------------------------------------------
 void CPanoramaEngineHandler::RunFrame()
 {
+	// SE port (2026-09-22): 延迟建 -panoramatest 的测试视图（原因见 Init() 里那段注释：
+	// 立即建会让该视图的文字全部变成占位色块）。
+	if ( m_nSECreateTestViewDelay > 0 )
+	{
+		if ( --m_nSECreateTestViewDelay == 0 )
+		{
+			CreatePanoramaTestView();
+		}
+	}
+
 	if ( m_bValid )
 	{
 		bool bUseForceBuiltPaintCmdCaches = !g_ClientDLL->HudShouldPaintThisFrame();

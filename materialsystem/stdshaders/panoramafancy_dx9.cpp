@@ -193,6 +193,25 @@ BEGIN_VS_SHADER( panoramafancy_dx9, "Help for panorama" )
 			ITexture *pTexture = NULL;
 
 			int texType = pAttr->GetValue( ATTR_D_TEXTURETYPE );
+			// SE port (2026-09-22, bring-up aid): record the attributes pointer the shader actually
+			// received, so it can be compared with the one the renderer filled in for that draw.
+			{
+				static int s_nSEAttrReadProbe = 0;
+				if ( s_nSEAttrReadProbe < 160 )
+				{
+					++s_nSEAttrReadProbe;
+					ITexture *pProbeReadTex = NULL;
+					pAttr->GetValue( &pProbeReadTex, ATTR_Texture0 );
+					FILE *fpRead = fopen( "D:\\cstrike\\se_attr_probe.txt", "a" );
+					if ( fpRead )
+					{
+						fprintf( fpRead, "ATTRREAD #%d t=%.4f addr=%p texType=%d tex0=%p\n",
+							s_nSEAttrReadProbe, Plat_FloatTime(), (void *)pAttr, texType, (void *)pProbeReadTex );
+						fflush( fpRead );
+						fclose( fpRead );
+					}
+				}
+			}
 			// SE port (bring-up aid): what does the fancy shader actually get for a solid colour fill?
 			{
 				static int s_nSEFancyShaderLogged = 0;

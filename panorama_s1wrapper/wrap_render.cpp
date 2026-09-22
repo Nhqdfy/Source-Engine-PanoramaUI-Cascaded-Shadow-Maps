@@ -91,25 +91,13 @@ int CMaterial2::ComputeRenderablePassesForContext( const CRenderAttributes *pAtt
 	((CRenderContext*)pSrc2RenderContext)->m_nPanMaterial = m_nMaterialId;
 	// Plus the attributes
 
-	// SE port: keep our own copy, in storage that lives as long as the material does.  CS:GO's attributes
-	// live in a pool that outlives the draw, but the object handed in here can be gone by the time the
-	// shader runs (it reads them back through the material's $renderattr var) - and the material outlives
-	// the render context that computed the pass.  See the note on m_apSEAttrStore in irendercontext.h.
+	// SE port: keep our own copy, in storage that outlives the draw.  CS:GO's attributes come from a pool
+	// that is recycled as soon as DrawFancyQuad() returns and CS:GO can get away with pointing the
+	// material's $renderattr straight at that object because its draw goes to the device immediately.
+	// Here the draws are batched by the Source 1 material system and the shader runs afterwards, so each
+	// draw gets its own entry, recycled at the next frame boundary.  See irendercontext.h.
 	CRenderContext *pContext = (CRenderContext*)pSrc2RenderContext;
-	const int nStore = ( m_nMaterialId == PANORAMA_MATERIAL_FANCYQUAD )
-		? CRenderContext::SE_ATTR_STORE_FANCYQUAD : CRenderContext::SE_ATTR_STORE_PANORAMA;
-
-	if ( pAttributes )
-	{
-		CRenderContext::m_apSEAttrStore[ nStore ] = *pAttributes;
-		CRenderContext::m_abSEAttrStoreValid[ nStore ] = true;
-		pContext->m_pAttr = &CRenderContext::m_apSEAttrStore[ nStore ];
-	}
-	else
-	{
-		CRenderContext::m_abSEAttrStoreValid[ nStore ] = false;
-		pContext->m_pAttr = NULL;
-	}
+	pContext->m_pAttr = CRenderContext::SENewAttrStoreEntry( pAttributes );
 
 	return 1;
 }

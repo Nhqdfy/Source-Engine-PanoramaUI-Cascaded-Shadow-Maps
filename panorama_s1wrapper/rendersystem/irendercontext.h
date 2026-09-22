@@ -1085,25 +1085,28 @@ public:
 	// "panoramafancy" stdshader classes are not ported yet).  Callers must skip the draw then.
 	bool UpdateMaterial();
 
-	// SE port: CS:GO keeps its render attributes in a pool that stays alive for the whole frame, and the
-	// panorama shader reads them from the material's $renderattr var when it draws.  Two different
-	// lifetimes are involved here and they have to be reconciled:
+	// SE port: the panorama shader reads the render attributes back out of the material's $renderattr
+	// var, so whatever pointer is stored there has to stay valid until that draw has been submitted.
+	// Two lifetimes have to be reconciled:
 	//
 	//   * the *material* (and therefore the var) lives for the whole session - there is one material per
 	//     blend state, shared by every render context;
-	//   * the *render context* is created and destroyed by panorama around its passes.
+	//   * the attributes CS:GO hands to ComputeRenderablePassesForContext() come from a pool that is
+	//     recycled the moment CSource2Surface::DrawFancyQuad() returns - which is fine for CS:GO because
+	//     its draw goes straight to the device (PanDxDrawFancyQuads), but not here: this wrapper draws
+	//     through the Source 1 material system, which batches the draws and lets the shader run later.
 	//
-	// Keeping the copy inside the context (which is what this port did first) leaves the material pointing
-	// into freed memory as soon as that context goes away, and whichever draw happens to reach the shader
-	// next reads garbage - that is what produced both the all-white menu and, once the textures were bound,
-	// a crash inside CShaderSystem::BindTexture with access at a float bit pattern (0x8B000000).
+	// The port first kept one copy inside the render context (the material then pointed into freed
+	// memory - the all-white menu and a crash in CShaderSystem::BindTexture), then two static copies
+	// keyed by material kind.  The two entry version aliased every draw of a material together:
+	// measured, 123 text draws asked for D_TEXTURETYPE = alpha while the shader only saw 4 of them, so
+	// text (which is drawn from an alpha mask) came out untextured as solid colour blocks, with the odd
+	// correct frame whenever the timing happened to work out.
 	//
-	// The store below is static, keyed by material kind (panorama / panoramafancy), so what $renderattr
-	// points at is always a live object.  Draws are sequential and a pass writes its own material's slot
-	// right before it draws, so each draw sees its own attributes.
-	enum { SE_ATTR_STORE_PANORAMA = 0, SE_ATTR_STORE_FANCYQUAD = 1, SE_ATTR_STORE_COUNT = 2 };
-	static CRenderAttributes m_apSEAttrStore[ SE_ATTR_STORE_COUNT ];
-	static bool m_abSEAttrStoreValid[ SE_ATTR_STORE_COUNT ];
+	// So: one copy per draw, kept until the next frame boundary (see wrap_rendercontext.cpp), which is
+	// well after the material system has submitted the draws of the frame that wrote them.
+	static CRenderAttributes *SENewAttrStoreEntry( const CRenderAttributes *pAttributes );
+	static void SERecycleAttrStore();
 
 	CRenderAttributes* m_pAttr;
 	CMatRenderContextPtr m_pMatRenderContext;

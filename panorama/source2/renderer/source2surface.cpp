@@ -1765,6 +1765,12 @@ bool CSource2Surface::BUpdateWindowSizeIfNeeded( uint32 nWidth, uint32 nHeight )
 //-----------------------------------------------------------------------------
 void CSource2Surface::BeginFrame( const BeginFrameRenderCommand_t &renderCommand )
 {
+	// SE port (2026-09-22): a new frame is the safe point to recycle the per-draw render attribute
+	// copies the wrapper hands to the shader through $renderattr (see CRenderContext::SENewAttrStoreEntry
+	// in panorama_s1wrapper/rendersystem/irendercontext.h).  The material system has submitted the
+	// previous frame's panorama draws by now, so nothing still reads those entries.
+	CRenderContext::SERecycleAttrStore();
+
 	// SE port (bring-up aid): frame pacing probe - the interesting "stutter" question is whether the
 	// frame rate is low in general or whether there are periodic spikes, and that cannot be read from
 	// a screenshot.  One "FRAME" line per second (fps + average + worst frame of the window).
@@ -2422,6 +2428,30 @@ void CSource2Surface::DrawFancyQuad( const FancyQuadDraw_t *pFancyQuadDraw )
 
 		renderAttributes.SetIntValue( ATTR_D_TEXTURETYPE, nType );
 		renderAttributes.SetIntValue( ATTR_D_PREMULTIPLY_ALPHA, pFancyQuadDraw->m_bTexIsNotPremul && !pFancyQuadBrush->m_bAlphaOnlyTexture );
+
+		// SE port (2026-09-22, bring-up aid): the render attributes come out of a pool and reach the
+		// shader through a material var, and the shader only ever sees whatever pointer that var
+		// holds.  Log the address this draw fills in, so a run can be told apart from "the shader is
+		// reading somebody else's attributes" (which shows up as text drawn with texType 0 -> solid
+		// colour blocks).
+		{
+			static int s_nSEAttrProbe = 0;
+			if ( s_nSEAttrProbe < 160 )
+			{
+				++s_nSEAttrProbe;
+				ITexture *pProbeTex = NULL;
+				renderAttributes.GetValue( &pProbeTex, ATTR_Texture0 );
+				FILE *fpAttr = fopen( "D:\\cstrike\\se_attr_probe.txt", "a" );
+				if ( fpAttr )
+				{
+					fprintf( fpAttr, "ATTRSET #%d t=%.4f addr=%p nType=%d alphaTex=%d tex0=%p blend=%d\n",
+						s_nSEAttrProbe, Plat_FloatTime(), (void *)&renderAttributes, nType,
+						(int)pFancyQuadDraw->m_bIsAlphaTexture, (void *)pProbeTex, (int)m_hCurrentBlendState );
+					fflush( fpAttr );
+					fclose( fpAttr );
+				}
+			}
+		}
 
 		// SE port TEMPORARY bring-up probe (2026-09-17, washed-out main menu): report the big quads and
 		// their *final* brush colour.  m_flColor is what the pixel shader starts from, so a colour whose
@@ -3875,9 +3905,20 @@ void CSource2Surface::DrawTextRegionRange( CSource2CompositionLayer *pLayer, flo
 	// whether a mis-rendered label is a text draw at all, and with which mask dimensions.
 	{
 		static int s_nSETextRangeProbe = 0;
-		if ( s_nSETextRangeProbe < 4 )
+		if ( s_nSETextRangeProbe < 24 )
 		{
 			s_nSETextRangeProbe++;
+			FILE *fpText = fopen( "D:\\cstrike\\se_atlas_probe.txt", "a" );
+			if ( fpText )
+			{
+				fprintf( fpText, "TEXTDRAW #%d tex=%p valid=%d uv=(%.4f,%.4f)-(%.4f,%.4f) mask=%.0fx%.0f srcRect=(%.1f,%.1f)-(%.1f,%.1f) dstRect=(%.1f,%.1f)-(%.1f,%.1f)\n",
+					s_nSETextRangeProbe, (const void *)hTexture.GetResourceHandle(), (int)hTexture.IsValid(),
+					u0, v0, u1, v1, maskRange.m_flTextureWidth, maskRange.m_flTextureHeight,
+					maskRange.m_x0, maskRange.m_y0, maskRange.m_x1, maskRange.m_y1,
+					x0, y0, x1, y1 );
+				fflush( fpText );
+				fclose( fpText );
+			}
 		}
 	}
 	fancyQuadDraw.m_flTexture0TexCoordScale[1] = flTextureOriginalHeightScale;
