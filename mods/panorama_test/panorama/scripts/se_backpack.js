@@ -39,10 +39,37 @@
 		}
 	})();
 
+	// ------------------------------------------------------------------------
+	// 背包里放什么
+	//
+	// 塔科夫式背包要的是"一背包东西"，不是把 CS:GO 的 1000+ 条皮肤目录塞进来 —— 之前那版遍历整个
+	// 库存按字母序摆，前 13 件全是 AK 系列就把 96 格填满了（实测 放入 13 / 放不下 1097）。
+	// 所以这里只挑一份装备清单（defindex），按 items_game 的槽位各来一把/一个：
+	//   主武器 7=AK-47 9=AWP 16=M4A4 60=M4A1-S · 副武器 1=沙鹰 4=格洛克 61=USP-S
+	//   近战 42=刀 500=刺刀 · 投掷物 43=闪光 44=手雷 45=烟雾 46=燃烧瓶 · 49=C4
+	// 尺寸表 ITEM_SIZE 里每类都有格子占用，摆出来就是塔科夫那种长短不一地占格的样子。
+	// ------------------------------------------------------------------------
+	var WANTED_DEFS = [ 7, 9, 16, 60, 1, 4, 61, 42, 500, 43, 44, 45, 46, 49 ];
+
+	function itemPaint(id) {
+		// "se_store_<def>_<paintkit>"；没写 paintkit 的按 0（无皮肤的那种"基础武器"）算
+		var s = String(id === undefined || id === null ? "" : id);
+		var parts = s.split("_");
+		return parts.length >= 4 ? parts[3] : "0";
+	}
+
 	var g_Grid = null;
 	var g_Details = null;
 	var g_Placed = 0;
 	var g_Skipped = 0;
+	var g_UsedCells = 0;
+	var g_Wanted = [];
+	var g_Missing = [];
+	var g_Items = [];			// 背包里的每件东西 { id, w, h, x, y, panel }
+	var g_Drag = null;			// 拖动中的状态（见 startDrag/endDrag）
+	var g_Scale = 0;			// 设备像素 / 逻辑像素（这个移植的窗口逻辑空间是 1920x1080，见 deviceScale）
+	var g_HoverItem = null;		// 当前光标下的物品（tick 做命中测试，见 backpackTick）
+	var g_hDenyInput = 0;		// AddDenyAllInputToGame 的句柄（把鼠标从游戏手里要过来）
 
 	// ------------------------------------------------------------------------
 	// 数据小工具
@@ -153,45 +180,280 @@
 		label.style.textOverflow = "ellipsis";
 		label.text = itemName(id);
 
-		cell.SetPanelEvent("onmouseover", function () { showDetails(id); });
-		cell.SetPanelEvent("onmouseout", function () { hideDetails(); });
+		var item = { id: id, w: w, h: h, x: x, y: y, panel: cell };
+		g_Items.push(item);
+
+		// 悬停/高亮不靠 onmouseover/onmouseout：这个移植里 hover 事件的到达不稳定（用户实测
+		// "悬停没有反应，只有点击才有"），改为由 backpackTick 自己按光标位置做命中测试。
+		// onactivate 保留：点击时也刷一次详情（顺带当兜底）。
 		cell.SetPanelEvent("onactivate", function () { showDetails(id); });
 
+		// 拖动：按下抓起来（onmousedown），松手落下（onmouseup）。panorama 的 mousedown 会把鼠标
+		// 捕获到这个面板，所以 mouseup 也会回到这里 —— 这正是 itemtile 那类面板做不到拖动的原因：
+		// 它没有鼠标坐标。坐标由新加的 GetCursorPositionWithinWindow() 提供（见 panel2d.cpp）。
+		cell.SetPanelEvent("onmousedown", function () { startDrag(item); });
+		cell.SetPanelEvent("onmouseup", function () { endDrag(true); });
+
 		return cell;
+	}
+
+	// ------------------------------------------------------------------------
+	// 拖动（塔科夫式：物品跟着鼠标走，落点按格子吸附，合法/非法用边框颜色区分）
+	//
+	// 实现要点：
+	//   * ghost 面板：拖动期间新建一个"影子"面板挂在网格下 —— panorama 按子节点顺序绘制，
+	//     新节点天然在最上层，所以不需要 z-index（这个版本也没把 z-index 暴露给 JS）。
+	//   * 原格子保持可见但压暗（不 collapse）：鼠标捕获在它身上，收起它就收不到 mouseup 了。
+	//   * 每帧用 $.Schedule 轮询光标位置换算成格子坐标（panorama 的鼠标事件不带坐标）。
+	// ------------------------------------------------------------------------
+	function rebuildOccExcept(skip) {
+		var occ = {};
+		for (var i = 0; i < g_Items.length; ++i) {
+			var it = g_Items[i];
+			if (it === skip) { continue; }
+			markPlaced(occ, it.x, it.y, it.w, it.h);
+		}
+		return occ;
+	}
+
+	function gridLocalCursor() {
+		// 光标与网格位置都在窗口（surface）坐标系里，相减即网格本地坐标
+		var cur = null;
+		try { cur = g_Grid.GetCursorPositionWithinWindow(); } catch (e) { return null; }
+		if (!cur) { return null; }
+
+		var gp = null;
+		try { gp = g_Grid.GetPositionWithinWindow(); } catch (e2) { gp = null; }
+		if (!gp) { return null; }
+
+		// 这里相减得到的是**设备像素**（1280x720 那份），而格子尺寸 CELL 是布局用的**逻辑像素**
+		// （panorama 的 1920x1080 空间，本移植的窗口缩放是 height/1080 = 0.667）。不换算的话
+		// 物品只跟到 2/3 的距离，小幅拖动会原地弹回 —— 看起来就是"拖不动"。
+		var s = deviceScale();
+		return { x: (Number(cur.x) - Number(gp.x)) / s, y: (Number(cur.y) - Number(gp.y)) / s };
+	}
+
+	// 标定"设备像素 / 逻辑像素"：网格背景格是自己按 CELL 摆的，位置已知（第 0 格 x=0，第 2 格
+	// x=2*CELL），拿它们的窗口坐标差一除就得到比例。这样不依赖引擎暴露缩放系数。
+	function deviceScale() {
+		if (g_Scale > 0) { return g_Scale; }
+
+		// 注意：onLoad 那一刻布局还没跑，GetPositionWithinWindow() 全是 0，标定会失败。
+		// 失败时**不能**把 1 缓存下来，否则之后永远按 1 用（第一版就这么错的，拖动只有 2/3 距离）。
+		var s = 0;
+		try {
+			var a = g_Grid.FindChildTraverse("SePackSlot0_0");
+			var b = g_Grid.FindChildTraverse("SePackSlot2_0");
+			if (a && b) {
+				var pa = a.GetPositionWithinWindow();
+				var pb = b.GetPositionWithinWindow();
+				var d = Number(pb.x) - Number(pa.x);
+				if (d > 1) { s = d / (2 * CELL); }
+			}
+		} catch (e) { }
+
+		if (s > 0) {
+			g_Scale = s;
+			$.Msg("[SE port] 背包: 坐标标定 scale=" + g_Scale);
+		}
+
+		return g_Scale > 0 ? g_Scale : 1;
+	}
+
+	function makeGhost(it) {
+		var g = $.CreatePanel("Panel", g_Grid, "SePackGhost");
+		g.style.width = ((it.w * CELL) - GAP) + "px";
+		g.style.height = ((it.h * CELL) - GAP) + "px";
+		g.style.x = (it.x * CELL) + "px";
+		g.style.y = (it.y * CELL) + "px";
+		g.style.backgroundColor = "#2b333cff";
+		g.style.border = "2px solid " + itemRarityColor(it.id);
+		g.style.opacity = "0.9";
+		g.hittest = false;			// 别抢鼠标，否则 mouseup 收不到
+		g.hittestchildren = false;	// 里面的图/字也不能抢（否则悬停命中会被它挡住）
+
+		var img = $.CreatePanel("ItemImage", g, "SePackGhostImage");
+		img.style.width = "100%";
+		img.style.height = "70%";
+		try { img.itemid = it.id; } catch (e) { }
+
+		var label = $.CreatePanel("Label", g, "SePackGhostLabel");
+		label.style.width = "100%";
+		label.style.height = "30%";
+		label.style.fontSize = "12px";
+		label.style.color = "#e6ebf0ff";
+		label.style.textAlign = "center";
+		label.style.textOverflow = "ellipsis";
+		label.text = itemName(it.id);
+
+		return g;
+	}
+
+	function startDrag(it) {
+		if (g_Drag || !g_Grid) { return; }
+
+		var local = gridLocalCursor();
+		if (!local) {
+			$.Msg("[SE port] 背包: 拖动起手失败 —— 拿不到光标坐标（GetCursorPositionWithinWindow）");
+			return;
+		}
+
+		g_Drag = {
+			item: it,
+			offX: local.x - (it.x * CELL),	// 抓取点相对物品左上角的偏移：拖动时不跳
+			offY: local.y - (it.y * CELL),
+			origX: it.x,
+			origY: it.y,
+			targetX: it.x,
+			targetY: it.y,
+			valid: true,
+			ghost: makeGhost(it)
+		};
+
+		it.panel.style.opacity = "0.3";
+		hideDetails();			// 拖动时收起详情（塔科夫也是这样）
+	}
+
+	// 光标命中测试：返回光标（网格本地、逻辑像素）落在哪件物品上
+	function hitTestItem(local, skip) {
+		if (!local) { return null; }
+		for (var i = 0; i < g_Items.length; ++i) {
+			var it = g_Items[i];
+			if (it === skip) { continue; }
+			var x0 = it.x * CELL, y0 = it.y * CELL;
+			if (local.x >= x0 && local.x < x0 + it.w * CELL && local.y >= y0 && local.y < y0 + it.h * CELL) {
+				return it;
+			}
+		}
+		return null;
+	}
+
+	// 悬停详情 + 拖动，都由这一条 tick 驱动（每帧读一次光标位置）。
+	function backpackTick() {
+		try {
+			var local = gridLocalCursor();
+
+			if (g_Drag) {
+				updateDrag(local);
+			} else {
+				var hit = hitTestItem(local, null);
+				if (hit) {
+					if (g_HoverItem !== hit) {
+						g_HoverItem = hit;
+						showDetails(hit.id);
+					}
+				} else if (g_HoverItem) {
+					g_HoverItem = null;
+					hideDetails();
+				}
+			}
+		} catch (e) {
+			$.Msg("[SE port] 背包: backpackTick 异常: " + e);
+		}
+
+		$.Schedule(0.033, backpackTick);
+	}
+
+	function updateDrag(local) {
+		var d = g_Drag;
+		if (!local) { return; }
+
+		var it = d.item;
+		var x = Math.round((local.x - d.offX) / CELL);
+		var y = Math.round((local.y - d.offY) / CELL);
+		x = Math.max(0, Math.min(COLS - it.w, x));
+		y = Math.max(0, Math.min(ROWS - it.h, y));
+
+		d.targetX = x;
+		d.targetY = y;
+		d.valid = canPlace(rebuildOccExcept(it), x, y, it.w, it.h);
+
+		if (d.ghost) {
+			d.ghost.style.x = (x * CELL) + "px";
+			d.ghost.style.y = (y * CELL) + "px";
+			d.ghost.style.border = "2px solid " + (d.valid ? "#4cd964ff" : "#ff3b30ff");
+		}
+	}
+
+	function endDrag(commit) {
+		if (!g_Drag) { return; }
+
+		var d = g_Drag;
+		g_Drag = null;
+
+		var it = d.item;
+		if (d.ghost) { d.ghost.DeleteAsync(0.0); }
+		it.panel.style.opacity = "1";
+
+		var moved = commit && d.valid && (d.targetX !== d.origX || d.targetY !== d.origY);
+		if (moved) {
+			it.x = d.targetX;
+			it.y = d.targetY;
+			it.panel.style.x = (it.x * CELL) + "px";
+			it.panel.style.y = (it.y * CELL) + "px";
+		}
+
+		$.Msg("[SE port] 背包: 拖动 " + itemName(it.id) + " (" + d.origX + "," + d.origY + ") -> ("
+			+ d.targetX + "," + d.targetY + ") " + (moved ? "已放下" : (commit ? "回原位" : "取消")));
 	}
 
 	function fillGrid(grid) {
 		var occ = {};
 		g_Placed = 0;
 		g_Skipped = 0;
+		g_UsedCells = 0;
+		g_Wanted = [];
+		g_Missing = [];
+		g_Items = [];
+		g_Drag = null;
 
-		// 真物品目录：sim 侧按排序/搜索返回结果集（这里要全部 -> 空搜索 + 字母序）
-		try { InventoryAPI.SetInventorySortAndFilters("inv_sort_alpha", true, ""); } catch (e) { }
-
+		// 1) 把库存按 defindex 索引一遍（1087 条只走一次，很快）：每个 def 优先取"无皮肤"那条
+		var firstId = {}, baseId = {};
 		var n = 0;
-		try { n = Number(InventoryAPI.GetInventoryCount()) || 0; } catch (e2) { n = 0; }
+		try { n = Number(InventoryAPI.GetInventoryCount()) || 0; } catch (e) { n = 0; }
 
 		for (var i = 0; i < n; ++i) {
 			var id = "";
-			try { id = InventoryAPI.GetInventoryItemIDByIndex(i); } catch (e3) { id = ""; }
+			try { id = InventoryAPI.GetInventoryItemIDByIndex(i); } catch (e2) { id = ""; }
 			if (!id) { continue; }
 
-			var size = itemSize(id);
-			var w = size[0], h = size[1];
+			var d = itemDef(id);
+			if (!firstId.hasOwnProperty(d)) { firstId[d] = id; }
+			if (itemPaint(id) === "0" && !baseId.hasOwnProperty(d)) { baseId[d] = id; }
+		}
 
-			var placed = false;
-			for (var y = 0; y < ROWS && !placed; ++y) {
-				for (var x = 0; x < COLS && !placed; ++x) {
+		// 2) 只留下清单里的东西，按占格从大到小排（摆起来更紧凑、也像塔科夫）
+		var list = [];
+		for (var k = 0; k < WANTED_DEFS.length; ++k) {
+			var dd = String(WANTED_DEFS[k]);
+			var wid = baseId.hasOwnProperty(dd) ? baseId[dd] : (firstId.hasOwnProperty(dd) ? firstId[dd] : "");
+			if (!wid) { g_Missing.push(dd); continue; }
+
+			var sz = itemSize(wid);
+			list.push({ id: wid, w: sz[0], h: sz[1] });
+		}
+		list.sort(function (a, b) { return (b.w * b.h) - (a.w * a.h); });
+
+		// 3) 逐个找位置放
+		for (var j = 0; j < list.length; ++j) {
+			var w = list[j].w, h = list[j].h, ok = false;
+			for (var y = 0; y < ROWS && !ok; ++y) {
+				for (var x = 0; x < COLS && !ok; ++x) {
 					if (canPlace(occ, x, y, w, h)) {
 						markPlaced(occ, x, y, w, h);
-						makeItem(grid, id, i, x, y, w, h);
+						makeItem(grid, list[j].id, j, x, y, w, h);
 						g_Placed++;
-						placed = true;
+						g_UsedCells += w * h;
+						ok = true;
 					}
 				}
 			}
-			if (!placed) { g_Skipped++; }
+			if (!ok) { g_Skipped++; }
 		}
+
+		$.Msg("[SE port] 背包: 清单 " + WANTED_DEFS.length + " 件 -> 放入 " + g_Placed + " 件, 占 "
+			+ g_UsedCells + "/" + (COLS * ROWS) + " 格, 放不下 " + g_Skipped
+			+ (g_Missing.length ? (", 目录里没有的 def: " + g_Missing.join(",")) : ""));
 	}
 
 	// ------------------------------------------------------------------------
@@ -245,12 +507,13 @@
 		}
 
 		var sub = root.FindChildTraverse("SePackSubtitle");
-		if (sub) { sub.text = g_Placed + " 件物品在背包里"; }
+		if (sub) { sub.text = g_Placed + " 件装备"; }
 
 		var foot = root.FindChildTraverse("SePackFooterText");
 		if (foot) {
-			foot.text = "共 " + (g_Placed + g_Skipped) + " 件 · 背包容量 " + (COLS * ROWS) + " 格 · 放入 " + g_Placed + " 件"
-				+ (g_Skipped > 0 ? (" · 放不下 " + g_Skipped + " 件") : "");
+			foot.text = "占用 " + g_UsedCells + " / " + (COLS * ROWS) + " 格 · " + g_Placed + " 件装备"
+				+ (g_Skipped > 0 ? (" · " + g_Skipped + " 件放不下") : "")
+				+ (g_Missing.length ? (" · 目录缺 def " + g_Missing.join(",")) : "");
 		}
 
 		var close = root.FindChildTraverse("SePackClose");
@@ -258,12 +521,31 @@
 			close.SetPanelEvent("onactivate", function () {
 				// 关掉自己：走引擎命令，让引擎把背包视图整体销毁（和打开对称）
 				try { GameInterfaceAPI.ConsoleCommand("se_backpack 0"); } catch (e) { }
-				var r = $.GetContextPanel().FindChildTraverse("SePackRoot");
+				// 最外层面板没有 id（panorama 规定 <root> 的第一层不能带 id，带了整个布局加载失败），
+				// 所以这里直接收 context panel 自己。
+				// 同时把鼠标还给游戏（和打开时的 AddDenyAllInputToGame 对称）
+				if (g_hDenyInput) {
+					try { UiToolkitAPI.ReleaseDenyAllInputToGame(g_hDenyInput); } catch (e) { }
+					g_hDenyInput = 0;
+				}
+				var r = $.GetContextPanel();
 				if (r) { r.style.visibility = "collapse"; }
 			});
 		}
 
-		$.Msg("[SE port] 背包: 放入 " + g_Placed + " 件, 放不下 " + g_Skipped + " 件 (网格 " + COLS + "x" + ROWS + ")");
+		// 松手兜底：鼠标在物品外面松开时，onmouseup 可能到不了那个物品格；网格和整窗也各挂一份，
+		// 保证拖动一定会结束（否则 ghost 会留在画面上）。
+		if (g_Grid) { g_Grid.SetPanelEvent("onmouseup", function () { endDrag(true); }); }
+		root.SetPanelEvent("onmouseup", function () { endDrag(true); });
+
+		// 注意：**不要**在这里调 UiToolkitAPI.AddDenyAllInputToGame()。那是 CS:GO 主菜单接管鼠标的做法
+		// （csgo_mainmenu.cpp:319），但这个移植里请求之后引擎会把 cl_mouseenable 置 0，而客户端的
+		// cl_mouseenable_buttons（"鼠标关掉也保留按键"）**只声明、没人读**（game/client/in_mouse.cpp:117），
+		// 结果按下事件也一起没了（实测 SE_PORT_MOUSEDOWN 计数 0，点击/拖动全废）。鼠标位置改由
+		// GetCursorPositionWithinWindow() 直接读实时系统光标，不需要跟游戏抢鼠标。
+
+		// 悬停 + 拖动都由这条 tick 驱动（不依赖 hover 事件是否到达）
+		backpackTick();
 	}
 
 	$.Schedule(0.0, onLoad);

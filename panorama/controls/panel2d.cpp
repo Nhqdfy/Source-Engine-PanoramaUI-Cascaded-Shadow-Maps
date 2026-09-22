@@ -424,6 +424,8 @@ void CPanel2D::SetupJavascriptObjectTemplate()
 	RegisterJSMethod( "MoveChildBefore", PANORAMA_DELEGATE( &CPanel2D::MoveChildBefore ) );
 	RegisterJSMethod( "MoveChildAfter", PANORAMA_DELEGATE( &CPanel2D::MoveChildAfter ) );
 	RegisterJSMethod( "GetPositionWithinWindow", PANORAMA_DELEGATE( &CPanel2D::GetPositionWithinWindowJS ) );
+	// SE port (2026-09-22): cursor position in the same (window/surface) space, for JS driven drag & drop.
+	RegisterJSMethod( "GetCursorPositionWithinWindow", PANORAMA_DELEGATE( &CPanel2D::GetCursorPositionWithinWindowJS ) );
 	RegisterJSMethod( "ApplyStyles", PANORAMA_DELEGATE( &CPanel2D::ApplyStyles ) );
 	RegisterJSMethod( "ClearPropertyFromCode", PANORAMA_DELEGATE( &CPanel2D::ClearPropertyFromCode ) );
 
@@ -925,6 +927,32 @@ Vector2D CPanel2D::GetPositionWithinWindowJS()
 {
 	Vector2D ret;
 	GetPositionWithinWindow( &ret.x, &ret.y );
+
+	return ret;
+}
+
+
+//-----------------------------------------------------------------------------
+// Purpose: Returns the mouse position in window (surface) space to JS.
+//			Pair it with GetPositionWithinWindow() to get panel local coordinates.
+//			See CPanel2D::GetPositionWithinWindow and html.cpp (controller cursor) for the same call.
+//-----------------------------------------------------------------------------
+Vector2D CPanel2D::GetCursorPositionWithinWindowJS()
+{
+	Vector2D ret( 0.0f, 0.0f );
+
+	IUIWindow *pWindow = GetParentWindow();
+	if ( !pWindow )
+		return ret;
+
+	IUIWindowInput *pInputWindow = pWindow->UIWindowInput();
+	if ( !pInputWindow )
+		return ret;
+
+	float flMouseX = 0.0f, flMouseY = 0.0f;
+	pInputWindow->GetSurfaceMousePosition( flMouseX, flMouseY );
+	ret.x = flMouseX;
+	ret.y = flMouseY;
 
 	return ret;
 }
@@ -2089,6 +2117,17 @@ bool CPanel2D::OnGamePadAnalog( const GamePadData_t &code )
 bool CPanel2D::OnMouseButtonDown( const MouseData_t &code )
 {
 	AssertMsg( BAcceptsInput(), "Unexpected action" );
+
+	// SE port (2026-09-22): this tree only ever dispatched onactivate (which fires on *release*), so
+	// nothing in JS could tell a press from a click - which is why drag & drop was impossible (an
+	// item could only be picked up and never moved).  Dispatch the press event CS:GO exposes,
+	// onmousedown: a panel that did SetPanelEvent( "onmousedown", fn ) gets called on the way down.
+	static const CPanoramaSymbol k_symPropertyOnMouseDown( "onmousedown" );
+	if ( DispatchPanelEvent( k_symPropertyOnMouseDown ) )
+	{
+		return true;
+	}
+
 	return false;
 }
 
@@ -2099,6 +2138,15 @@ bool CPanel2D::OnMouseButtonDown( const MouseData_t &code )
 bool CPanel2D::OnMouseButtonUp( const MouseData_t &code )
 {
 	AssertMsg( BAcceptsInput(), "Unexpected action" );
+
+	// SE port (2026-09-22): the matching release event for onmousedown - panorama routes the mouse up
+	// to the panel that captured the press, so a drag started in onmousedown ends here.
+	static const CPanoramaSymbol k_symPropertyOnMouseUp( "onmouseup" );
+	if ( DispatchPanelEvent( k_symPropertyOnMouseUp ) )
+	{
+		return true;
+	}
+
 	return false;
 }
 

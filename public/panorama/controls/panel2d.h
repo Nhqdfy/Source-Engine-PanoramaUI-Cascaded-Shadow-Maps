@@ -772,6 +772,10 @@ public:
 	// walks parents calculating the top left corner relative to window space
 	void GetPositionWithinWindow( float *pflX, float *pflY );
 	Vector2D GetPositionWithinWindowJS();
+	// SE port (2026-09-22): JS has no way to read the mouse position (CS:GO exposes
+	// $.GetCursorPosition(); this port never bound it).  The backpack's drag & drop needs it, and it
+	// has to be in the same space as GetPositionWithinWindow() to subtract the two.
+	Vector2D GetCursorPositionWithinWindowJS();
 
 	// Given an array of points within the current panel's coordinate system, convert them to an ancestor's cooordinate system.
 	// If the passed in panel is NULL or not an ancestor, this will end up being relative to the top level window

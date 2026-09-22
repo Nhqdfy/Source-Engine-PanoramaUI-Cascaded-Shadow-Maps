@@ -67,6 +67,10 @@
 #include "vgui/IPanel.h"	// vgui::ipanel()->SetVisible
 #include <vgui_controls/Controls.h>	// vgui::ipanel() lives here
 #include <vgui/ISurface.h>	// vgui::surface()->IsCursorLocked/IsCursorVisible (probe)
+// SE port (2026-09-23): vgui::input()->GetCursorPosition() (live system cursor, fed to the UI every
+// frame in RunFrame) and Plat_ScreenToWindowCoords (screen -> client conversion).
+#include <vgui/IInput.h>
+#include "tier0/platwindow.h"
 #include "seport/se_background_movie.h"	// SE_PortLoadMainMenuBackgroundMovie (background webm)
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -1196,6 +1200,47 @@ void CPanoramaEngineHandler::RunFrame()
 	if ( m_bValid )
 	{
 		bool bUseForceBuiltPaintCmdCaches = !g_ClientDLL->HudShouldPaintThisFrame();
+
+		// SE port (2026-09-23): keep the hosted UI's cursor position live.
+		//
+		// The UI learns the cursor from IE_AnalogValueChanged( MOUSE_XY ), which the engine only emits
+		// while the game is not driving the mouse - so with a mouse button held (i.e. exactly while
+		// dragging an item) the stream stops and the UI's position freezes at the press point, which
+		// made drag & drop impossible (hover, which has no button held, worked).
+		//
+		// Rather than asking for the mouse (AddDenyAllInputToGame) - that sets cl_mouseenable 0, and the
+		// companion cl_mouseenable_buttons is declared but never read in this tree (game/client/in_mouse.cpp),
+		// so the presses died with it and clicks stopped working - feed the *live* system cursor through
+		// the same MOUSE_XY path every frame.  It is a no-op when nothing moved.
+		if ( game && g_pInputSystem )
+		{
+			// Read the *input system's* own mouse analog values: those are the exact numbers a real
+			// mouse move posts in its MOUSE_XY event (inputsystem.cpp: state.m_pAnalogValue[MOUSE_X/Y]),
+			// so the UI sees byte-for-byte what it would see from the hardware.  Converting a cursor
+			// position by hand (vgui::input()->GetCursorPosition + Plat_ScreenToWindowCoords) looked
+			// right at 1280x720 but drifted with the surface scale - at 800x600 it fed negative
+			// coordinates, i.e. the drop point moved further off the lower the resolution got.
+			int nAnalogX = g_pInputSystem->GetAnalogValue( MOUSE_X );
+			int nAnalogY = g_pInputSystem->GetAnalogValue( MOUSE_Y );
+
+			static int s_nSEFeededCursorX = INT_MIN, s_nSEFeededCursorY = INT_MIN;
+			if ( nAnalogX != s_nSEFeededCursorX || nAnalogY != s_nSEFeededCursorY )
+			{
+				s_nSEFeededCursorX = nAnalogX;
+				s_nSEFeededCursorY = nAnalogY;
+
+				PlatWindow_t hMainWindow = (PlatWindow_t)game->GetMainWindow();
+
+				InputEvent_t cursorEvent;
+				memset( &cursorEvent, 0, sizeof( cursorEvent ) );
+				cursorEvent.m_nType = IE_AnalogValueChanged;
+				cursorEvent.m_nData = MOUSE_XY;
+				cursorEvent.m_nData2 = nAnalogX;
+				cursorEvent.m_nData3 = nAnalogY;
+				cursorEvent.m_hWnd = hMainWindow;
+				ProcessUserInput( cursorEvent );
+			}
+		}
 
 		// SE port (bring-up aid): this flag decides whether CTopLevelWindow::PerformLayout() runs at all.
 		{
