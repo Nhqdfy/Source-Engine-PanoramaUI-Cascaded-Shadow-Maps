@@ -20,7 +20,7 @@
 			<Panel id="SePackHeader" style="width: 100%; height: 46px; background-color: #1d2229ff; flow-children: right;">
 				<Label id="SePackTitle" style="margin-left: 18px; vertical-align: center; font-size: 22px; color: #dae0e6ff;" text="背包" />
 				<Label id="SePackSubtitle" style="margin-left: 16px; vertical-align: center; font-size: 14px; color: #79838dff;" text="" />
-				<Panel style="width: fill; height: 100%;" />
+				<Panel style="width: fill-parent-flow( 1.0 ); height: 100%;" />
 				<Label id="SePackClose" style="margin-right: 12px; vertical-align: center; font-size: 18px; color: #9aa4aeff; padding: 8px;" text="X" />
 			</Panel>
 
