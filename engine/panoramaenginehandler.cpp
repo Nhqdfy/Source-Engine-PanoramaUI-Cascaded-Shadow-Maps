@@ -126,9 +126,31 @@ static void CC_DumpDenyAllInputToGame( void )
 }
 static ConCommand panorama_dump_deny_input( "panorama_dump_deny_input", CC_DumpDenyAllInputToGame, "Dumps panels currently denying all input to the game", FCVAR_DEVELOPMENTONLY );
 
+// SE port: create/destroy the hosted-UI smoke test view at runtime (same thing -panoramatest does at
+// startup).  With no argument it toggles; "panorama_test 1" creates it and "panorama_test 0" removes it.
+// NOTE: no FCVAR_DEVELOPMENTONLY - Source hides development-only commands in release builds, which is
+// exactly the build this port runs as.
+static void CC_PanoramaTest( const CCommand &args )
+{
+	bool bCreate = !PanoramaEngineHandler().HasPanoramaTestView();
+	if ( args.ArgC() > 1 )
+	{
+		bCreate = ( V_atoi( args.Arg( 1 ) ) != 0 );
+	}
+
+	if ( bCreate )
+	{
+		PanoramaEngineHandler().CreatePanoramaTestView();
+	}
+	else
+	{
+		PanoramaEngineHandler().DestroyPanoramaTestView();
+	}
+}
+static ConCommand panorama_test( "panorama_test", CC_PanoramaTest, "Creates (1) or destroys (0) the hosted panorama test view; no argument toggles" );
 
 // SE port: create/destroy the CS:GO main-menu view (needs panorama/code.pbin in the mod - that pack
-// contains layout/mainmenu.xml).  Same toggling: no argument = toggle, 1 = create, 0 = destroy.
+// contains layout/mainmenu.xml).  Same toggling as panorama_test.
 static void CC_PanoramaMenu( const CCommand &args )
 {
 	bool bCreate = !PanoramaEngineHandler().HasPanoramaMenuView();
@@ -319,6 +341,7 @@ CPanoramaEngineHandler::CPanoramaEngineHandler()
 {
 	m_bValid = false;
 	m_pUIEngine = NULL;
+	m_pTestWindow = NULL;
 	m_pMenuWindow = NULL;
 	m_nMainWindowWidth = 0;
 	m_nMainWindowHeight = 0;
@@ -392,6 +415,103 @@ void CPanoramaEngineHandler::RemovePanoramaView( panorama::IUIWindow *pWindow )
 	return;
 }
 
+
+//-----------------------------------------------------------------------------
+// SE port: create/destroy the hosted-UI smoke test view.  Reached through -panoramatest at startup and
+// through the "panorama_test" console command at runtime.
+//-----------------------------------------------------------------------------
+bool CPanoramaEngineHandler::CreatePanoramaTestView()
+{
+	if ( m_pTestWindow )
+	{
+		Warning( "panorama: the test view already exists (\"panorama_test 0\" removes it)\n" );
+		return true;
+	}
+
+	// NOTE: m_bValid is only set at the end of Init(), and this runs in the middle of it - so only
+	// m_pUIEngine can be relied on here.
+	if ( !m_pUIEngine )
+	{
+		Warning( "panorama: the hosted UI isn't initialized, can't create the test view\n" );
+		return false;
+	}
+
+	int nTestWidth = 0;
+	int nTestHeight = 0;
+	materials->GetBackBufferDimensions( nTestWidth, nTestHeight );
+	if ( !nTestWidth || !nTestHeight )
+	{
+		Warning( "panorama: no back buffer size yet, the test view was not created\n" );
+		return false;
+	}
+
+	panorama::IUIWindow *pTestWindow = m_pUIEngine->CreateNewUILayerWindow( 0, 0, nTestWidth, nTestHeight, false, false, false, true, "PanoramaTest", INPUT_CONTEXT_HANDLE_INVALID );
+	panorama::IUIPanelClient *pTestPanel = pTestWindow ? AddPanoramaView( "PanoramaTest", pTestWindow ) : NULL;
+	if ( !pTestPanel )
+	{
+		Warning( "panorama: could not create the test view\n" );
+		return false;
+	}
+
+	m_pTestWindow = pTestWindow;
+
+	const char *pTestLayout = "file://{resources}/layout/test.xml";
+	if ( !pTestPanel->UIPanel()->BLoadLayout( pTestLayout ) )
+	{
+		Warning( "panorama: could not load %s (the mod layout, see mods/panorama_test)\n", pTestLayout );
+	}
+	else
+	{
+		Warning( "panorama: loaded %s\n", pTestLayout );
+	}
+
+	// SE port (bring-up aid): dump the panel tree so we can see whether the layout actually built
+	// panel children (an empty tree means the paint pass has nothing to draw).
+	{
+		struct SEDumpPanelTree
+		{
+			static void Dump( panorama::IUIPanel *pPanel, int nDepth )
+			{
+				if ( !pPanel || nDepth > 3 )
+					return;
+
+				Warning( "SE_PORT_TREE: %*s%s visible=%d children=%d w=%.1f h=%.1f\n",
+					nDepth * 2, "", pPanel->GetID(),
+					(int)pPanel->BIsVisible(), pPanel->GetChildCount(),
+					pPanel->GetActualLayoutWidth(), pPanel->GetActualLayoutHeight() );
+				for ( int i = 0; i < pPanel->GetChildCount(); ++i )
+				{
+					Dump( pPanel->GetChild( i ), nDepth + 1 );
+				}
+			}
+		};
+
+		SEDumpPanelTree::Dump( pTestPanel->UIPanel(), 0 );
+	}
+
+	return true;
+}
+
+
+void CPanoramaEngineHandler::DestroyPanoramaTestView()
+{
+	if ( !m_pTestWindow )
+	{
+		Warning( "panorama: there is no test view\n" );
+		return;
+	}
+
+	panorama::IUIWindow *pTestWindow = m_pTestWindow;
+	m_pTestWindow = NULL;
+
+	RemovePanoramaView( pTestWindow );
+	if ( m_pUIEngine )
+	{
+		m_pUIEngine->DestroyWindow( pTestWindow );
+	}
+
+	Warning( "panorama: test view destroyed\n" );
+}
 
 
 //-----------------------------------------------------------------------------
@@ -606,9 +726,9 @@ void CPanoramaEngineHandler::PrintPanoramaStatus()
 		return;
 	}
 
-	Msg( "panorama: views=%d windows=%d ecom=%d debugger=%d forceBuiltPaintCmdCaches=%d menuView=%s\n",
+	Msg( "panorama: views=%d windows=%d ecom=%d debugger=%d forceBuiltPaintCmdCaches=%d testView=%s menuView=%s\n",
 		m_Views.Count(), m_pWindows.Count(), (int)IsInECOMode(), (int)IsDebuggerShown(),
-		(int)m_pUIEngine->BShouldUseForceBuiltPaintCmdCaches(), m_pMenuWindow ? "yes" : "no" );
+		(int)m_pUIEngine->BShouldUseForceBuiltPaintCmdCaches(), m_pTestWindow ? "yes" : "no", m_pMenuWindow ? "yes" : "no" );
 
 	for ( int i = 0; i < m_Views.Count(); ++i )
 	{
@@ -949,6 +1069,21 @@ InitReturnVal_t CPanoramaEngineHandler::Init()
 	}
 #endif
 
+	// SE port: smoke-test view.  CS:GO's engine never creates views itself - its game DLL does that
+	// through IGameUIFuncs::AddPanoramaView - so until the game side is ported this creates one from a
+	// hand-written layout (mods/panorama_test/panorama/layout/test.xml, i.e.
+	// file://{resources}/layout/test.xml inside the mounted mod).  Enabled with -panoramatest, or at
+	// runtime with the "panorama_test" console command.
+	// SE port: 这里就是要**立即**建（和 CS:GO 行为一致，也和本移植 2026-09-23 之前一样）。
+	//
+	// 曾经改成"延迟 30 帧再建"，理由是"文字渲染成占位色块 = 字体图集上传时机不对"。那个理由
+	// **已被证伪**（真正原因是 render attributes 的交接，见 docs/已完成任务记录.md 第 12 节），
+	// 而延迟带来一个副作用：视图是在主菜单视图**之后**建的，于是画在主菜单**上面**——
+	// 用户看到的"SE panel test 面板一直挂在屏幕上"就是这么来的。立即建则和以前一样排在主菜单下面。
+	if ( CommandLine()->CheckParm( "-panoramatest" ) )
+	{
+		CreatePanoramaTestView();
+	}
 
 #if ( PLATFORM_WINDOWS && DEVELOPMENT_ONLY ) && !defined (DX_TO_GL_ABSTRACTION)
 	m_pUIEngine->RegisterForUnhandledEvent(m_pUIEngine->MakeSymbol("ToggleDebugger"), UtlMakeDelegate(this, &CPanoramaEngineHandler::ToggleDebugger).GetAbstractDelegate());
