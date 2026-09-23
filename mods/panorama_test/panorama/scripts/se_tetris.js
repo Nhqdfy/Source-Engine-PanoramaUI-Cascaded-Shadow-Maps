@@ -245,21 +245,29 @@
 	}
 
 	function bindKeys(root) {
+		// 键命中日志（有上限，避免刷屏）：一次运行就能看出 $.RegisterKeyBind 这条路到底通不通。
+		var g_KeyLogs = 0;
+		function keyLog(tag) {
+			if (g_KeyLogs < 30) { ++g_KeyLogs; $.Msg("[SE port] 俄罗斯方块: 按键 " + tag); }
+		}
+
 		// 只用 CS:GO 内容里确实出现过的键名（teamselectmenu.js: key_escape/key_1/key_down/key_up…）：
 		// 这个移植的 $.RegisterKeyBind 遇到不存在的键名会抛异常，把整个 onLoad 带下去（试过
 		// key_arrowleft 这类名字，日志里连启动行都没了）。RegisterKeyBind 的回调不带键名参数，
 		// 所以每个动作单独注册。
-		$.RegisterKeyBind(root, "key_left", function () { move(-1); });
-		$.RegisterKeyBind(root, "key_right", function () { move(1); });
-		$.RegisterKeyBind(root, "key_up", rotate);
-		$.RegisterKeyBind(root, "key_down", softDrop);
-		$.RegisterKeyBind(root, "key_space", hardDrop);
+		$.RegisterKeyBind(root, "key_left", function () { keyLog("左移"); move(-1); });
+		$.RegisterKeyBind(root, "key_right", function () { keyLog("右移"); move(1); });
+		$.RegisterKeyBind(root, "key_up", function () { keyLog("旋转"); rotate(); });
+		$.RegisterKeyBind(root, "key_down", function () { keyLog("加速"); softDrop(); });
+		$.RegisterKeyBind(root, "key_space", function () { keyLog("落底"); hardDrop(); });
 		$.RegisterKeyBind(root, "key_p", function () {
+			keyLog("暂停");
 			g_Paused = !g_Paused;
 			setState(g_Paused ? "已暂停（P 继续）" : "");
 		});
-		$.RegisterKeyBind(root, "key_r", restart);
+		$.RegisterKeyBind(root, "key_r", function () { keyLog("重开"); restart(); });
 		$.RegisterKeyBind(root, "key_escape", function () {
+			keyLog("关闭");
 			// 关掉整个视图（和打开对称）：走引擎命令；顺手先把自我隐藏当作兜底
 			try { GameInterfaceAPI.ConsoleCommand("se_tetris 0"); } catch (e) { }
 			var r = $.GetContextPanel();
