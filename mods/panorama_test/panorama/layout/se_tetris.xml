@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	SE port (2026-09-23): 地图内按 I 打开的俄罗斯方块（engine 侧 "se_tetris" 命令建的托管视图）。
+
+	* 载入方式：控制台 `se_tetris`（无参=开关，1=开，0=关）；默认把 I 键绑到它
+	  （见 cstrike/cfg/autoexec.cfg 与 engine/panoramaenginehandler.cpp 里的兜底绑定）。
+	* 视图是"托管视图"，所以进关卡后不会被自动隐藏（主菜单视图在 cl.IsActive() 时会被藏起来）。
+	* 键盘走 panorama 的 JS 键绑定（$.RegisterKeyBind，CS:GO 内容 teamselectmenu.js 就是这条路），
+	  不依赖引擎的 bind 系统，所以不会和游戏里的按键冲突。
+	* 注意：<scripts> 必须在任何子面板之前；<root> 下的最外层面板不能带 id（带了整个布局加载失败）。
+-->
+<root>
+	<scripts>
+		<include src="file://{resources}/scripts/se_tetris.js" />
+	</scripts>
+
+	<!-- 背景遮罩：地图里压暗一点，让棋盘读得清 -->
+	<Panel style="width: 100%; height: 100%; background-color: #00000059;">
+		<Panel id="SeTetrisWindow" style="width: 470px; height: 560px; align: center center; background-color: #101418f2; border: 1px solid #3b444eff; flow-children: right;">
+
+			<!-- 左：10x20 棋盘（JS 创建 200 个格子并逐帧改颜色） -->
+			<Panel id="SeTetrisBoard" style="width: 240px; height: 480px; margin: 14px 8px 14px 14px; flow-children: down-wrap; background-color: #0a0d10ff; border: 1px solid #2a3138ff;" />
+
+			<!-- 右：预览 + 计分 + 按键说明 -->
+			<Panel style="width: fill-parent-flow( 1.0 ); height: 100%; margin: 14px 14px 14px 0px; flow-children: down;">
+				<Label style="font-size: 20px; color: #dae0e6ff;" text="俄罗斯方块 / TETRIS" />
+				<Label style="margin-top: 6px; font-size: 13px; color: #79838dff;" text="下一个 / NEXT" />
+				<Panel id="SeTetrisNext" style="width: 108px; height: 108px; margin-top: 4px; flow-children: down-wrap; background-color: #0a0d10ff; border: 1px solid #2a3138ff;" />
+
+				<Label id="SeTetrisScore" style="margin-top: 14px; font-size: 16px; color: #ffffffff;" text="分数 0" />
+				<Label id="SeTetrisLines" style="margin-top: 4px; font-size: 14px; color: #c3ccd4ff;" text="消行 0" />
+				<Label id="SeTetrisLevel" style="margin-top: 4px; font-size: 14px; color: #c3ccd4ff;" text="等级 1" />
+
+				<Label id="SeTetrisState" style="margin-top: 10px; font-size: 14px; color: #ffd54fff;" text="" />
+
+				<Label style="margin-top: 16px; font-size: 12px; color: #6f7982ff; width: 100%;" text="← → 左右移动" />
+				<Label style="margin-top: 2px; font-size: 12px; color: #6f7982ff; width: 100%;" text="↑ 旋转　↓ 加速下落" />
+				<Label style="margin-top: 2px; font-size: 12px; color: #6f7982ff; width: 100%;" text="空格 直接落底" />
+				<Label style="margin-top: 2px; font-size: 12px; color: #6f7982ff; width: 100%;" text="P 暂停　R 重开　Esc 关闭" />
+			</Panel>
+		</Panel>
+	</Panel>
+</root>
