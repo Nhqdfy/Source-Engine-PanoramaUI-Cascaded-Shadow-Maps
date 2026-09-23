@@ -577,10 +577,13 @@
 		var cx = (Number(cur.x) - Number(wp.x)) / s;		// 光标在窗口内的逻辑坐标
 		var cy = (Number(cur.y) - Number(wp.y)) / s;
 
-		var flWinW = Number(g_Window.actuallayoutwidth) || 928;
-		var flWinH = Number(g_Window.actuallayoutheight) || 670;
-		var flTipW = Number(g_Details.actuallayoutwidth) || 300;
-		var flTipH = Number(g_Details.actuallayoutheight) || 210;
+		// actuallayoutwidth/height 是**设备像素**（和光标位置同一个空间），而 x/y 要写逻辑像素 ——
+		// 忘了这层换算就会拿"设备宽的窗口"去夹"逻辑坐标的弹窗"：右侧物品翻转后会被夹到 x≈211，
+		// 看起来就是"弹窗跑到中间去"（用户报的现象）。
+		var flWinW = (Number(g_Window.actuallayoutwidth) / s) || 928;
+		var flWinH = (Number(g_Window.actuallayoutheight) / s) || 670;
+		var flTipW = (Number(g_Details.actuallayoutwidth) / s) || 300;
+		var flTipH = (Number(g_Details.actuallayoutheight) / s) || 210;
 		var flGap = 18;
 
 		var x = cx + flGap;
