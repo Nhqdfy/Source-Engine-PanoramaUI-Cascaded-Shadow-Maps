@@ -21,13 +21,14 @@
 			<!-- 左：10x20 棋盘（JS 创建 200 个格子并逐帧改颜色） -->
 			<!-- 宽度要 >= 10 格 x 24px(22+左右各 1 外边距) + 边框 2px = 242，否则一行只排得下 9 格，
 			     按 y*10+x 索引的格子就整体错位（实测方块会堆到右上去）。取 244 留点余量。 -->
-			<Panel id="SeTetrisBoard" style="width: 244px; height: 482px; margin: 14px 8px 14px 14px; flow-children: down-wrap; background-color: #0a0d10ff; border: 1px solid #2a3138ff;" />
+			<!-- 格子由 JS 用 x/y 显式摆放（flow-children: none）—— 自动换行受边框/取整影响会错位。 -->
+			<Panel id="SeTetrisBoard" style="width: 244px; height: 482px; margin: 14px 8px 14px 14px; flow-children: none; background-color: #0a0d10ff; border: 1px solid #2a3138ff;" />
 
 			<!-- 右：预览 + 计分 + 按键说明 -->
 			<Panel style="width: fill-parent-flow( 1.0 ); height: 100%; margin: 14px 14px 14px 0px; flow-children: down;">
 				<Label style="font-size: 20px; color: #dae0e6ff;" text="俄罗斯方块 / TETRIS" />
 				<Label style="margin-top: 6px; font-size: 13px; color: #79838dff;" text="下一个 / NEXT" />
-				<Panel id="SeTetrisNext" style="width: 108px; height: 108px; margin-top: 4px; flow-children: down-wrap; background-color: #0a0d10ff; border: 1px solid #2a3138ff;" />
+				<Panel id="SeTetrisNext" style="width: 108px; height: 108px; margin-top: 4px; flow-children: none; background-color: #0a0d10ff; border: 1px solid #2a3138ff;" />
 
 				<Label id="SeTetrisScore" style="margin-top: 14px; font-size: 16px; color: #ffffffff;" text="分数 0" />
 				<Label id="SeTetrisLines" style="margin-top: 4px; font-size: 14px; color: #c3ccd4ff;" text="消行 0" />

@@ -161,6 +161,10 @@
 			g_Cells.push([]);
 			for (var x = 0; x < COLS; ++x) {
 				var p = $.CreatePanel("Panel", board, "SeT" + x + "_" + y);
+				// 显式定位：不再依赖 flow-children 的自动换行（它受面板边框/取整影响，一行可能只排 9 格，
+				// 于是 (x,y) 与屏幕位置就对不上了 —— 之前"方块落错位置"就是这个）。
+				p.style.x = (x * CELL) + "px";
+				p.style.y = (y * CELL) + "px";
 				p.style.width = (CELL - 2) + "px";
 				p.style.height = (CELL - 2) + "px";
 				p.style.margin = "1px";
@@ -174,6 +178,8 @@
 		if (next) {
 			for (var i = 0; i < 16; ++i) {
 				var q = $.CreatePanel("Panel", next, "SeTN" + i);
+				q.style.x = ((i % 4) * 26) + "px";
+				q.style.y = (Math.floor(i / 4) * 26) + "px";
 				q.style.width = (CELL + 2) + "px";
 				q.style.height = (CELL + 2) + "px";
 				q.style.margin = "1px";
@@ -239,7 +245,10 @@
 	}
 
 	function bindKeys(root) {
-		// 每个键单独注册（RegisterKeyBind 的回调不带键名参数）
+		// 只用 CS:GO 内容里确实出现过的键名（teamselectmenu.js: key_escape/key_1/key_down/key_up…）：
+		// 这个移植的 $.RegisterKeyBind 遇到不存在的键名会抛异常，把整个 onLoad 带下去（试过
+		// key_arrowleft 这类名字，日志里连启动行都没了）。RegisterKeyBind 的回调不带键名参数，
+		// 所以每个动作单独注册。
 		$.RegisterKeyBind(root, "key_left", function () { move(-1); });
 		$.RegisterKeyBind(root, "key_right", function () { move(1); });
 		$.RegisterKeyBind(root, "key_up", rotate);
@@ -263,10 +272,12 @@
 		if (!root) { return; }
 
 		buildBoard();
+		// 焦点：panorama 的键绑定是挂在面板上的，没有焦点的面板收不到键（CS:GO 的面板同样先 SetFocus）
+		try { root.SetFocus(); } catch (e) { }
 		bindKeys(root);
 		restart();
 		tick();
-		$.Msg("[SE port] 俄罗斯方块: 已启动（10x20，P 暂停 / R 重开 / Esc 关闭）");
+		$.Msg("[SE port] 俄罗斯方块: 已启动（10x20，←→ 移动 / ↑ 旋转 / ↓ 加速 / 空格 落底 / P 暂停 / R 重开 / Esc 关闭）");
 	}
 
 	$.Schedule(0.0, onLoad);
