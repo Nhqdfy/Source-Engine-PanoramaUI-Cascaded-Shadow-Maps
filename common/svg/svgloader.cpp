@@ -3265,6 +3265,30 @@ bool ConvertSVGToRGBA( const byte *pubSVGData, int cubSVGData, CUtlBuffer &bufOu
 		}
 	}
 
+	// SE port (2026-09-23): when the caller did not request a size (a layout without
+	// texturewidth/textureheight), the size used to fall back to the document's intrinsic size
+	// *inside* Render(), i.e. after the fScaleFactor multiply below - so the intrinsic case ended up
+	// rasterised at logical pixels while every other image is rasterised at device pixels.  The image
+	// panel's CImagePanel::OnContentSizeTraverse() relies on the scaled load ("image has already been
+	// scaled, so we need to apply only the difference in scales" - it divides the texture size by the
+	// window scale factor), so with the texture unscaled a bare SVG's content size came out
+	// intrinsic/scale: the lower the resolution, the bigger the image.  Resolve the document size
+	// first, so the scale factor applies to both paths.
+	// NOTE: only when *both* are unset.  A layout may specify one dimension (`texturewidth="-1"
+	// textureheight="56"`, the navbar style): there the loader derives the missing one from the
+	// document's aspect ratio, and pre-filling it here would clamp the render to an intrinsic-sized
+	// box and shrink the icon (it did: 31x31 became 17x17).
+	if( w == 0 && h == 0 )
+	{
+		uint32 nDocumentWidth = 0;
+		uint32 nDocumentHeight = 0;
+		if( GetSVGDimensions( pubSVGData, cubSVGData, nDocumentWidth, nDocumentHeight ) && nDocumentWidth > 0 && nDocumentHeight > 0 )
+		{
+			w = nDocumentWidth;
+			h = nDocumentHeight;
+		}
+	}
+
 	if( fScaleFactor > 0 )
 	{
 		w = w*fScaleFactor;
