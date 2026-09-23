@@ -10,8 +10,8 @@
 // CS:GO 的 econ 数据里没有"格子尺寸"，这是本面板自创的展示规则（步枪 5x2 / 狙击 6x2 /
 // 冲锋枪 4x2 / 手枪 2x2 / 霰弹 5x2 / 机枪 6x2 / 盾 3x3 / 刀 1x3 / 手雷 1x1 / C4 2x1）。
 (function () {
-	var COLS = 12;
-	var ROWS = 8;
+	var COLS = 16;
+	var ROWS = 10;
 	var CELL = 56;			// 每格边长（像素）
 	var GAP = 2;			// 格子内缩，留出网格缝
 
@@ -58,6 +58,61 @@
 		return parts.length >= 4 ? parts[3] : "0";
 	}
 
+	// ------------------------------------------------------------------------
+	// 价格
+	//
+	// 本构建里没有真实价目表：se_session_sim.js 的 StoreAPI.GetStoreItemSalePrice/OriginalPrice 与
+	// LoadoutAPI.GetItemGamePrice 都是空桩（注释也写着 "This build has no GC price sheet"）。
+	// 所以价格按"武器类别基准价 × 稀有度系数"生成 —— 和上面的 ITEM_SIZE 一样，属于本面板自创的
+	// 展示规则，不是零售价；将来接上真经济数据后换成真价即可（换 itemPrice() 一处）。
+	// ------------------------------------------------------------------------
+	var BASE_PRICE = {
+		1: 700,  2: 300,  3: 500,  4: 300,  7: 2700, 8: 3300, 9: 4750, 10: 2050,
+		11: 5000, 13: 1800, 14: 5200, 16: 3100, 17: 1050, 19: 2350, 20: 200,
+		23: 1250, 24: 1050, 25: 700, 26: 2050, 27: 1500, 28: 1700, 29: 1800,
+		30: 500, 31: 200, 32: 200, 33: 1300, 34: 1200, 35: 2100, 36: 500,
+		37: 300, 38: 1700, 39: 3000, 40: 1700, 41: 500, 42: 300, 43: 200,
+		44: 300, 45: 300, 46: 400, 47: 50, 48: 200, 49: 400, 57: 100, 59: 100,
+		60: 3200, 61: 200, 63: 500, 64: 300, 500: 1200, 503: 1200, 505: 1200,
+		506: 1200, 507: 1200, 508: 1200, 509: 1200, 512: 1200, 514: 1200, 515: 1200,
+	};
+	var RARITY_MULT = [1.0, 1.0, 1.6, 2.8, 5.0, 12.0, 30.0, 120.0];	// 消费级..★ 金
+	var DEFAULT_BASE_PRICE = 500;
+
+	function itemRarity(id) {
+		var r = 0;
+		try { r = Number(InventoryAPI.GetItemAttributeValue(id, "rarity")); } catch (e) { r = 0; }
+		if (!r) {
+			// sim 没给 rarity 时用颜色反查（和 itemRarityName 的兜底同一套表）
+			var c = itemRarityColor(id).toLowerCase();
+			if (c === "#b0c3d9") { r = 1; }
+			else if (c === "#5e98d9") { r = 2; }
+			else if (c === "#4b69ff") { r = 3; }
+			else if (c === "#8847ff") { r = 4; }
+			else if (c === "#d32ce6") { r = 5; }
+			else if (c === "#eb4b4b") { r = 6; }
+			else if (c === "#e4ae39") { r = 7; }
+		}
+		return Math.max(0, Math.min(7, r));
+	}
+
+	function itemPrice(id) {
+		var def = itemDef(id);
+		var base = BASE_PRICE.hasOwnProperty(def) ? BASE_PRICE[def] : DEFAULT_BASE_PRICE;
+		return Math.round(base * RARITY_MULT[itemRarity(id)]);
+	}
+
+	function formatPrice(v) {
+		// 千位分隔，和游戏里价签的读法一致
+		var s = String(Math.round(v));
+		var out = "";
+		for (var i = 0; i < s.length; ++i) {
+			if (i > 0 && ((s.length - i) % 3) === 0) { out += ","; }
+			out += s.charAt(i);
+		}
+		return out;
+	}
+
 	var g_Grid = null;
 	var g_Details = null;
 	var g_Placed = 0;
@@ -70,6 +125,7 @@
 	var g_Scale = 0;			// 设备像素 / 逻辑像素（这个移植的窗口逻辑空间是 1920x1080，见 deviceScale）
 	var g_HoverItem = null;		// 当前光标下的物品（tick 做命中测试，见 backpackTick）
 	var g_hDenyInput = 0;		// AddDenyAllInputToGame 的句柄（把鼠标从游戏手里要过来）
+	var g_Window = null;		// SePackWindow：弹窗跟随鼠标时的定位基准
 
 	// ------------------------------------------------------------------------
 	// 数据小工具
@@ -168,17 +224,27 @@
 		// 只要把 itemid 给它，名字/贴图由 C++ 侧解析（和 itemtile.js 的做法一致）。
 		var img = $.CreatePanel("ItemImage", cell, "SePackImage" + index);
 		img.style.width = "100%";
-		img.style.height = "70%";
+		img.style.height = "58%";		// 58/26/16 分配，给右下角的价格留一行
 		try { img.itemid = id; } catch (e) { }
 
 		var label = $.CreatePanel("Label", cell, "SePackLabel" + index);
 		label.style.width = "100%";
-		label.style.height = "30%";
+		label.style.height = "26%";
 		label.style.fontSize = (w >= 4 ? "15px" : (w >= 2 ? "13px" : "11px"));
 		label.style.color = "#c9d1d9ff";
 		label.style.textAlign = "center";
 		label.style.textOverflow = "ellipsis";
 		label.text = itemName(id);
+
+		// 价格：格子右下角（小字，绿色；一眼能看出哪件值钱）
+		var price = $.CreatePanel("Label", cell, "SePackPrice" + index);
+		price.style.width = "100%";
+		price.style.height = "16%";
+		price.style.fontSize = (w >= 4 ? "14px" : "12px");
+		price.style.color = "#b0e57cff";
+		price.style.textAlign = "right";
+		price.style.marginRight = "4px";
+		price.text = "¥" + formatPrice(itemPrice(id));
 
 		var item = { id: id, w: w, h: h, x: x, y: y, panel: cell };
 		g_Items.push(item);
@@ -346,6 +412,8 @@
 					g_HoverItem = null;
 					hideDetails();
 				}
+				// 详情浮层跟着鼠标走（CS:GO/塔科夫那种跟随式 tooltip）
+				if (g_HoverItem) { placeDetailsAtCursor(); }
 			}
 		} catch (e) {
 			$.Msg("[SE port] 背包: backpackTick 异常: " + e);
@@ -466,11 +534,16 @@
 		var elRar = g_Details.FindChildTraverse("SePackDetailRarity");
 		var elMeta = g_Details.FindChildTraverse("SePackDetailMeta");
 		var elImg = g_Details.FindChildTraverse("SePackDetailImage");
+		var elPrice = g_Details.FindChildTraverse("SePackDetailPrice");
 
 		if (elName) { elName.text = itemName(id); }
 		if (elRar) {
 			elRar.text = itemRarityName(id);
 			elRar.style.color = itemRarityColor(id);
+		}
+		if (elPrice) {
+			// 价格：本构建没有真价目表，见 itemPrice() 的注释
+			elPrice.text = "¥" + formatPrice(itemPrice(id));
 		}
 		if (elMeta) {
 			var size = itemSize(id);
@@ -484,6 +557,44 @@
 
 	function hideDetails() {
 		if (g_Details) { g_Details.style.visibility = "collapse"; }
+	}
+
+	// 把详情浮层放到光标旁边：右/下放不下就翻到另一侧，再整体夹在窗口内。
+	// 光标位置和窗口位置都在"设备像素"里（GetCursorPositionWithinWindow /
+	// GetPositionWithinWindow 同一坐标系），除以前面标定出的 scale 才是布局用的逻辑像素。
+	function placeDetailsAtCursor() {
+		if (!g_Details || !g_Window) { return; }
+
+		var cur = null;
+		try { cur = g_Window.GetCursorPositionWithinWindow(); } catch (e) { return; }
+		if (!cur) { return; }
+
+		var wp = null;
+		try { wp = g_Window.GetPositionWithinWindow(); } catch (e2) { return; }
+		if (!wp) { return; }
+
+		var s = deviceScale();
+		var cx = (Number(cur.x) - Number(wp.x)) / s;		// 光标在窗口内的逻辑坐标
+		var cy = (Number(cur.y) - Number(wp.y)) / s;
+
+		var flWinW = Number(g_Window.actuallayoutwidth) || 928;
+		var flWinH = Number(g_Window.actuallayoutheight) || 670;
+		var flTipW = Number(g_Details.actuallayoutwidth) || 300;
+		var flTipH = Number(g_Details.actuallayoutheight) || 210;
+		var flGap = 18;
+
+		var x = cx + flGap;
+		if (x + flTipW > flWinW - 4) { x = cx - flGap - flTipW; }		// 右边放不下 → 翻到左侧
+		if (x < 4) { x = 4; }
+		if (x + flTipW > flWinW - 4) { x = Math.max(4, flWinW - 4 - flTipW); }
+
+		var y = cy + flGap;
+		if (y + flTipH > flWinH - 4) { y = cy - flGap - flTipH; }		// 下面放不下 → 翻到上方
+		if (y < 4) { y = 4; }
+		if (y + flTipH > flWinH - 4) { y = Math.max(4, flWinH - 4 - flTipH); }
+
+		g_Details.style.x = Math.round(x) + "px";
+		g_Details.style.y = Math.round(y) + "px";
 	}
 
 	function itemDef2Class(id) {
@@ -500,6 +611,7 @@
 
 		g_Grid = root.FindChildTraverse("SePackGrid");
 		g_Details = root.FindChildTraverse("SePackDetails");
+		g_Window = root.FindChildTraverse("SePackWindow");
 
 		if (g_Grid) {
 			buildBackdrop(g_Grid);
