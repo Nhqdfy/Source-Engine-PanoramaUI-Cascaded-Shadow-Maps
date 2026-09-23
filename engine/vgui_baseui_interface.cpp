@@ -594,27 +594,16 @@ void CEngineVGui::Init()
 
 	if ( IsPC() )
 	{
-#ifdef PANORAMA_ENABLE
-		// SE port (2026-09-18, console into panorama): CS:GO asks its client-side GameUI module for the
-		// console (m_GameUIFactory == g_ClientFactory there; the class is
-		// game/client/cstrike15/gameui/gameconsole.cpp, a vgui2 panel owned by the module that also hosts
-		// panorama).  This fork's GameUI-side module is panoramauiclient.dll - it hosts the console now
-		// (panorama/seport/gameclient/cstrike15/gameui/) - so ask it first; gameui.dll stays the fallback,
-		// which keeps a build without the panorama module byte-for-byte on the old path.
-		staticGameConsole = SE_PortGetPanoramaGameConsole();
-		if ( staticGameConsole )
+		// SE port (2026-09-23): back to the Counter-Strike: Source arrangement - the console comes from
+		// the GameUI module (GameUI.dll), exactly like the stock engine.  From 2026-09-18 the panorama
+		// module published its own IGameConsole (SE_PortGetPanoramaGameConsole(), see
+		// engine/panoramaenginehandler.cpp) and had priority here; that path is disabled for now
+		// ("先去起源那套"), so panoramauiclient.dll no longer owns the console.  Its code and the bridge
+		// are left in place, unbuilt-in only in the sense that nothing calls them.
+		staticGameConsole = (IGameConsole *)m_GameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
+		if ( !staticGameConsole )
 		{
-			Msg( "SE port: IGameConsole comes from panoramauiclient.dll (console owned by the panorama "
-				 "module, CS:GO style); gameui.dll only provides IGameUI here\n" );
-		}
-		else
-#endif
-		{
-			staticGameConsole = (IGameConsole *)m_GameUIFactory(GAMECONSOLE_INTERFACE_VERSION, NULL);
-			if ( !staticGameConsole )
-			{
-				Sys_Error( "Could not get IGameConsole interface %s from %s\n", GAMECONSOLE_INTERFACE_VERSION, szDllName );
-			}
+			Sys_Error( "Could not get IGameConsole interface %s from %s\n", GAMECONSOLE_INTERFACE_VERSION, szDllName );
 		}
 	}
 
