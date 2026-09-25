@@ -5326,6 +5326,11 @@ void CShaderAPIDx8::CullMode( MaterialCullMode_t nCullMode )
 		nNewCullMode = D3DCULL_CW;
 		break;
 
+	// CSM port (CS:GO parity): the cascade shadow depth pass disables culling entirely
+	case MATERIAL_CULLMODE_NONE:
+		nNewCullMode = D3DCULL_NONE;	// Culls nothing
+		break;
+
 	default:
 		Warning( "CullMode: invalid cullMode\n" );
 		return;
