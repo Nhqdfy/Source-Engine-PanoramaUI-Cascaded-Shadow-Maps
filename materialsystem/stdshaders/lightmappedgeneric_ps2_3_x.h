@@ -41,6 +41,13 @@
 #include "common_flashlight_fxc.h"
 #include "common_lightmappedgeneric_fxc.h"
 
+// CS:GO lightmappedgeneric_ps2_3_x.h:241 - used by the CSM blending fallback path (CSM_BLENDING==0)
+float Luminance( float3 cColor )
+{
+	// Formula for calculating luminance based on NTSC standard
+	return dot( cColor.rgb, float3( 0.2125, 0.7154, 0.0721 ) );
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // CSM (ported from CS:GO materialsystem/stdshaders/lightmappedgeneric_ps2_3_x.h)
 #if ( CASCADED_SHADOW_MAPPING ) && !defined( _X360 ) && !defined( _PS3 ) && !defined( SHADER_MODEL_PS_2_B )

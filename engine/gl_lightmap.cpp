@@ -509,7 +509,9 @@ static void InitLMSamples( Vector4D *pSamples, int nSamples, float value )
 	for( int i=0; i < nSamples; i++ )
 	{
 		pSamples[i][0] = pSamples[i][1] = pSamples[i][2] = value;
-		pSamples[i][3] = 1.0f;
+		// CS:GO gl_lightmap.cpp:536 - the lightmap alpha holds the vrad baked sun percent; a map without
+		// that data must read as 0 so the CSM shaders know not to apply the lightmap blending path.
+		pSamples[i][3] = 0.0f;
 	}
 }
 
