@@ -631,6 +631,12 @@ void CShaderDeviceMgrBase::LoadHardwareCaps( KeyValues *pGroup, HardwareCaps_t &
 
 	caps.m_bNeedsATICentroidHack = ReadBool( pGroup, "CentroidHack", caps.m_bNeedsATICentroidHack );
 	caps.m_bDisableShaderOptimizations = ReadBool( pGroup, "DisableShaderOptimizations", caps.m_bDisableShaderOptimizations );
+
+	// dxsupport can only kill CSM support, not forcefully enable it.
+	caps.m_bSupportsCascadedShadowMapping = ReadBool( pGroup, "SupportsCascadedShadowMapping", caps.m_bSupportsCascadedShadowMapping );
+	int nCSMQuality = CSMQUALITY_VERY_LOW;
+	ReadInt( pGroup, "CSMQuality", 0, &nCSMQuality );
+	caps.m_nCSMQuality = static_cast<uint8>( clamp( nCSMQuality, 0, CSMQUALITY_TOTAL_MODES - 1 ) );
 }
 
 

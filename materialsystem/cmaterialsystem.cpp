@@ -1818,6 +1818,7 @@ static ConVar mat_fastnobump(		"mat_fastnobump", "0", FCVAR_CHEAT ); // Binds 1-
 // These are not controlled by the material system, but are limited by settings in the material system
 static ConVar r_shadowrendertotexture(		"r_shadowrendertotexture", "0", FCVAR_ARCHIVE );
 static ConVar r_flashlightdepthtexture(		"r_flashlightdepthtexture", "1" );
+static ConVar csm_quality_level( "csm_quality_level", "0", 0, "Cascaded shadow map quality level, [0,3], 0=VERY_LOW, 3=HIGHEST" );
 #ifndef _X360
 static ConVar r_waterforceexpensive(		"r_waterforceexpensive", "0", FCVAR_ARCHIVE );
 #endif
@@ -1899,6 +1900,8 @@ void CMaterialSystem::ReadConfigFromConVars( MaterialSystem_Config_t *pConfig )
 	pConfig->m_bMotionBlur = mat_motion_blur_enabled.GetBool();
 	pConfig->m_bSupportFlashlight = mat_supportflashlight.GetInt() != 0;
 	pConfig->m_bShadowDepthTexture = r_flashlightdepthtexture.GetBool();
+
+	pConfig->m_nCSMQuality = (CSMQualityMode_t)clamp( csm_quality_level.GetInt(), CSMQUALITY_VERY_LOW, (int)CSMQUALITY_TOTAL_MODES - 1 );
 
 	pConfig->SetFlag( MATSYS_VIDCFG_FLAGS_ENABLE_HDR, HardwareConfig() && HardwareConfig()->GetHDREnabled() );
 
@@ -2144,6 +2147,7 @@ void CMaterialSystem::WriteConfigIntoConVars( const MaterialSystem_Config_t &con
 	bool hdre = config.HDREnabled();
 	HardwareConfig()->SetHDREnabled( hdre );
 	r_flashlightdepthtexture.SetValue( config.m_bShadowDepthTexture ? 1 : 0 );
+	csm_quality_level.SetValue( clamp<int>( config.m_nCSMQuality, CSMQUALITY_VERY_LOW, CSMQUALITY_TOTAL_MODES - 1 ) );
 	mat_motion_blur_enabled.SetValue( config.m_bMotionBlur ? 1 : 0 );
 	mat_supportflashlight.SetValue( config.m_bSupportFlashlight ? 1 : 0 );
 }
@@ -2244,6 +2248,12 @@ bool CMaterialSystem::OverrideConfig( const MaterialSystem_Config_t &_config, bo
 		}
 
 		forceUpdate = true;
+		bReloadMaterials = true;
+		recomputeSnapshots = true;
+	}
+
+	if ( config.m_nCSMQuality != g_config.m_nCSMQuality )
+	{
 		bReloadMaterials = true;
 		recomputeSnapshots = true;
 	}

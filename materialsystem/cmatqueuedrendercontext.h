@@ -259,6 +259,23 @@ public:
 
 	void									SetFlashlightState( const FlashlightState_t &s, const VMatrix &m );
 
+	virtual bool IsCascadedShadowMapping() const
+	{
+		return m_bCascadedShadowMappingEnabled;
+	}
+
+	virtual void SetCascadedShadowMapping( bool bEnable )
+	{
+		m_bCascadedShadowMappingEnabled = bEnable;
+		m_queue.QueueCall( m_pHardwareContext, &IMatRenderContext::SetCascadedShadowMapping, bEnable );
+	}
+
+	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas )
+	{
+		state, pDepthTextureAtlas;
+		m_queue.QueueCall( m_pHardwareContext, &IMatRenderContext::SetCascadedShadowMappingState, RefToVal( state ), pDepthTextureAtlas );
+	}
+
 	DEFINE_QUEUED_CALL_AFTER_BASE_1(		SetHeightClipMode, MaterialHeightClipMode_t, IMatRenderContext, m_pHardwareContext );
 	DEFINE_QUEUED_CALL_AFTER_BASE_1(		SetHeightClipZ, float, IMatRenderContext, m_pHardwareContext );
 
@@ -612,6 +629,7 @@ private:
 	int m_iRenderDepth;
 	int m_WidthBackBuffer, m_HeightBackBuffer;
 	int m_nBoneCount;
+	bool m_bCascadedShadowMappingEnabled;
 	MaterialFogMode_t m_FogMode;
 	float m_flFogStart;
 	float m_flFogEnd;

@@ -509,6 +509,7 @@ static void ReadMaterialSystemConfigFromRegistry( MaterialSystem_Config_t &confi
 		{
 			conVar.SetValue( nValue );
 			config.m_bShadowDepthTexture = ReadVideoConfigInt( "ShadowDepthTexture", 0 ) != 0;
+			config.m_nCSMQuality = (CSMQualityMode_t)clamp( ReadVideoConfigInt( "CSMQuality", 0 ), CSMQUALITY_VERY_LOW, (int)CSMQUALITY_TOTAL_MODES - 1 );
 		}
 	}
 
@@ -552,6 +553,7 @@ static void WriteMaterialSystemConfigToRegistry( const MaterialSystem_Config_t &
 	WriteVideoConfigInt( "ScreenMSAAQuality", config.m_nAAQuality );
 	WriteVideoConfigInt( "MotionBlur", config.m_bMotionBlur ? 1 : 0 );
 	WriteVideoConfigInt( "ShadowDepthTexture", config.m_bShadowDepthTexture ? 1 : 0 );
+	WriteVideoConfigInt( "CSMQuality", config.m_nCSMQuality );
 	WriteVideoConfigInt( "VRModeAdapter", config.m_nVRModeAdapter );
 
 	// Registry only stores ints, so divide/multiply by 100 when reading/writing.

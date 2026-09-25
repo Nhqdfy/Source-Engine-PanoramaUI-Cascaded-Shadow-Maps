@@ -853,6 +853,14 @@ private:
 
 	virtual void SetShadowDepthBiasFactors( float fShadowSlopeScaleDepthBias, float fShadowDepthBias ) {}
 
+	virtual bool IsCascadedShadowMapping() const { return false; }
+	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas ) { state, pDepthTextureAtlas; }
+	virtual const CascadedShadowMappingState_t &GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale = false ) const
+	{
+		static CascadedShadowMappingState_t dummyState;
+		return dummyState;
+	}
+
 	virtual void SetDisallowAccess( bool ) {}
 	virtual void EnableShaderShaderMutex( bool ) {}
 	virtual void ShaderLock() {}

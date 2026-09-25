@@ -12,6 +12,7 @@
 #endif
 
 #include "materialsystem/imaterialsystem.h"
+#include "materialsystem/imaterialsystemhardwareconfig.h"
 
 #define MATERIALSYSTEM_CONFIG_VERSION "VMaterialSystemConfig002"
 
@@ -67,6 +68,7 @@ struct MaterialSystem_Config_t
 	bool UsePhong() const { return ( m_Flags & MATSYS_VIDCFG_FLAGS_DISABLE_PHONG ) == 0; }
 	bool VRMode() const { return ( m_Flags & MATSYS_VIDCFG_FLAGS_VR_MODE) != 0; }
 	bool ShadowDepthTexture() const { return m_bShadowDepthTexture; }
+	CSMQualityMode_t GetCSMQualityMode() const { return m_nCSMQuality; }
 	bool MotionBlur() const { return m_bMotionBlur; }
 	bool SupportFlashlight() const { return m_bSupportFlashlight; }
 
@@ -139,6 +141,7 @@ struct MaterialSystem_Config_t
 	uint m_WindowedSizeLimitHeight;
 	int m_nAAQuality;
 	bool m_bShadowDepthTexture;
+	CSMQualityMode_t m_nCSMQuality;
 	bool m_bMotionBlur;
 	bool m_bSupportFlashlight;
 
@@ -184,6 +187,7 @@ struct MaterialSystem_Config_t
 
 		m_nAASamples = 1;
 		m_bShadowDepthTexture = false;
+		m_nCSMQuality = CSMQUALITY_VERY_LOW;
 		m_bMotionBlur = false;
 		m_bSupportFlashlight = true;
 

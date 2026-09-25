@@ -1135,6 +1135,11 @@ bool CShaderDeviceMgrDx8::ComputeCapsFromD3D( HardwareCaps_t *pCaps, int nAdapte
 	CheckVendorDependentAlphaToCoverage( pCaps, nAdapter );
 	CheckVendorDependentShadowMappingSupport( pCaps, nAdapter );
 
+	// Cascaded shadow mapping
+	// Note: dxsupport can only DISABLE CSM support, not enable it.
+	pCaps->m_nCSMQuality = CSMQUALITY_VERY_LOW;
+	pCaps->m_bSupportsCascadedShadowMapping = pCaps->m_bSupportsShadowDepthTextures;
+
 	// If we're not on a 3.0 part, these values are more appropriate (X800 & X850 parts from ATI do shadow mapping but not 3.0 )
 	if ( !IsOpenGL() )
 	{

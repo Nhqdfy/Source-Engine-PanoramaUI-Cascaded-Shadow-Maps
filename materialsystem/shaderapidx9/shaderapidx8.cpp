@@ -1272,6 +1272,10 @@ private:
 	VMatrix m_FlashlightWorldToTexture;
 	ITexture *m_pFlashlightDepthTexture;
 
+	CascadedShadowMappingState_t m_CascadedShadowMappingState;
+	CascadedShadowMappingState_t m_CascadedShadowMappingState_LightMapScaled;
+	ITexture *m_pCascadedShadowMappingDepthTexture;
+
 	CShaderAPIDx8( CShaderAPIDx8 const& );
 
 	enum
@@ -1740,6 +1744,11 @@ private:
 
 	void SetShadowDepthBiasFactors( float fShadowSlopeScaleDepthBias, float fShadowDepthBias );
 
+	// CSM (ported from CS:GO)
+	virtual bool IsCascadedShadowMapping() const;
+	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas );
+	virtual const CascadedShadowMappingState_t &GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale = false ) const;
+
 	// Vendor-dependent depth stencil texture format
 	ImageFormat GetShadowDepthTextureFormat( void );
 
@@ -1924,6 +1933,9 @@ CShaderAPIDx8::CShaderAPIDx8() :
 
 	memset( m_pMatrixStack, 0, sizeof(ID3DXMatrixStack*) * NUM_MATRIX_MODES );
 	memset( &m_DynamicState, 0, sizeof(m_DynamicState) );
+	memset( &m_CascadedShadowMappingState, 0, sizeof( m_CascadedShadowMappingState ) );
+	memset( &m_CascadedShadowMappingState_LightMapScaled, 0, sizeof( m_CascadedShadowMappingState_LightMapScaled ) );
+	m_pCascadedShadowMappingDepthTexture = NULL;
 	//m_DynamicState.m_HeightClipMode = MATERIAL_HEIGHTCLIPMODE_DISABLE;
 	m_nWindowHeight = m_nWindowWidth = 0;
 	m_maxBoneLoaded = 0;
@@ -13183,6 +13195,41 @@ void CShaderAPIDx8::SetShadowDepthBiasFactors( float fShadowSlopeScaleDepthBias,
 {
 	m_fShadowSlopeScaleDepthBias = fShadowSlopeScaleDepthBias;
 	m_fShadowDepthBias = fShadowDepthBias;
+}
+
+bool CShaderAPIDx8::IsCascadedShadowMapping() const
+{
+	return m_CascadedShadowMappingState.m_nNumCascades != 0;
+}
+
+void CShaderAPIDx8::SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas )
+{
+	LOCK_SHADERAPI();
+
+	m_CascadedShadowMappingState = state;
+	m_CascadedShadowMappingState_LightMapScaled = state;
+
+	// save some PS instructions by pre-multiplying by (1/lightmapScale)
+	m_CascadedShadowMappingState_LightMapScaled.m_vLightColor.x *= m_CascadedShadowMappingState_LightMapScaled.m_vLightColor.w;
+	m_CascadedShadowMappingState_LightMapScaled.m_vLightColor.y *= m_CascadedShadowMappingState_LightMapScaled.m_vLightColor.w;
+	m_CascadedShadowMappingState_LightMapScaled.m_vLightColor.z *= m_CascadedShadowMappingState_LightMapScaled.m_vLightColor.w;
+
+	m_pCascadedShadowMappingDepthTexture = pDepthTextureAtlas;
+}
+
+const CascadedShadowMappingState_t &CShaderAPIDx8::GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale ) const
+{
+	if ( pDepthTextureAtlas )
+		*pDepthTextureAtlas = m_pCascadedShadowMappingDepthTexture;
+
+	if ( bLightMapScale )
+	{
+		return m_CascadedShadowMappingState_LightMapScaled;
+	}
+	else
+	{
+		return m_CascadedShadowMappingState;
+	}
 }
 
 void CShaderAPIDx8::ClearVertexAndPixelShaderRefCounts()

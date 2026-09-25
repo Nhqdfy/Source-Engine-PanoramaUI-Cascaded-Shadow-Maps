@@ -951,6 +951,19 @@ public:
 	{
 	}
 
+	virtual bool IsCascadedShadowMapping() const { return false; }
+
+	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas )
+	{
+		state, pDepthTextureAtlas;
+	}
+
+	virtual const CascadedShadowMappingState_t &GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale = false ) const
+	{
+		static CascadedShadowMappingState_t dummyState;
+		return dummyState;
+	}
+
 	virtual const FlashlightState_t &GetFlashlightState( VMatrix &worldToTexture ) const 
 	{
 		static FlashlightState_t  blah;
@@ -1137,6 +1150,13 @@ public:
 	virtual void ComputeVertexDescription( unsigned char* pBuffer, VertexFormat_t vertexFormat, MeshDesc_t& desc ) const {}
 
 	virtual bool SupportsShadowDepthTextures() { return false; }
+
+	virtual bool SupportsCascadedShadowMapping() const { return false; }
+	virtual CSMQualityMode_t GetCSMQuality() const { return CSMQUALITY_VERY_LOW; }
+	virtual bool SupportsBilinearPCFSampling() const { return true; }
+	virtual CSMShaderMode_t GetCSMShaderMode( CSMQualityMode_t nQualityLevel ) const { nQualityLevel; return CSMSHADERMODE_LOW_OR_VERY_LOW; }
+	virtual void SetCSMAccurateBlending( bool bEnable ) {}
+	virtual bool GetCSMAccurateBlending() const { return true; }
 
 	virtual bool SupportsFetch4() { return false; }
 

@@ -144,6 +144,7 @@ struct HardwareCaps_t : public MaterialAdapterInfo_t
 	bool m_bFogColorAlwaysLinearSpace : 1;
 	bool m_bSupportsAlphaToCoverage : 1;
 	bool m_bSupportsShadowDepthTextures : 1;
+	bool m_bSupportsCascadedShadowMapping : 1;
 	bool m_bSupportsFetch4 : 1;
 	bool m_bSoftwareVertexProcessing : 1;
 	bool m_bScissorSupported : 1;
@@ -158,6 +159,8 @@ struct HardwareCaps_t : public MaterialAdapterInfo_t
 	bool m_bCanStretchRectFromTextures : 1;			// Does the device expose D3DDEVCAPS2_CAN_STRETCHRECT_FROM_TEXTURES (or is it >DX9?)
 
 	HDRType_t m_MaxHDRType;
+
+	uint8 m_nCSMQuality;
 };
 
 
@@ -263,6 +266,13 @@ public:
 	const HardwareCaps_t& ActualCaps() const { return m_ActualCaps; }
 	const HardwareCaps_t& Caps() const { return m_Caps; }
 	virtual bool GetHDREnabled( void ) const;
+
+	bool SupportsCascadedShadowMapping( void ) const;
+	CSMQualityMode_t GetCSMQuality() const;
+	bool SupportsBilinearPCFSampling() const;
+	CSMShaderMode_t GetCSMShaderMode( CSMQualityMode_t nQualityLevel ) const;
+	bool GetCSMAccurateBlending() const;
+	void SetCSMAccurateBlending( bool bEnable );
 	virtual void SetHDREnabled( bool bEnable );
 
 protected:
@@ -274,6 +284,7 @@ protected:
 	HardwareCaps_t m_Caps;
 	HardwareCaps_t m_UnOverriddenCaps;
 	bool m_bHDREnabled;
+	bool m_bCSMAccurateBlending;
 };
 
 

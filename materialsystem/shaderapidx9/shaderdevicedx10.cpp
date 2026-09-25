@@ -237,6 +237,8 @@ bool CShaderDeviceMgrDx10::ComputeCapsFromD3D( HardwareCaps_t *pCaps, IDXGIAdapt
 	pCaps->m_nMaxVertexTextureDimension = D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;
 	pCaps->m_bSupportsAlphaToCoverage = false;	// FIXME
 	pCaps->m_bSupportsShadowDepthTextures = true;
+	pCaps->m_nCSMQuality = CSMQUALITY_VERY_LOW;
+	pCaps->m_bSupportsCascadedShadowMapping = true;
 	pCaps->m_bSupportsFetch4 = ( desc.VendorId == VENDORID_ATI );
 	pCaps->m_bSupportsBorderColor = true;
 	pCaps->m_ShadowDepthTextureFormat = IMAGE_FORMAT_UNKNOWN;

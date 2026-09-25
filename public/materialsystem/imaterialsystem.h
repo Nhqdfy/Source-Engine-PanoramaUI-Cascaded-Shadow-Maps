@@ -501,6 +501,53 @@ public:
 //-----------------------------------------------------------------------------
 // Flags to be used with the Init call
 //-----------------------------------------------------------------------------
+#define MAX_CASCADED_SHADOW_MAPPING_CASCADES (4)
+
+// The number of float4's in the CascadedShadowMappingState_t (starting at m_vLightColor)
+#define CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE (26)
+
+// Note: This struct is sent as-is as an array of pixel shader constants (starting at m_vLightColor). If you modify it, be sure to update CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE.
+struct CascadedShadowMappingState_t
+{
+	uint m_nNumCascades;
+	bool m_bIsRenderingViewModels;
+		
+	Vector4D m_vLightColor;
+
+	Vector m_vLightDir;
+	float m_flPadding1;
+
+	struct
+	{
+		float m_flInvShadowTextureWidth;
+		float m_flInvShadowTextureHeight;
+		float m_flHalfInvShadowTextureWidth;
+		float m_flHalfInvShadowTextureHeight;
+	} m_TexParams;
+
+	struct 
+	{
+		float m_flShadowTextureWidth;
+		float m_flShadowTextureHeight;
+		float m_flSplitLerpFactorBase;
+		float m_flSplitLerpFactorInvRange;
+	} m_TexParams2;
+
+	struct 
+	{
+		float m_flDistLerpFactorBase;
+		float m_flDistLerpFactorInvRange;
+		float m_flUnused0;
+		float m_flUnused1;
+	} m_TexParams3;
+
+	VMatrix m_matWorldToShadowTexMatrices[ MAX_CASCADED_SHADOW_MAPPING_CASCADES ];
+	Vector4D m_vCascadeAtlasUVOffsets[ MAX_CASCADED_SHADOW_MAPPING_CASCADES ];
+
+	Vector4D m_vCamPosition;
+};
+
+
 enum MaterialInitFlags_t
 {
 	MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE = 0x2,
@@ -1346,6 +1393,10 @@ public:
 	virtual void SetFlashlightMode( bool bEnable ) = 0;
 
 	virtual void SetFlashlightState( const FlashlightState_t &state, const VMatrix &worldToTexture ) = 0;
+
+	virtual bool IsCascadedShadowMapping() const = 0;
+	virtual void SetCascadedShadowMapping( bool bEnable ) = 0;
+	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas ) = 0;
 
 	// Gets the current height clip mode
 	virtual MaterialHeightClipMode_t GetHeightClipMode( ) = 0;

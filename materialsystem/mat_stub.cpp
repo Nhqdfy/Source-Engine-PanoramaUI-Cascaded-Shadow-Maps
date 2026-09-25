@@ -415,6 +415,13 @@ public:
 	virtual int MaxViewports() const { return 1; }
 	virtual void OverrideStreamOffsetSupport( bool bOverrideEnabled, bool bEnableSupport ) {}
 	virtual int GetShadowFilterMode() const { return 0; }
+
+	virtual bool SupportsCascadedShadowMapping() const { return false; }
+	virtual CSMQualityMode_t GetCSMQuality() const { return CSMQUALITY_VERY_LOW; }
+	virtual bool SupportsBilinearPCFSampling() const { return true; }
+	virtual CSMShaderMode_t GetCSMShaderMode( CSMQualityMode_t nQualityLevel ) const { nQualityLevel; return CSMSHADERMODE_LOW_OR_VERY_LOW; }
+	virtual void SetCSMAccurateBlending( bool bEnable ) {}
+	virtual bool GetCSMAccurateBlending( void ) const { return true; }
 	virtual int NeedsShaderSRGBConversion() const { return 0; }
 	bool UsesSRGBCorrectBlending() const { return false; }
 	virtual bool HasFastVertexTextures() const { return false; }
@@ -1631,6 +1638,13 @@ public:
 	}
 	virtual void SetFlashlightState( const FlashlightState_t &state, const VMatrix &worldToTexture )
 	{
+	}
+
+	virtual bool IsCascadedShadowMapping() const { return false; }
+	virtual void SetCascadedShadowMapping( bool bEnable ) { bEnable; }
+	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas )
+	{
+		state, pDepthTextureAtlas;
 	}
 	virtual void SetFlashlightStateEx( const FlashlightState_t &state, const VMatrix &worldToTexture, ITexture *pFlashlightDepthTexture )
 	{

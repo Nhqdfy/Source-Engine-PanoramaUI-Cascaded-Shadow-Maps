@@ -65,6 +65,31 @@ enum VertexCompressionType_t
 };
 
 
+//-----------------------------------------------------------------------------
+// Cascaded shadow mapping
+//-----------------------------------------------------------------------------
+enum CSMQualityMode_t
+{
+	CSMQUALITY_VERY_LOW,
+	CSMQUALITY_LOW,
+	CSMQUALITY_MEDIUM,
+	CSMQUALITY_HIGH,
+
+	CSMQUALITY_TOTAL_MODES
+};
+
+// CSMShaderMode_t must match the CSM_MODE static combo in the pixel shaders
+enum CSMShaderMode_t
+{
+	CSMSHADERMODE_LOW_OR_VERY_LOW	= 0,
+	CSMSHADERMODE_MEDIUM			= 1,
+	CSMSHADERMODE_HIGH				= 2,
+	CSMSHADERMODE_ATIFETCH4			= 3,
+
+	CSMSHADERMODE_TOTAL_MODES
+};
+
+
 // use DEFCONFIGMETHOD to define time-critical methods that we want to make just return constants
 // on the 360, so that the checks will happen at compile time. Not all methods are defined this way
 // - just the ones that I perceive as being called often in the frame interval.
@@ -190,6 +215,13 @@ public:
 	virtual void OverrideStreamOffsetSupport( bool bOverrideEnabled, bool bEnableSupport ) = 0;
 
 	virtual int GetShadowFilterMode() const = 0;
+
+	virtual bool SupportsCascadedShadowMapping() const = 0;
+	virtual CSMQualityMode_t GetCSMQuality() const = 0;
+	virtual bool SupportsBilinearPCFSampling() const = 0;
+	virtual CSMShaderMode_t GetCSMShaderMode( CSMQualityMode_t nQualityLevel ) const = 0;
+	virtual bool GetCSMAccurateBlending( void ) const = 0;
+	virtual void SetCSMAccurateBlending( bool bEnable ) = 0;
 
 	virtual int NeedsShaderSRGBConversion() const = 0;
 

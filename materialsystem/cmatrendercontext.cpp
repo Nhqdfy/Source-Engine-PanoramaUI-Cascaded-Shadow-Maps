@@ -2976,6 +2976,11 @@ void CMatRenderContext::SetFlashlightStateEx( const FlashlightState_t &state, co
 	}
 }
 
+void CMatRenderContext::SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas )
+{
+	g_pShaderAPI->SetCascadedShadowMappingState( state, pDepthTextureAtlas );
+}
+
 void CMatRenderContext::SetScissorRect( const int nLeft, const int nTop, const int nRight, const int nBottom, const bool bEnableScissor )
 {
 	g_pShaderAPI->SetScissorRect( nLeft, nTop, nRight, nBottom, bEnableScissor );

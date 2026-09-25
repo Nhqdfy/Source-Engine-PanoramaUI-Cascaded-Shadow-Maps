@@ -241,6 +241,9 @@ public:
 	virtual CMeshBuilder* GetVertexModifyBuilder() = 0;
 	virtual bool InFlashlightMode() const = 0;
 	virtual const FlashlightState_t &GetFlashlightState( VMatrix &worldToTexture ) const = 0;
+
+	virtual bool IsCascadedShadowMapping() const = 0;
+	virtual const CascadedShadowMappingState_t &GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale = false ) const = 0;
 	virtual bool InEditorMode() const = 0;
 
 	// Gets the bound morph's vertex format; returns 0 if no morph is bound

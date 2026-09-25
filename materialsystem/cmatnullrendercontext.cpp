@@ -333,6 +333,10 @@ public:
 		AssertMsg( 0, "CMatNullRenderContext only provides base features, not a stub (right now)" );
 	}
 
+	bool IsCascadedShadowMapping() const { return false; }
+	void SetCascadedShadowMapping( bool ) {}
+	void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &, ITexture * ) {}
+
 	void SetScissorRect( const int nLeft, const int nTop, const int nRight, const int nBottom, const bool bEnableScissor  )
 	{
 		AssertMsg( 0, "CMatNullRenderContext only provides base features, not a stub (right now)" );

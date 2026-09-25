@@ -140,6 +140,8 @@ CON_COMMAND_F( ccs_create_convars_from_hwconfig, "Create convars from the curren
 	HWCFG( m_bFogColorAlwaysLinearSpace );
 	HWCFG( m_bSupportsAlphaToCoverage );
 	HWCFG( m_bSupportsShadowDepthTextures );
+	HWCFG( m_bSupportsCascadedShadowMapping );
+	HWCFG( m_nCSMQuality );
 	HWCFG( m_bSupportsFetch4 );
 	HWCFG( m_bSoftwareVertexProcessing );
 	HWCFG( m_bScissorSupported );
@@ -168,6 +170,7 @@ CHardwareConfig::CHardwareConfig()
 #endif
 
 	m_bHDREnabled = false;
+	m_bCSMAccurateBlending = true;
 
 	// FIXME: This is kind of a hack to deal with DX8 worldcraft startup.
 	// We can at least have this much texture 
@@ -261,6 +264,8 @@ void CHardwareConfig::ForceCapsToDXLevel( HardwareCaps_t *pCaps, int nDxLevel, c
 		pCaps->m_bFogColorAlwaysLinearSpace = false;
 		pCaps->m_bSupportsAlphaToCoverage = false;
 		pCaps->m_bSupportsShadowDepthTextures = false;
+		pCaps->m_bSupportsCascadedShadowMapping = false;
+		pCaps->m_nCSMQuality = 0;
 		pCaps->m_bSupportsFetch4 = false;
 		pCaps->m_bSupportsBorderColor = false;
 		// m_bSoftwareVertexProcessing
@@ -343,6 +348,8 @@ void CHardwareConfig::ForceCapsToDXLevel( HardwareCaps_t *pCaps, int nDxLevel, c
 		pCaps->m_bFogColorAlwaysLinearSpace = false;
 		pCaps->m_bSupportsAlphaToCoverage = false;
 		pCaps->m_bSupportsShadowDepthTextures = false;
+		pCaps->m_bSupportsCascadedShadowMapping = false;
+		pCaps->m_nCSMQuality = 0;
 		pCaps->m_bSupportsFetch4 = false;
 		pCaps->m_bSupportsBorderColor = false;
 		// m_bSoftwareVertexProcessing
@@ -414,6 +421,8 @@ void CHardwareConfig::ForceCapsToDXLevel( HardwareCaps_t *pCaps, int nDxLevel, c
 		pCaps->m_bFogColorAlwaysLinearSpace = false;
 		pCaps->m_bSupportsAlphaToCoverage = false;
 		pCaps->m_bSupportsShadowDepthTextures = false;
+		pCaps->m_bSupportsCascadedShadowMapping = false;
+		pCaps->m_nCSMQuality = 0;
 		pCaps->m_bSupportsFetch4 = false;
 		// m_bSoftwareVertexProcessing
 		pCaps->m_nVertexTextureCount = 0;
@@ -504,6 +513,8 @@ void CHardwareConfig::ForceCapsToDXLevel( HardwareCaps_t *pCaps, int nDxLevel, c
 		pCaps->m_bFogColorAlwaysLinearSpace = false;
 		pCaps->m_bSupportsAlphaToCoverage = false;
 		pCaps->m_bSupportsShadowDepthTextures = false;
+		pCaps->m_bSupportsCascadedShadowMapping = false;
+		pCaps->m_nCSMQuality = 0;
 		pCaps->m_bSupportsFetch4 = false;
 		pCaps->m_bSupportsBorderColor = false;
 		// m_bSoftwareVertexProcessing
@@ -1310,4 +1321,58 @@ bool CHardwareConfig::SupportsMipmapping() const
 bool CHardwareConfig::ActuallySupportsPixelShaders_2_b() const
 {
 	return m_ActualCaps.m_SupportsPixelShaders_2_b;
+}
+
+//-----------------------------------------------------------------------------
+// Cascaded shadow mapping (ported from CS:GO materialsystem/shaderapidx9/hardwareconfig.cpp)
+//-----------------------------------------------------------------------------
+bool CHardwareConfig::SupportsCascadedShadowMapping( void ) const
+{
+	return m_Caps.m_bSupportsCascadedShadowMapping && ( GetDXSupportLevel() >= 95 );
+}
+
+CSMQualityMode_t CHardwareConfig::GetCSMQuality( void ) const
+{
+	return (CSMQualityMode_t)m_Caps.m_nCSMQuality;
+}
+
+bool CHardwareConfig::SupportsBilinearPCFSampling() const
+{
+	if( IsOpenGL() )
+		return true;
+
+	static bool bForceATIFetch4 = CommandLine()->CheckParm( "-forceatifetch4" ) ? true : false;
+	if ( bForceATIFetch4 )
+		return false;
+
+	// Non-DX10 class ATI cards (pre-X2000) don't support bilinear PCF in hardware.
+	// NOTE: this tree's HardwareCaps_t carries no vendor id, so approximate the CS:GO vendor check
+	// (NVIDIA/Intel => true, old ATI => false) with the DX10-class / SM3.0 caps.
+	return m_Caps.m_bDX10Card || m_Caps.m_SupportsShaderModel_3_0;
+}
+
+// Returns the CSM static combo to select given the current card's capabilities and the configured CSM quality level.
+CSMShaderMode_t CHardwareConfig::GetCSMShaderMode( CSMQualityMode_t nQualityLevel ) const
+{
+	// Special case for ATI DX9-class (pre ATI HD 2xxx) cards that don't support NVidia-style PCF filtering - always set to CSMSHADERMODE_ATIFETCH4.
+	if ( !SupportsBilinearPCFSampling() )
+		return CSMSHADERMODE_ATIFETCH4;
+
+	int nMode = nQualityLevel - 1;
+	if ( nMode < CSMSHADERMODE_LOW_OR_VERY_LOW )
+		nMode = CSMSHADERMODE_LOW_OR_VERY_LOW;
+	else if ( nMode > CSMSHADERMODE_HIGH )
+		nMode = CSMSHADERMODE_HIGH;
+
+	return (CSMShaderMode_t)nMode;
+}
+
+bool CHardwareConfig::GetCSMAccurateBlending( void ) const
+{
+	return m_bCSMAccurateBlending;
+}
+
+void CHardwareConfig::SetCSMAccurateBlending( bool bEnable )
+{
+	m_bCSMAccurateBlending = bEnable;
 }

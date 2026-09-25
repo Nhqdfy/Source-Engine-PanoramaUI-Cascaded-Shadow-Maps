@@ -251,6 +251,7 @@ protected:
 	static int							sm_nInitializeCount;
 
 	bool								m_bFlashlightEnable : 1;
+	bool								m_bCascadedShadowMappingEnabled : 1;
 	bool								m_bDirtyViewState : 1;
 	bool								m_bDirtyViewProjState : 1;
 	bool								m_bEnableClipping : 1;
@@ -440,6 +441,9 @@ public:
 	bool									GetFlashlightMode( ) const;
 	void									SetFlashlightState( const FlashlightState_t &state, const VMatrix &worldToTexture );
 	void									SetFlashlightStateEx( const FlashlightState_t &state, const VMatrix &worldToTexture, ITexture *pFlashlightDepthTexture );
+	bool									IsCascadedShadowMapping() const;
+	void									SetCascadedShadowMapping( bool bEnable );
+	void									SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas );
 
 	void									SetScissorRect( const int nLeft, const int nTop, const int nRight, const int nBottom, const bool bEnableScissor );
 
@@ -649,6 +653,16 @@ inline bool CMatRenderContext::InFlashlightMode() const
 inline void CMatRenderContext::SetFlashlightState( const FlashlightState_t &state, const VMatrix &worldToTexture )
 {
 	SetFlashlightStateEx( state, worldToTexture, NULL );
+}
+
+inline bool CMatRenderContext::IsCascadedShadowMapping() const
+{
+	return m_bCascadedShadowMappingEnabled;
+}
+
+inline void CMatRenderContext::SetCascadedShadowMapping( bool bEnable )
+{
+	m_bCascadedShadowMappingEnabled = bEnable;
 }
 
 inline float CMatRenderContextBase::ComputePixelWidthOfSphere( const Vector& vecOrigin, float flRadius )
