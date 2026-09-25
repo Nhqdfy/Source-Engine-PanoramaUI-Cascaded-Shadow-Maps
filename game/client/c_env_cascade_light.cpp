@@ -736,6 +736,13 @@ bool CCascadeLightManager::InitRenderTargets()
 		!materials->SupportsShadowDepthTextures()
 		)
 	{
+		// CSM port: say why CSM is off instead of failing silently.
+		Msg( "CSM: disabled - cl_csm_enabled=%d supportsCSM=%d supportsShadowDepthTextures=%d dxlevel=%d\n",
+			 cl_csm_enabled.GetInt(),
+			 g_pMaterialSystemHardwareConfig->SupportsCascadedShadowMapping() ? 1 : 0,
+			 materials->SupportsShadowDepthTextures() ? 1 : 0,
+			 g_pMaterialSystemHardwareConfig->GetDXSupportLevel() );
+
 		DeinitRenderTargets();
 
 		cl_csm_enabled.SetValue( 0 );
@@ -1564,6 +1571,13 @@ void CCascadeLightManager::ComputeShadowDepthTextures( const CViewSetup &viewSet
 
 	if ( !m_bRenderTargetsAllocated || !C_CascadeLight::Get() )
 	{
+		static bool bWarnedCSMIdle = false;
+		if ( !bWarnedCSMIdle )
+		{
+			bWarnedCSMIdle = true;
+			Msg( "CSM: idle - %s\n", !m_bRenderTargetsAllocated ? "shadow depth atlas was not allocated (see earlier CSM line)" : "this map has no env_cascade_light entity" );
+		}
+
 		m_curState.Reset();
 		m_curViewModelState.Reset();
 	}
@@ -1649,9 +1663,27 @@ void CCascadeLightManager::ComputeShadowDepthTextures( const CViewSetup &viewSet
 
 			pRenderContext->EndGeneratingCSMs();
 			m_bCSMIsActive = true;
+
+			static bool bWarnedCSMActive = false;
+			if ( !bWarnedCSMActive )
+			{
+				bWarnedCSMActive = true;
+				Msg( "CSM: active - %d cascades, shadow dir=(%.2f %.2f %.2f)\n",
+			 MAX_CSM_CASCADES, vShadowDir.x, vShadowDir.y, vShadowDir.z );
+			}
 		}
 	}
 				
+	if ( !m_bCSMIsActive && C_CascadeLight::Get() && m_bRenderTargetsAllocated )
+	{
+		static bool bWarnedCSMState = false;
+		if ( !bWarnedCSMState )
+		{
+			bWarnedCSMState = true;
+			Msg( "CSM: cascade state invalid (CCSMParallelSplit produced no valid cascades)\n" );
+		}
+	}
+
 	pRenderContext->SetCascadedShadowMapping( m_bCSMIsActive );
 	if ( m_bCSMIsActive )
 	{

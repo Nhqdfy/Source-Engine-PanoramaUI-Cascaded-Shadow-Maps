@@ -1327,12 +1327,18 @@ void CViewRender::ViewDrawScene( bool bDrew3dSkybox, SkyboxVisibility_t nSkyboxV
 	g_pClientShadowMgr->PreRender();
 
 	// Shadowed flashlights supported on ps_2_b and up...
+	// CSM (CS:GO): render the cascade shadow depth atlas for the main view.  This is independent of
+	// the flashlight shadow depth texture setting (r_flashlightdepthtexture), which gets forced off
+	// on some device/dxlevel paths.
+	if ( viewID == VIEW_MAIN )
+	{
+		g_CascadeLightManager.ComputeShadowDepthTextures( view );
+	}
+
+	// Shadowed flashlights supported on ps_2_b and up...
 	if ( r_flashlightdepthtexture.GetBool() && (viewID == VIEW_MAIN) )
 	{
 		g_pClientShadowMgr->ComputeShadowDepthTextures( view );
-
-		// CSM: build the cascade shadow depth atlas for this view
-		g_CascadeLightManager.ComputeShadowDepthTextures( view );
 	}
 
 	m_BaseDrawFlags = baseDrawFlags;
