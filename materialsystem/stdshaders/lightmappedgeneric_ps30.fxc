@@ -1,29 +1,52 @@
-// STATIC: "MASKEDBLENDING"				"0..1"
-// STATIC: "BASETEXTURE2"				"0..1"
-// STATIC: "DETAILTEXTURE"				"0..1"
-// STATIC: "BUMPMAP"					"0..2"
-// STATIC: "BUMPMAP2"					"0..1"
-// STATIC: "CUBEMAP"					"0..1"
-// STATIC: "ENVMAPMASK"					"0..1"
-// STATIC: "BASEALPHAENVMAPMASK"		"0..1"
-// STATIC: "SELFILLUM"					"0..1"
-// STATIC: "NORMALMAPALPHAENVMAPMASK"	"0..1"
-// STATIC: "DIFFUSEBUMPMAP"				"0..1"
-// STATIC: "BASETEXTURENOENVMAP"		"0..1"
-// STATIC: "BASETEXTURE2NOENVMAP"		"0..1"
-// STATIC: "WARPLIGHTING"				"0..1"
-// STATIC: "FANCY_BLENDING"				"0..1"
-// STATIC: "RELIEF_MAPPING"				"0..0"	[ps20b] [ps30]
-// STATIC: "SEAMLESS"					"0..1"
-// STATIC: "OUTLINE"                    "0..1"
-// STATIC: "SOFTEDGES"                  "0..1"
-// STATIC: "BUMPMASK"                   "0..1"
-// STATIC: "NORMAL_DECODE_MODE"			"0..0"	[XBOX]
-// STATIC: "NORMAL_DECODE_MODE"			"0..0"	[PC]
-// STATIC: "NORMALMASK_DECODE_MODE"		"0..0"	[XBOX]
-// STATIC: "NORMALMASK_DECODE_MODE"		"0..0"	[PC]
-// STATIC: "DETAIL_BLEND_MODE"			"0..11"
-// STATIC: "FLASHLIGHT"					"0..1"	[ps20b] [ps30] [XBOX]
+// LightmappedGeneric pixel shader, ps_3_0 + CSM.
+//
+// Combo set: this tree's LightmappedGeneric combo set (lightmappedgeneric_ps2x.fxc) plus the CSM
+// combos from CS:GO's lightmappedgeneric_ps2x.fxc.
+//
+// DECLARATION ORDER MATTERS.  With DYNAMIC_SHADER_COMPILE the engine assigns every combo a mixed
+// radix weight in declaration order (materialsystem/shaderapidx9/vertexshaderdx8.cpp, mirrored by
+// utils/fxc_prep_combo_inc.py) and the generated fxctmp9/lightmappedgeneric_ps30.inc has to
+// reproduce it.  PC LightmappedGeneric carries 11 more static combos than the CS:GO copy the CSM
+// port came from, so appending the CSM combos at the tail would push the 32-bit shader index past
+// INT_MAX (CASCADED_SHADOW_MAPPING alone would weigh 905969664 and CSM_MODE 1811939328, which
+// together overflow).  Therefore:
+//
+//   * the combos this tree sets for ordinary materials are declared first, so they get the
+//     cheapest weights (see the GetIndex() in the generated .inc).
+//   * OUTLINE, SOFTEDGES, BASETEXTURENOENVMAP and BASETEXTURE2NOENVMAP are declared 0..0 for
+//     ps_3_0.  Those four bits are exactly what the CSM combos (1 * 4 * 2) cost, so the ps_3_0
+//     static index space stays identical to the existing ps_3_0-compatible ps20b one
+//     (96 * 9437184 = max index 905969568 < INT_MAX).
+//   * materials that need any of those four combos keep using the ps20b path, which still
+//     implements them - see the ps_3_0 branch of DrawLightmappedGeneric_DX9_Internal.
+//
+// STATIC: "CSM_MODE"						"0..3"	[ps30] [PC]
+// STATIC: "DETAIL_BLEND_MODE"				"0..11"
+// STATIC: "BUMPMAP"						"0..2"
+// STATIC: "CASCADED_SHADOW_MAPPING"		"0..1"	[ = g_pHardwareConfig->SupportsCascadedShadowMapping() && !ToolsEnabled() ] [ps30] [PC]
+// STATIC: "DIFFUSEBUMPMAP"					"0..1"
+// STATIC: "BASETEXTURE2"					"0..1"
+// STATIC: "CUBEMAP"						"0..1"
+// STATIC: "ENVMAPMASK"						"0..1"
+// STATIC: "SELFILLUM"						"0..1"
+// STATIC: "NORMALMAPALPHAENVMAPMASK"		"0..1"
+// STATIC: "BASEALPHAENVMAPMASK"			"0..1"
+// STATIC: "DETAILTEXTURE"					"0..1"
+// STATIC: "BUMPMAP2"						"0..1"
+// STATIC: "CSM_BLENDING"					"0..1"
+// STATIC: "SEAMLESS"						"0..1"
+// STATIC: "MASKEDBLENDING"					"0..1"
+// STATIC: "FANCY_BLENDING"					"0..1"
+// STATIC: "BUMPMASK"						"0..1"
+// STATIC: "WARPLIGHTING"					"0..1"
+// STATIC: "RELIEF_MAPPING"					"0..0"	[ps20b] [ps30]
+// STATIC: "OUTLINE"						"0..0"	[ps30] [PC]
+// STATIC: "SOFTEDGES"						"0..0"	[ps30] [PC]
+// STATIC: "BASETEXTURENOENVMAP"			"0..0"	[ps30] [PC]
+// STATIC: "BASETEXTURE2NOENVMAP"			"0..0"	[ps30] [PC]
+// STATIC: "NORMAL_DECODE_MODE"				"0..0"	[PC]
+// STATIC: "NORMALMASK_DECODE_MODE"			"0..0"	[PC]
+// STATIC: "FLASHLIGHT"						"0..1"	[ps20b] [ps30] [XBOX]
 
 // DYNAMIC: "FASTPATHENVMAPCONTRAST"	"0..1"
 // DYNAMIC: "FASTPATH"					"0..1"
@@ -33,10 +56,11 @@
 // DYNAMIC: "LIGHTING_PREVIEW"			"0..0"	[XBOX]
 // DYNAMIC: "WRITE_DEPTH_TO_DESTALPHA"	"0..1"	[ps20b] [ps30] [PC]
 // DYNAMIC: "WRITE_DEPTH_TO_DESTALPHA"	"0..0"	[ps20b] [ps30] [XBOX]
+// DYNAMIC: "CASCADE_SIZE"				"0..0"	[ps30] [PC]
 
-//  SKIP: $SEAMLESS && $RELIEF_MAPPING			[ps20b] [ps30] [ps30]
+//  SKIP: $SEAMLESS && $RELIEF_MAPPING
 
-//	SKIP: (! $DETAILTEXTURE) && ( $DETAIL_BLEND_MODE != 0 )
+//  SKIP: (! $DETAILTEXTURE) && ( $DETAIL_BLEND_MODE != 0 )
 
 //  SKIP: $SEAMLESS && ( $OUTLINE || $SOFTEDGES)
 //  SKIP: $BASETEXTURE2 && ( $OUTLINE || $SOFTEDGES)
@@ -55,15 +79,7 @@
 //  SKIP ($DETAIL_BLEND_MODE == 10 ) && ($BUMPMAP == 0 )
 //  SKIP ($DETAIL_BLEND_MODE == 11 ) && ($BUMPMAP != 0 )
 
-
-// CSM (ported from CS:GO materialsystem/stdshaders/lightmappedgeneric_ps2x.fxc)
-// STATIC: "CASCADED_SHADOW_MAPPING"	"0..1"	[ = g_pHardwareConfig->SupportsCascadedShadowMapping() && !ToolsEnabled() ] [ps30] [PC]
-// STATIC: "CSM_MODE"					"0..3"	[ps30] [PC]
-// STATIC: "CSM_BLENDING"				"0..1"
-// DYNAMIC: "CASCADE_SIZE"				"0..0"  [ps30] [PC]
-
 //  SKIP: ( $CASCADED_SHADOW_MAPPING == 0 ) && ( $CASCADE_SIZE != 0 )
 //  SKIP: ( $CASCADED_SHADOW_MAPPING == 0 ) && ( $CSM_MODE != 0 )
 
 #include "lightmappedgeneric_ps2_3_x.h"
-
