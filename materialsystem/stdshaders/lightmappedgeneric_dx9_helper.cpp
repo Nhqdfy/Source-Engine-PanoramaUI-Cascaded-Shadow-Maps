@@ -285,6 +285,15 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 								 )
 {
 	CLightmappedGeneric_DX9_Context *pContextData = reinterpret_cast< CLightmappedGeneric_DX9_Context *> ( *pContextDataPtr );
+	// CSM: the ps_3_0 variant gives up OUTLINE, SOFTEDGES, BASETEXTURENOENVMAP and
+	// BASETEXTURE2NOENVMAP so that its 32-bit shader index cannot overflow (see
+	// lightmappedgeneric_ps30.fxc).  Materials that need any of them stay on the ps20b path,
+	// which still implements them.  Both the shadow and the dynamic pass below have to pick the
+	// same variant, so the decision is made here.
+	bool bCSMStaticCombosUnavailable =
+		IsBoolSet( info.m_nOutline, params ) || IsBoolSet( info.m_nSoftEdges, params ) ||
+		( GetIntParam( info.m_nBaseTextureNoEnvmap, params ) != 0 ) ||
+		( GetIntParam( info.m_nBaseTexture2NoEnvmap, params ) != 0 );
 	if ( pShaderShadow || ( ! pContextData ) || pContextData->m_bMaterialVarsChanged  || hasFlashlight )
 	{
 		bool hasBaseTexture = params[info.m_nBaseTexture]->IsTexture();
@@ -550,7 +559,7 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 				// (CS:GO uses ps_3_0 for every lightmappedgeneric draw on dx9.5+; here it is scoped to
 				//  CSM-capable hardware so the proven ps20b path is untouched otherwise.  Materials that
 				//  need the four static combos the ps_3_0 variant gives up keep using ps20b too.)
-				if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() )
+				if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bCSMStaticCombosUnavailable )
 				{
 					static bool bDbgPs30Static = false;
 					if ( !bDbgPs30Static ) { bDbgPs30Static = true; Msg( "CSM: lmg static -> ps30 (SM3=%d supportsCSM=%d)\n", g_pHardwareConfig->SupportsShaderModel_3_0() ? 1 : 0, g_pHardwareConfig->SupportsCascadedShadowMapping() ? 1 : 0 ); }
@@ -963,7 +972,7 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 		}
 
 		float envmapContrast = params[info.m_nEnvmapContrast]->GetFloatValue();
-		if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() )
+		if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bCSMStaticCombosUnavailable )
 		{
 			// CSM: bind the cascade shadow depth atlas and push the cascade state to the shader
 			BOOL bCSMEnabled = pShaderAPI->IsCascadedShadowMapping() && !( g_pConfig->nFullbright == 1 );

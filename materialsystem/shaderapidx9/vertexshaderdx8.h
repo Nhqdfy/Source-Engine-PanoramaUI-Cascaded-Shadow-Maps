@@ -77,8 +77,8 @@ protected:
 	// happened first, so the index was garbage (-2109740384 in the field), the lookup went past the end of
 	// the combo table and produced a wild shader pointer that the engine then used while drawing the world -
 	// that is what crashed in CShaderManager::SetPixelShader.
-	int64 m_nVertexShaderIndex = 0;
-	int64 m_nPixelShaderIndex = 0;
+	int m_nVertexShaderIndex = 0;
+	int m_nPixelShaderIndex = 0;
 
 public:
 	// Initialize, shutdown
@@ -95,12 +95,12 @@ public:
 	virtual void DestroyPixelShader( PixelShaderHandle_t hShader ) = 0;
 
 	// Creates vertex, pixel shaders
-	virtual VertexShader_t CreateVertexShader( const char *pVertexShaderFile, int64 nStaticVshIndex = 0, char *debugLabel = NULL  ) = 0;
-	virtual PixelShader_t CreatePixelShader( const char *pPixelShaderFile, int64 nStaticPshIndex = 0, char *debugLabel = NULL ) = 0;
+	virtual VertexShader_t CreateVertexShader( const char *pVertexShaderFile, int nStaticVshIndex = 0, char *debugLabel = NULL  ) = 0;
+	virtual PixelShader_t CreatePixelShader( const char *pPixelShaderFile, int nStaticPshIndex = 0, char *debugLabel = NULL ) = 0;
 
 	// Sets which dynamic version of the vertex + pixel shader to use
-	FORCEINLINE void SetVertexShaderIndex( int64 vshIndex );
-	FORCEINLINE void SetPixelShaderIndex( int64 pshIndex );
+	FORCEINLINE void SetVertexShaderIndex( int vshIndex );
+	FORCEINLINE void SetPixelShaderIndex( int pshIndex );
 
 	// Sets the vertex + pixel shader render state
 	virtual void SetVertexShader( VertexShader_t shader ) = 0;
@@ -141,12 +141,12 @@ public:
 // Methods related to setting vertex + pixel shader state
 //
 //-----------------------------------------------------------------------------
-FORCEINLINE void IShaderManager::SetVertexShaderIndex( int64 vshIndex )
+FORCEINLINE void IShaderManager::SetVertexShaderIndex( int vshIndex )
 {
 	m_nVertexShaderIndex = vshIndex;
 }
 
-FORCEINLINE void IShaderManager::SetPixelShaderIndex( int64 pshIndex )
+FORCEINLINE void IShaderManager::SetPixelShaderIndex( int pshIndex )
 {
 	m_nPixelShaderIndex = pshIndex;
 }

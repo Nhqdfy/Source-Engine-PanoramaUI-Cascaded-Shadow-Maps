@@ -1144,11 +1144,11 @@ void CShaderAPIDx10::GetViewport( int& x, int& y, int& width, int& height ) cons
 }
 
 // Sets the vertex and pixel shaders
-void CShaderAPIDx10::SetVertexShaderIndex( int64 vshIndex )
+void CShaderAPIDx10::SetVertexShaderIndex( int vshIndex )
 {
 }
 
-void CShaderAPIDx10::SetPixelShaderIndex( int64 pshIndex )
+void CShaderAPIDx10::SetPixelShaderIndex( int pshIndex )
 {
 }
 

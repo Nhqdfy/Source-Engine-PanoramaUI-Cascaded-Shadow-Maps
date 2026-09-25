@@ -217,8 +217,8 @@ public:
 	virtual void SetBumpEnvMatrix( TextureStage_t textureStage, float m00, float m01, float m10, float m11 ) = 0;
 
 	// Sets the vertex and pixel shaders
-	virtual void SetVertexShaderIndex( int64 vshIndex = -1 ) = 0;
-	virtual void SetPixelShaderIndex( int64 pshIndex = 0 ) = 0;
+	virtual void SetVertexShaderIndex( int vshIndex = -1 ) = 0;
+	virtual void SetPixelShaderIndex( int pshIndex = 0 ) = 0;
 
 	// Get the dimensions of the back buffer.
 	virtual void GetBackBufferDimensions( int& width, int& height ) const = 0;

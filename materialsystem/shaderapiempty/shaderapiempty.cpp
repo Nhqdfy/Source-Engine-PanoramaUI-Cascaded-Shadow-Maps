@@ -196,8 +196,8 @@ public:
 	void BlendFuncSeparateAlpha( ShaderBlendFactor_t srcFactor, ShaderBlendFactor_t dstFactor );
 
 	// Sets the vertex and pixel shaders
-	void SetVertexShader( const char *pFileName, int64 vshIndex );
-	void SetPixelShader( const char *pFileName, int64 pshIndex );
+	void SetVertexShader( const char *pFileName, int vshIndex );
+	void SetPixelShader( const char *pFileName, int pshIndex );
 
 	// Convert from linear to gamma color space on writes to frame buffer.
 	void EnableSRGBWrite( bool bEnable )
@@ -591,8 +591,8 @@ public:
 	virtual void DestroyVertexBuffers( bool bExitingLevel = false );
 
 	// Sets the vertex and pixel shaders
-	void SetVertexShaderIndex( int64 vshIndex );
-	void SetPixelShaderIndex( int64 pshIndex );
+	void SetVertexShaderIndex( int vshIndex );
+	void SetPixelShaderIndex( int pshIndex );
 
 	// Sets the constant register for vertex and pixel shaders
 	void SetVertexShaderConstant( int var, float const* pVec, int numConst = 1, bool bForce = false );
@@ -1845,7 +1845,7 @@ void CShaderShadowEmpty::TexGen( TextureStage_t stage, ShaderTexGenParam_t param
 }
 
 // Sets the vertex and pixel shaders
-void CShaderShadowEmpty::SetVertexShader( const char *pShaderName, int64 vshIndex )
+void CShaderShadowEmpty::SetVertexShader( const char *pShaderName, int vshIndex )
 {
 	m_bUsesVertexAndPixelShaders = ( pShaderName != NULL );
 }
@@ -1853,7 +1853,7 @@ void CShaderShadowEmpty::SetVertexShader( const char *pShaderName, int64 vshInde
 void CShaderShadowEmpty::EnableBlendingSeparateAlpha( bool bEnable )
 {
 }
-void CShaderShadowEmpty::SetPixelShader( const char *pShaderName, int64 pshIndex )
+void CShaderShadowEmpty::SetPixelShader( const char *pShaderName, int pshIndex )
 {
 	m_bUsesVertexAndPixelShaders = ( pShaderName != NULL );
 }
@@ -2604,11 +2604,11 @@ int CShaderAPIEmpty::GetViewports( ShaderViewport_t* pViewports, int nMax ) cons
 }
 
 // Sets the vertex and pixel shaders
-void CShaderAPIEmpty::SetVertexShaderIndex( int64 vshIndex )
+void CShaderAPIEmpty::SetVertexShaderIndex( int vshIndex )
 {
 }
 
-void CShaderAPIEmpty::SetPixelShaderIndex( int64 pshIndex )
+void CShaderAPIEmpty::SetPixelShaderIndex( int pshIndex )
 {
 }
 

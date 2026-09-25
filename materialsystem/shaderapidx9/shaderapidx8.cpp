@@ -691,8 +691,8 @@ public:
 	virtual void EnableHWMorphing( bool bEnable );
 
 	// Sets the vertex and pixel shaders
-	virtual void SetVertexShaderIndex( int64 vshIndex = -1 );
-	virtual void SetPixelShaderIndex( int64 pshIndex = 0 );
+	virtual void SetVertexShaderIndex( int vshIndex = -1 );
+	virtual void SetPixelShaderIndex( int pshIndex = 0 );
 
 	// Matrix state
 	void MatrixMode( MaterialMatrixMode_t matrixMode );
@@ -6307,12 +6307,12 @@ D3DCOLOR CShaderAPIDx8::ComputeGammaCorrectedFogColor( unsigned char r, unsigned
 //-----------------------------------------------------------------------------
 // Some methods chaining vertex + pixel shaders through to the shader manager
 //-----------------------------------------------------------------------------
-void CShaderAPIDx8::SetVertexShaderIndex( int64 vshIndex )
+void CShaderAPIDx8::SetVertexShaderIndex( int vshIndex )
 {
 	ShaderManager()->SetVertexShaderIndex( vshIndex );
 }
 
-void CShaderAPIDx8::SetPixelShaderIndex( int64 pshIndex )
+void CShaderAPIDx8::SetPixelShaderIndex( int pshIndex )
 {
 	ShaderManager()->SetPixelShaderIndex( pshIndex );
 }
@@ -6634,17 +6634,17 @@ void CShaderAPIDx8::ExecuteCommandBuffer( uint8 *pCmdBuf )
 
 			case CBCMD_SET_PSHINDEX:
 			{
-				int64 nIdx = GetData<int64>( pCmdBuf + sizeof( int ) );
+				int nIdx = GetData<int>( pCmdBuf + sizeof( int ) );
 				ShaderManager()->SetPixelShaderIndex( nIdx );
-				pCmdBuf += sizeof( int ) + sizeof( int64 );
+				pCmdBuf += 2 * sizeof( int );
 				break;
 			}
 
 			case CBCMD_SET_VSHINDEX:
 			{
-				int64 nIdx = GetData<int64>( pCmdBuf + sizeof( int ) );
+				int nIdx = GetData<int>( pCmdBuf + sizeof( int ) );
 				ShaderManager()->SetVertexShaderIndex( nIdx );
-				pCmdBuf += sizeof( int ) + sizeof( int64 );
+				pCmdBuf += 2 * sizeof( int );
 				break;
 			}
 
@@ -13504,14 +13504,14 @@ int CShaderAPIDx8::CompareSnapshots( StateSnapshot_t snapshot0, StateSnapshot_t 
 	int dVertex = shader0.m_VertexShader - shader1.m_VertexShader;
 	if ( dVertex )
 		return dVertex;
-	int64 dVCombo = shader0.m_nStaticVshIndex - shader1.m_nStaticVshIndex;
+	int dVCombo = shader0.m_nStaticVshIndex - shader1.m_nStaticVshIndex;
 	if ( dVCombo)
 		return dVCombo;
 
 	int dPixel = shader0.m_PixelShader - shader1.m_PixelShader;
 	if ( dPixel )
 		return dPixel;
-	int64 dPCombo = shader0.m_nStaticPshIndex - shader1.m_nStaticPshIndex;
+	int dPCombo = shader0.m_nStaticPshIndex - shader1.m_nStaticPshIndex;
 	if ( dPCombo)
 		return dPCombo;
 

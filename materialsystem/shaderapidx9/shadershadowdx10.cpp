@@ -204,7 +204,7 @@ void CShaderShadowDx10::TexGen( TextureStage_t stage, ShaderTexGenParam_t param 
 }
 
 // Sets the vertex and pixel shaders
-void CShaderShadowDx10::SetVertexShader( const char *pShaderName, int64 vshIndex )
+void CShaderShadowDx10::SetVertexShader( const char *pShaderName, int vshIndex )
 {
 	m_bUsesVertexAndPixelShaders = ( pShaderName != NULL );
 }
@@ -212,7 +212,7 @@ void CShaderShadowDx10::SetVertexShader( const char *pShaderName, int64 vshIndex
 void CShaderShadowDx10::EnableBlendingSeparateAlpha( bool bEnable )
 {
 }
-void CShaderShadowDx10::SetPixelShader( const char *pShaderName, int64 pshIndex )
+void CShaderShadowDx10::SetPixelShader( const char *pShaderName, int pshIndex )
 {
 	m_bUsesVertexAndPixelShaders = ( pShaderName != NULL );
 }

@@ -98,8 +98,8 @@ public:
 	void BlendFuncSeparateAlpha( ShaderBlendFactor_t srcFactor, ShaderBlendFactor_t dstFactor );
 
 	// Sets the vertex and pixel shaders
-	void SetVertexShader( const char *pFileName, int64 vshIndex );
-	void SetPixelShader( const char *pFileName, int64 pshIndex );
+	void SetVertexShader( const char *pFileName, int vshIndex );
+	void SetPixelShader( const char *pFileName, int pshIndex );
 
 	// Convert from linear to gamma color space on writes to frame buffer.
 	void EnableSRGBWrite( bool bEnable )

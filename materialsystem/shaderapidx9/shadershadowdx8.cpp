@@ -116,8 +116,8 @@ public:
 		int nTexCoordCount, int* pTexCoordDimensions, int nUserDataSize );
 
 	// Pixel and vertex shader methods
-	virtual void SetVertexShader( const char* pFileName, int64 nStaticVshIndex );
-	virtual	void SetPixelShader( const char* pFileName, int64 nStaticPshIndex );
+	virtual void SetVertexShader( const char* pFileName, int nStaticVshIndex );
+	virtual	void SetPixelShader( const char* pFileName, int nStaticPshIndex );
 
 	// Indicates we're going to be using the ambient cube
 	void EnableAmbientLightCubeOnStage0( bool bEnable );
@@ -1079,7 +1079,7 @@ void CShaderShadowDX8::SetMorphFormat( MorphFormat_t flags )
 //-----------------------------------------------------------------------------
 // Pixel and vertex shader methods
 //-----------------------------------------------------------------------------
-void CShaderShadowDX8::SetVertexShader( const char* pFileName, int64 nStaticVshIndex )
+void CShaderShadowDX8::SetVertexShader( const char* pFileName, int nStaticVshIndex )
 {
 	char debugLabel[500] = "";
 #ifdef DX_TO_GL_ABSTRACTION
@@ -1090,7 +1090,7 @@ void CShaderShadowDX8::SetVertexShader( const char* pFileName, int64 nStaticVshI
 	m_ShadowShaderState.m_nStaticVshIndex = nStaticVshIndex;
 }
 
-void CShaderShadowDX8::SetPixelShader( const char* pFileName, int64 nStaticPshIndex )
+void CShaderShadowDX8::SetPixelShader( const char* pFileName, int nStaticPshIndex )
 {
 	char debugLabel[500] = "";
 #ifdef DX_TO_GL_ABSTRACTION
