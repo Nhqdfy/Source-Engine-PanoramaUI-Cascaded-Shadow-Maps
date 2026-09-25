@@ -100,6 +100,9 @@ extern	ConVar		r_rootlod;
 
 bool g_bLoadedMapHasBakedPropLighting = false;
 bool g_bBakedPropLightingNoSeparateHDR = false;  // Some maps only have HDR lighting on props, contained in the file for non-hdr light data
+bool g_bHasLightmapAlphaData = false;   // LVLFLAGS_LIGHTMAP_ALPHA (CS:GO: lightmap alpha holds the baked sun percent)
+bool g_bHasLightmapAlphaData3 = false;  // LVLFLAGS_LIGHTMAP_ALPHA_3 (CS:GO accurate CSM blending variant)
+bool g_bBakedPropLightingStreams3 = false;
 
 double g_flAccumulatedModelLoadTime;
 double g_flAccumulatedModelLoadTimeStudio;
@@ -998,6 +1001,9 @@ void Map_CheckFeatureFlags()
 {
 	g_bLoadedMapHasBakedPropLighting = false;
 	g_bBakedPropLightingNoSeparateHDR = false;
+	g_bHasLightmapAlphaData = false;
+	g_bHasLightmapAlphaData3 = false;
+	g_bBakedPropLightingStreams3 = false;
 
 	if ( CMapLoadHelper::LumpSize( LUMP_MAP_FLAGS ) > 0 )
 	{
@@ -1011,6 +1017,21 @@ void Map_CheckFeatureFlags()
 			( flags_lump.m_LevelFlags & LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_HDR ) != 0;
 		g_bBakedPropLightingNoSeparateHDR = 
 			( flags_lump.m_LevelFlags & LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_HDR ) == 0;
+
+		// CS:GO: lightmap alpha (vrad baked sun percent) and the 3 stream variant
+		g_bHasLightmapAlphaData = ( flags_lump.m_LevelFlags & LVLFLAGS_LIGHTMAP_ALPHA ) != 0;
+		g_bBakedPropLightingStreams3 = ( flags_lump.m_LevelFlags & LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_3 ) != 0;
+		g_bHasLightmapAlphaData3 = ( flags_lump.m_LevelFlags & LVLFLAGS_LIGHTMAP_ALPHA_3 ) != 0;
+
+		DevMsg( 1, "Map flags: lightmap alpha data=%d (3 stream=%d)`n", g_bHasLightmapAlphaData ? 1 : 0, g_bHasLightmapAlphaData3 ? 1 : 0 );
+		// CS:GO modelloader.cpp: only the 3 stream variant turns on the accurate CSM blending path
+		g_pMaterialSystemHardwareConfig->SetCSMAccurateBlending( g_bHasLightmapAlphaData3 );
+	}
+
+	// CS:GO: maps without the lightmap alpha data cannot drive CSM lightmap blending at all
+	if ( !g_bHasLightmapAlphaData )
+	{
+		g_pMaterialSystemHardwareConfig->SetCSMAccurateBlending( false );
 	}
 }
 

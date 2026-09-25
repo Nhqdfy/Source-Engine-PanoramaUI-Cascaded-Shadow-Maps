@@ -539,66 +539,119 @@ static int ComputeLightmapSize( SurfaceHandle_t surfID )
 //-----------------------------------------------------------------------------
 // Compute the portion of the lightmap generated from lightstyles
 //-----------------------------------------------------------------------------
-static void AccumulateLightstyles( ColorRGBExp32* pLightmap, int lightmapSize, float scalar ) 
+static void AccumulateLightstyles( ColorRGBExp32* pLightmap, unsigned char *pLightmapExtraData, int lightmapSize, float scalar ) 
 {
 	Assert( pLightmap );
 	for (int i=0; i<lightmapSize ; ++i)
 	{
-		blocklights[0][i][0] += scalar * TexLightToLinear( pLightmap[i].r, pLightmap[i].exponent );
-		blocklights[0][i][1] += scalar * TexLightToLinear( pLightmap[i].g, pLightmap[i].exponent );
-		blocklights[0][i][2] += scalar * TexLightToLinear( pLightmap[i].b, pLightmap[i].exponent );
+		float flR = scalar * TexLightToLinear( pLightmap[i].r, pLightmap[i].exponent );
+		float flG = scalar * TexLightToLinear( pLightmap[i].g, pLightmap[i].exponent );
+		float flB = scalar * TexLightToLinear( pLightmap[i].b, pLightmap[i].exponent );
+
+		blocklights[0][i][0] += flR;
+		blocklights[0][i][1] += flG;
+		blocklights[0][i][2] += flB;
+
+		// CS:GO gl_lightmap.cpp:584-593 - the vrad baked sun percent (lightmap alpha) goes into
+		// the 4th component, which the material system writes into the lightmap texture alpha
+		// (cmatlightmaps.cpp) where the CSM shaders read it as LightMapSample(...).a.
+		// lightmapAlphaData3 implies the new (3 stream) data used by the accurate CSM blending.
+		if ( g_bHasLightmapAlphaData3 && pLightmapExtraData )
+		{
+			blocklights[0][i][3] += ( (float)( pLightmapExtraData[ i * 4 ] ) ) * ( 1.0f / 255.0f );
+		}
+		else
+		{
+			blocklights[0][i][3] += pLightmapExtraData ? ( ( float )pLightmapExtraData[i] ) * ( 1.0f / 255.0f ) * ( flR * 0.2125f + flG * 0.7154f + flB * 0.0721f ) / 16.0f : 0.0f;
+		}
 	}
 }
 
-static void AccumulateLightstylesFlat( ColorRGBExp32* pLightmap, int lightmapSize, float scalar ) 
+static void AccumulateLightstylesFlat( ColorRGBExp32* pLightmap, unsigned char *pLightmapExtraData, int lightmapSize, float scalar ) 
 {
 	Assert( pLightmap );
 	for (int i=0; i<lightmapSize ; ++i)
 	{
-		blocklights[0][i][0] += scalar * TexLightToLinear( pLightmap->r, pLightmap->exponent );
-		blocklights[0][i][1] += scalar * TexLightToLinear( pLightmap->g, pLightmap->exponent );
-		blocklights[0][i][2] += scalar * TexLightToLinear( pLightmap->b, pLightmap->exponent );
+		float flR = scalar * TexLightToLinear( pLightmap->r, pLightmap->exponent );
+		float flG = scalar * TexLightToLinear( pLightmap->g, pLightmap->exponent );
+		float flB = scalar * TexLightToLinear( pLightmap->b, pLightmap->exponent );
+
+		blocklights[0][i][0] += flR;
+		blocklights[0][i][1] += flG;
+		blocklights[0][i][2] += flB;
+
+		if ( g_bHasLightmapAlphaData3 && pLightmapExtraData )
+		{
+			blocklights[0][i][3] += ( (float)( pLightmapExtraData[ i * 4 ] ) ) * ( 1.0f / 255.0f );
+		}
+		else
+		{
+			blocklights[0][i][3] += pLightmapExtraData ? ( ( float )pLightmapExtraData[i] ) * ( 1.0f / 255.0f ) * ( flR * 0.2125f + flG * 0.7154f + flB * 0.0721f ) / 16.0f : 0.0f;
+		}
 	}
 }
 
-
-static void AccumulateBumpedLightstyles( ColorRGBExp32* pLightmap, int lightmapSize, float scalar ) 
+static void AccumulateBumpedLightstyles( ColorRGBExp32* pLightmap, unsigned char *pLightmapExtraData, int lightmapSize, float scalar ) 
 {
 	ColorRGBExp32 *pBumpedLightmaps[3];
 	pBumpedLightmaps[0] = pLightmap + lightmapSize;
 	pBumpedLightmaps[1] = pLightmap + 2 * lightmapSize;
 	pBumpedLightmaps[2] = pLightmap + 3 * lightmapSize;
 
-	// I chose to split up the loops this way because it was the best tradeoff
-	// based on profiles between cache miss + loop overhead
-	for (int i=0 ; i<lightmapSize ; ++i)
+	float flR;
+	float flG;
+	float flB;
+
+	// CS:GO gl_lightmap.cpp:659-775: one loop per luxel, so the per bump basis sun percent
+	// (4 bytes per luxel) lines up with the four lightmap streams (flat + 3 bump bases).
+	for (int i=0, j=0; i<lightmapSize ; ++i, j+=4)
 	{
-		blocklights[0][i][0] += scalar * TexLightToLinear( pLightmap[i].r, pLightmap[i].exponent );
-		blocklights[0][i][1] += scalar * TexLightToLinear( pLightmap[i].g, pLightmap[i].exponent );
-		blocklights[0][i][2] += scalar * TexLightToLinear( pLightmap[i].b, pLightmap[i].exponent );
+		flR = scalar * TexLightToLinear( pLightmap[i].r, pLightmap[i].exponent );
+		flG = scalar * TexLightToLinear( pLightmap[i].g, pLightmap[i].exponent );
+		flB = scalar * TexLightToLinear( pLightmap[i].b, pLightmap[i].exponent );
+		blocklights[0][i][0] += flR;
+		blocklights[0][i][1] += flG;
+		blocklights[0][i][2] += flB;
+		if ( g_bHasLightmapAlphaData3 && pLightmapExtraData )
+			blocklights[0][i][3] += ( (float)( pLightmapExtraData[ j ] ) ) * ( 1.0f / 255.0f );
+		else
+			blocklights[0][i][3] += pLightmapExtraData ? ( ( float )pLightmapExtraData[i] ) * ( 1.0f / 255.0f ) * ( flR * 0.2125f + flG * 0.7154f + flB * 0.0721f ) / 16.0f : 0.0f;
 		Assert( blocklights[0][i][0] >= 0.0f );
 		Assert( blocklights[0][i][1] >= 0.0f );
 		Assert( blocklights[0][i][2] >= 0.0f );
 
-		blocklights[1][i][0] += scalar * TexLightToLinear( pBumpedLightmaps[0][i].r, pBumpedLightmaps[0][i].exponent );
-		blocklights[1][i][1] += scalar * TexLightToLinear( pBumpedLightmaps[0][i].g, pBumpedLightmaps[0][i].exponent );
-		blocklights[1][i][2] += scalar * TexLightToLinear( pBumpedLightmaps[0][i].b, pBumpedLightmaps[0][i].exponent );
+		flR = scalar * TexLightToLinear( pBumpedLightmaps[0][i].r, pBumpedLightmaps[0][i].exponent );
+		flG = scalar * TexLightToLinear( pBumpedLightmaps[0][i].g, pBumpedLightmaps[0][i].exponent );
+		flB = scalar * TexLightToLinear( pBumpedLightmaps[0][i].b, pBumpedLightmaps[0][i].exponent );
+		blocklights[1][i][0] += flR;
+		blocklights[1][i][1] += flG;
+		blocklights[1][i][2] += flB;
+		if ( g_bHasLightmapAlphaData3 && pLightmapExtraData )
+			blocklights[1][i][3] += ( (float)( pLightmapExtraData[ j + 1 ] ) ) * ( 1.0f / 255.0f );
 		Assert( blocklights[1][i][0] >= 0.0f );
 		Assert( blocklights[1][i][1] >= 0.0f );
 		Assert( blocklights[1][i][2] >= 0.0f );
-	}
-	for ( int i=0 ; i<lightmapSize ; ++i)
-	{
-		blocklights[2][i][0] += scalar * TexLightToLinear( pBumpedLightmaps[1][i].r, pBumpedLightmaps[1][i].exponent );
-		blocklights[2][i][1] += scalar * TexLightToLinear( pBumpedLightmaps[1][i].g, pBumpedLightmaps[1][i].exponent );
-		blocklights[2][i][2] += scalar * TexLightToLinear( pBumpedLightmaps[1][i].b, pBumpedLightmaps[1][i].exponent );
+
+		flR = scalar * TexLightToLinear( pBumpedLightmaps[1][i].r, pBumpedLightmaps[1][i].exponent );
+		flG = scalar * TexLightToLinear( pBumpedLightmaps[1][i].g, pBumpedLightmaps[1][i].exponent );
+		flB = scalar * TexLightToLinear( pBumpedLightmaps[1][i].b, pBumpedLightmaps[1][i].exponent );
+		blocklights[2][i][0] += flR;
+		blocklights[2][i][1] += flG;
+		blocklights[2][i][2] += flB;
+		if ( g_bHasLightmapAlphaData3 && pLightmapExtraData )
+			blocklights[2][i][3] += ( (float)( pLightmapExtraData[ j + 2 ] ) ) * ( 1.0f / 255.0f );
 		Assert( blocklights[2][i][0] >= 0.0f );
 		Assert( blocklights[2][i][1] >= 0.0f );
 		Assert( blocklights[2][i][2] >= 0.0f );
 
-		blocklights[3][i][0] += scalar * TexLightToLinear( pBumpedLightmaps[2][i].r, pBumpedLightmaps[2][i].exponent );
-		blocklights[3][i][1] += scalar * TexLightToLinear( pBumpedLightmaps[2][i].g, pBumpedLightmaps[2][i].exponent );
-		blocklights[3][i][2] += scalar * TexLightToLinear( pBumpedLightmaps[2][i].b, pBumpedLightmaps[2][i].exponent );
+		flR = scalar * TexLightToLinear( pBumpedLightmaps[2][i].r, pBumpedLightmaps[2][i].exponent );
+		flG = scalar * TexLightToLinear( pBumpedLightmaps[2][i].g, pBumpedLightmaps[2][i].exponent );
+		flB = scalar * TexLightToLinear( pBumpedLightmaps[2][i].b, pBumpedLightmaps[2][i].exponent );
+		blocklights[3][i][0] += flR;
+		blocklights[3][i][1] += flG;
+		blocklights[3][i][2] += flB;
+		if ( g_bHasLightmapAlphaData3 && pLightmapExtraData )
+			blocklights[3][i][3] += ( (float)( pLightmapExtraData[ j + 3 ] ) ) * ( 1.0f / 255.0f );
 		Assert( blocklights[3][i][0] >= 0.0f );
 		Assert( blocklights[3][i][1] >= 0.0f );
 		Assert( blocklights[3][i][2] >= 0.0f );
@@ -1003,6 +1056,10 @@ static void ComputeLightmapFromLightstyle( msurfacelighting_t *pLighting, bool c
 
 	ColorRGBExp32 *pLightmap = pLighting->m_pSamples;
 
+	// CS:GO gl_lightmap.cpp:1347/1383-1386: per lightstyle, right behind the RGB samples, the maps
+	// baked by CS:GO's vrad carry one byte of sun percent per luxel (4 per luxel for the 3 stream variant).
+	unsigned char *pLightmapExtraData = NULL;
+
 	// Compute iteration range
 	int minmap, maxmap;
 #ifdef USE_CONVARS
@@ -1036,20 +1093,31 @@ static void ComputeLightmapFromLightstyle( msurfacelighting_t *pLighting, bool c
 			const float &scalar = fscalar;
 #endif
 
+			// CS:GO only accumulates the sun percent for the primary lightstyle (style 0);
+			// the other styles use the *NoAlpha variants there, which is the same as passing NULL.
+			if ( g_bHasLightmapAlphaData && pLighting->m_nStyles[maps] == 0 )
+			{
+				pLightmapExtraData = (unsigned char *)( pLightmap + ( hasBumpmapLightmapData ? ( lightmapSize * ( NUM_BUMP_VECTS + 1 ) ) : lightmapSize ) );
+			}
+			else
+			{
+				pLightmapExtraData = NULL;
+			}
+
 			if( computeBumpmap )
 			{
-				AccumulateBumpedLightstyles( pLightmap, lightmapSize, scalar );
+				AccumulateBumpedLightstyles( pLightmap, pLightmapExtraData, lightmapSize, scalar );
 			}
 			else if( computeLightmap )
 			{
 				if (r_avglightmap.GetInt())
 				{
 					pLightmap = pLighting->AvgLightColor(maps);
-					AccumulateLightstylesFlat( pLightmap, lightmapSize, scalar );
+					AccumulateLightstylesFlat( pLightmap, pLightmapExtraData, lightmapSize, scalar );
 				}
 				else
 				{
-					AccumulateLightstyles( pLightmap, lightmapSize, scalar );
+					AccumulateLightstyles( pLightmap, pLightmapExtraData, lightmapSize, scalar );
 				}
 			}
 		}

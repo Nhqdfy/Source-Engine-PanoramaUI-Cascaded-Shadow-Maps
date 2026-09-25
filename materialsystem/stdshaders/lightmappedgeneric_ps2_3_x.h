@@ -44,8 +44,10 @@
 //-----------------------------------------------------------------------------------------------------------------------------
 // CSM (ported from CS:GO materialsystem/stdshaders/lightmappedgeneric_ps2_3_x.h)
 #if ( CASCADED_SHADOW_MAPPING ) && !defined( _X360 ) && !defined( _PS3 ) && !defined( SHADER_MODEL_PS_2_B )
-const bool g_bCSMEnabled : register(b0);
-const bool g_bCSMVizSplit : register(b1);
+const bool g_bCSMEnabled : register(b0);
+
+const bool g_bCSMVizSplit : register(b1);
+
 const bool g_bCSMVizShadow : register(b2);
 #undef CASCADE_SIZE
 #define CASCADE_SIZE 1
@@ -242,9 +244,9 @@ HALF4 main( PS_INPUT i ) : COLOR
 	vNormal.xyz = vNormal.xyz * 2.0f - 1.0f;					// make signed if we're not ssbump
 #endif
 
-	HALF3 lightmapColor1 = HALF3( 1.0f, 1.0f, 1.0f );
-	HALF3 lightmapColor2 = HALF3( 1.0f, 1.0f, 1.0f );
-	HALF3 lightmapColor3 = HALF3( 1.0f, 1.0f, 1.0f );
+	HALF4 lightmapColor1 = HALF4( 1.0f, 1.0f, 1.0f, 1.0f );
+	HALF4 lightmapColor2 = HALF4( 1.0f, 1.0f, 1.0f, 1.0f );
+	HALF4 lightmapColor3 = HALF4( 1.0f, 1.0f, 1.0f, 1.0f );
 #if LIGHTING_PREVIEW == 0
 	if( bBumpmap && bDiffuseBumpmap )
 	{
@@ -457,14 +459,17 @@ HALF4 main( PS_INPUT i ) : COLOR
 	float3 vSSBumpVector = vNormal.xyz;
 
 	HALF3 diffuseLighting;
+	// CS:GO passes the bump weights into BlendBumpDiffuseLightmapWithCSM (ssbump uses the normal)
+	float3 csmBumpWeights = float3( 1.0f, 1.0f, 1.0f );
 	if( bBumpmap && bDiffuseBumpmap )
 	{
 
 // ssbump
 #if ( BUMPMAP == 2 )
-		diffuseLighting = vNormal.x * lightmapColor1 +
-						  vNormal.y * lightmapColor2 +
-						  vNormal.z * lightmapColor3;
+		csmBumpWeights = vNormal.xyz;
+		diffuseLighting = vNormal.x * lightmapColor1.rgb +
+						  vNormal.y * lightmapColor2.rgb +
+						  vNormal.z * lightmapColor3.rgb;
 		diffuseLighting *= g_TintValuesAndLightmapScale.rgb;
 
 		// now, calculate vNormal for reflection purposes. if vNormal isn't needed, hopefully
@@ -480,23 +485,60 @@ HALF4 main( PS_INPUT i ) : COLOR
 #if ( DETAIL_BLEND_MODE == TCOMBINE_SSBUMP_BUMP )
 		dp *= 2*detailColor;
 #endif
-		diffuseLighting = dp.x * lightmapColor1 +
-						  dp.y * lightmapColor2 +
-						  dp.z * lightmapColor3;
+		csmBumpWeights = dp;
+		diffuseLighting = dp.x * lightmapColor1.rgb +
+						  dp.y * lightmapColor2.rgb +
+						  dp.z * lightmapColor3.rgb;
 		float sum = dot( dp, float3( 1.0f, 1.0f, 1.0f ) );
 		diffuseLighting *= g_TintValuesAndLightmapScale.rgb / sum;
 #endif
 	}
 	else
 	{
-		diffuseLighting = lightmapColor1 * g_TintValuesAndLightmapScale.rgb;
+		diffuseLighting = lightmapColor1.rgb * g_TintValuesAndLightmapScale.rgb;
 
 	}
 
 #if ( CASCADED_SHADOW_MAPPING ) && ( CASCADE_SIZE > 0 )
-	// CS:GO CSM sampling (csm_common_pc_fxc.h). CS:GO's fully blended path modulates by the
-	// vrad-baked lightmap alpha sun percent (CSM_BLENDING / MapHasLightMapAlphaData); this
-	// tree's lightmaps do not carry that channel yet, so the shadow term is applied directly.
+	// CS:GO lightmappedgeneric_ps2_3_x.h: the CSM term replaces the sunlight that was baked into
+	// the lightmap instead of scaling the whole lightmap, using the per luxel sun percent that
+	// vrad baked into the lightmap alpha (LVLFLAGS_LIGHTMAP_ALPHA, see engine/gl_lightmap.cpp).
+	float flShadow = 1.0f;
+	float flShadowScalar = 1.0f;
+
+#if ( CSM_BLENDING == 1 )
+	// "new/fixed" path: only the direct sun term is shadowed, indirect (ambient/bounce) is kept.
+	if ( bBumpmap && bDiffuseBumpmap )
+	{
+		diffuseLighting = BlendBumpDiffuseLightmapWithCSM( diffuseLighting, lightmapColor1.a, lightmapColor2.a, lightmapColor3.a,
+														   csmBumpWeights, i.worldPos_projPosZ.xyz, flShadow, flShadowScalar );
+	}
+	else
+	{
+		diffuseLighting = BlendDiffuseLightmapWithCSM( diffuseLighting, lightmapColor1.a, i.worldPos_projPosZ.xyz, flShadow, flShadowScalar );
+	}
+#else
+	// CS:GO's fallback for maps whose alpha holds the older (pre alpha_3) data.
+	if ( g_bCSMEnabled )
+	{
+		if ( lightmapColor1.a > 0.0f )
+		{
+			float flSunPercent;
+			if ( bBumpmap && bDiffuseBumpmap )
+				flSunPercent = lightmapColor1.a / ( Luminance( lightmapColor1.rgb + lightmapColor2.rgb + lightmapColor3.rgb ) * 0.3333f );
+			else
+				flSunPercent = lightmapColor1.a / Luminance( lightmapColor1.rgb );
+
+			flShadow = CSMComputeShadowing( i.worldPos_projPosZ.xyz );
+			flShadowScalar = 1.0f - ( flSunPercent * ( 1.0f - flShadow ) );
+
+			diffuseLighting.rgb *= flShadowScalar;
+			// desaturate the shadow colour since we only have a grayscale dim factor
+			diffuseLighting.rgb = lerp( diffuseLighting.bgr, diffuseLighting.rgb, flShadowScalar * 0.5f + 0.5f );
+		}
+	}
+#endif
+
 	if ( g_bCSMVizSplit )
 	{
 		// debug: paint the cascade each pixel selects (CS:GO CSMVisualizeSplit)
@@ -506,10 +548,6 @@ HALF4 main( PS_INPUT i ) : COLOR
 	{
 		// debug: raw shadow factor, white = lit, black = shadowed
 		diffuseLighting.rgb = CSMComputeShadowing( i.worldPos_projPosZ.xyz ).xxx;
-	}
-	else if ( g_bCSMEnabled )
-	{
-		diffuseLighting.rgb *= CSMComputeShadowing( i.worldPos_projPosZ.xyz );
 	}
 #endif
 

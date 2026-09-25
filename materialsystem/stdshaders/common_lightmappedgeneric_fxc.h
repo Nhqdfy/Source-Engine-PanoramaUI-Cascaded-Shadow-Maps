@@ -152,11 +152,13 @@ void GetBaseTextureAndNormal( sampler base, sampler base2, sampler bump, bool bB
 
 
 
-float3 LightMapSample( sampler LightmapSampler, float2 vTexCoord )
+// CS:GO common_lightmappedgeneric_fxc.h: returns HALF4 so the lightmap alpha (the vrad baked
+// sun percent used by the CSM blending paths) survives up to the shader body.
+float4 LightMapSample( sampler LightmapSampler, float2 vTexCoord )
 {
 #	if ( !defined( _X360 ) || !defined( USE_32BIT_LIGHTMAPS_ON_360 ) )
 	{
-		float3 sample = tex2D( LightmapSampler, vTexCoord );
+		float4 sample = tex2D( LightmapSampler, vTexCoord );
 
 		return sample;
 	}

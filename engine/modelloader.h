@@ -244,6 +244,9 @@ void DisconnectMDLCacheNotify( );
 void InitStudioModelState( model_t *pModel );
 
 extern bool g_bLoadedMapHasBakedPropLighting;
+extern bool g_bHasLightmapAlphaData;      // LVLFLAGS_LIGHTMAP_ALPHA: lightmaps carry the vrad baked sun percent in alpha
+extern bool g_bHasLightmapAlphaData3;     // LVLFLAGS_LIGHTMAP_ALPHA_3: the newer 3 stream variant (CS:GO accurate CSM blending)
+extern bool g_bBakedPropLightingStreams3;   // LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_3
 extern bool g_bBakedPropLightingNoSeparateHDR;
 
 #endif // MOD_LOADER_H

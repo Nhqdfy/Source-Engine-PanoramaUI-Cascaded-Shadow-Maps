@@ -395,6 +395,11 @@ struct dheader_t
 // level feature flags
 #define LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_NONHDR 0x00000001	// was processed by vrad with -staticproplighting, no hdr data
 #define LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_HDR    0x00000002   // was processed by vrad with -staticproplighting, in hdr
+#define LVLFLAGS_LIGHTMAP_ALPHA                    0x00000004   // indicates that lightmap alpha data is interleved in the lighting lump
+#define LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_3      0x00000008   // was processed by vrad with -staticproplighting3
+#define LVLFLAGS_LIGHTMAP_ALPHA_3                  0x00000010   // indicates that 3 sets of lightmap alpha data are interleved in the lighting lump
+#define LVLFLAGS_BAKED_STATIC_PROP_LIGHTING_3_NO_SUN  0x00000020 // indicates that vertexlitgeneric static prop lighting does not contain direct sunlight in lighting vertex stream
+#define LVLFLAGS_LIGHTSTYLES_WITH_CSM			   0x00000040   // indicates that lightstyles now compatible with CSMs
 
 struct dflagslump_t
 {
