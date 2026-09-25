@@ -59,7 +59,8 @@ unsigned char g_RenderAreaBits[32];
 static unsigned char g_AreaStack[32];
 
 // Frustums for each area for the current frame. Used to cull out leaves.
-static CUtlVector<CAreaCullInfo> g_AreaCullInfo;
+// Align it: CAreaCullInfo holds a SIMD-aligned Frustum_t (ALIGN16), and plain CUtlMemory only aligns to 8.
+static CUtlVector< CAreaCullInfo, CUtlMemoryAligned< CAreaCullInfo, 16 > > g_AreaCullInfo;
 
 // List of areas marked visible this frame.
 static unsigned short g_VisibleAreas[MAX_MAP_AREAS];

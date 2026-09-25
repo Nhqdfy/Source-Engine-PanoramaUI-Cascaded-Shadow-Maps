@@ -4910,3 +4910,5 @@ FPExceptionEnabler::~FPExceptionEnabler()
 	_controlfp_s(0, mOldValues, _MCW_EM);
 }
 #endif
+
+// CSM port: keep this comment so a rebuild is forced if the object file is ever re-generated out of band.

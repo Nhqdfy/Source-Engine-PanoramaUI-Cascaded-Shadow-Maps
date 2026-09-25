@@ -481,7 +481,8 @@ private:
 	// The number of decals we're gonna need to render
 	int	m_DecalsToRender;
 
-	CUtlLinkedList<FlashlightInfo_t> m_FlashlightStates;
+	// Align it: FlashlightInfo_t holds a SIMD-aligned Frustum_t (ALIGN16) - same reason as m_Shadows above.
+	CUtlLinkedList< FlashlightInfo_t, unsigned short, false, int, CUtlMemoryAligned< UtlLinkedListElem_t< FlashlightInfo_t, unsigned short >, 16 > > m_FlashlightStates;
 	int m_NumWorldMaterialBuckets;
 	bool m_bInitialized;
 
