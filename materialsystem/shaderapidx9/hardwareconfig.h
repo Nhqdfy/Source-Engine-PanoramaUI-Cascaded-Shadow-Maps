@@ -272,6 +272,8 @@ public:
 	bool SupportsBilinearPCFSampling() const;
 	CSMShaderMode_t GetCSMShaderMode( CSMQualityMode_t nQualityLevel ) const;
 	bool GetCSMAccurateBlending() const;
+
+	float GetLightMapScaleFactor( void ) const;
 	void SetCSMAccurateBlending( bool bEnable );
 	virtual void SetHDREnabled( bool bEnable );
 

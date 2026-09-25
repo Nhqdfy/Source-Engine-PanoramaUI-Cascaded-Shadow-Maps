@@ -15,6 +15,10 @@
 #include "mathlib/vector.h"
 #include "materialsystem/MaterialSystemUtil.h"
 
+#include "mathlib/camera.h"
+
+class CVolumeCuller;
+
 
 //-----------------------------------------------------------------------------
 // Flags passed in with view setup
@@ -27,6 +31,16 @@ enum ClearFlags_t
 	VIEW_NO_DRAW = 0x8,
 	VIEW_CLEAR_OBEY_STENCIL = 0x10, // Draws a quad allowing stencil test to clear through portals
 	VIEW_CLEAR_STENCIL = 0x20,
+};
+
+//-----------------------------------------------------------------------------
+// Motion blur modes (CS:GO view_shared.h)
+//-----------------------------------------------------------------------------
+enum MotionBlurMode_t
+{
+	MOTION_BLUR_DISABLE = 1,
+	MOTION_BLUR_GAME = 2,
+	MOTION_BLUR_SFM = 3
 };
 
 enum StereoEye_t
@@ -54,6 +68,11 @@ public:
 		m_bCacheFullSceneState = false;
 //		m_bUseExplicitViewVector = false;
         m_bViewToProjectionOverride = false;
+		m_bCustomViewMatrix = false;
+		m_bCustomProjMatrix = false;
+		m_nMotionBlurMode = MOTION_BLUR_GAME;
+		m_bCSMView = false;
+		m_pCSMVolumeCuller = NULL;
 		m_eStereoEye = STEREO_EYE_MONO;
 	}
 
@@ -129,8 +148,68 @@ public:
 	// This does NOT override the Z range - that will be set up as normal (i.e. the values in this matrix will be ignored).
     bool        m_bViewToProjectionOverride;
     VMatrix     m_ViewToProjection;
+
+	// CS:GO additions used by the CSM code
+	bool		m_bCustomViewMatrix;
+	matrix3x4_t	m_matCustomViewMatrix;
+
+	bool		m_bCustomProjMatrix;
+	VMatrix		m_matCustomProjMatrix;
+
+	const CVolumeCuller *m_pCSMVolumeCuller;
+
+	int			m_nMotionBlurMode;
+
+
+	// True if this is a CSM depth view. The CSM world->view matrix doesn't have an XY translation (that's moved into the CSM ortho view->projection
+	// matrix to address continuity issues), so the usual assumptions made about camera/view space do not necessarily apply.
+	bool		m_bCSMView:1;
+	float ComputeViewMatrices( VMatrix *pWorldToView, VMatrix *pViewToProjection, VMatrix *pWorldToProjection ) const;
 };
 
 
+
+
+inline float CViewSetup::ComputeViewMatrices( VMatrix *pWorldToView, VMatrix *pViewToProjection, VMatrix *pWorldToProjection ) const
+{
+	float flAspectRatio = m_flAspectRatio;
+	if ( flAspectRatio == 0.0f )
+	{
+		flAspectRatio = (height != 0) ? ( (float)width / (float)height ) : 1.0f;
+	}
+
+	if( !m_bCustomViewMatrix )
+	{
+		ComputeViewMatrix( pWorldToView, origin, angles );
+	}
+	else
+	{
+		ComputeViewMatrix( pWorldToView, m_matCustomViewMatrix );
+	}
+
+	if ( m_bCustomProjMatrix )
+	{
+		*pViewToProjection = m_matCustomProjMatrix;
+	}
+	else if ( m_bOrtho )
+	{
+		MatrixBuildOrtho( *pViewToProjection, m_OrthoLeft, m_OrthoTop, 
+			m_OrthoRight, m_OrthoBottom, zNear, zFar );
+	}
+	else if ( m_bOffCenter )
+	{
+		MatrixBuildPerspectiveOffCenterX( *pViewToProjection, fov, flAspectRatio, 
+			zNear, zFar, m_flOffCenterBottom, m_flOffCenterTop,
+			m_flOffCenterLeft, m_flOffCenterRight );
+	}
+	else
+	{
+		MatrixBuildPerspectiveX( *pViewToProjection, fov, flAspectRatio, zNear, zFar );
+	}
+
+	MatrixMultiply( *pViewToProjection, *pWorldToView, *pWorldToProjection );
+
+	return flAspectRatio;
+}
 
 #endif // VIEW_SHARED_H

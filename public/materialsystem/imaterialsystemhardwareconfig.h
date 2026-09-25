@@ -216,6 +216,8 @@ public:
 
 	virtual int GetShadowFilterMode() const = 0;
 
+	virtual float GetLightMapScaleFactor() const = 0;
+
 	virtual bool SupportsCascadedShadowMapping() const = 0;
 	virtual CSMQualityMode_t GetCSMQuality() const = 0;
 	virtual bool SupportsBilinearPCFSampling() const = 0;

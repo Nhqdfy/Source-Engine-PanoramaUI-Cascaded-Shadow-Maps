@@ -861,6 +861,10 @@ private:
 		return dummyState;
 	}
 
+	virtual void BeginGeneratingCSMs() {}
+	virtual void EndGeneratingCSMs() {}
+	virtual void PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias ) {}
+
 	virtual void SetDisallowAccess( bool ) {}
 	virtual void EnableShaderShaderMutex( bool ) {}
 	virtual void ShaderLock() {}

@@ -1275,6 +1275,8 @@ private:
 	CascadedShadowMappingState_t m_CascadedShadowMappingState;
 	CascadedShadowMappingState_t m_CascadedShadowMappingState_LightMapScaled;
 	ITexture *m_pCascadedShadowMappingDepthTexture;
+	bool m_bGeneratingCSMs;
+	bool m_bCSMsValidThisFrame;
 
 	CShaderAPIDx8( CShaderAPIDx8 const& );
 
@@ -1749,6 +1751,10 @@ private:
 	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas );
 	virtual const CascadedShadowMappingState_t &GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale = false ) const;
 
+	virtual void BeginGeneratingCSMs();
+	virtual void EndGeneratingCSMs();
+	virtual void PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias );
+
 	// Vendor-dependent depth stencil texture format
 	ImageFormat GetShadowDepthTextureFormat( void );
 
@@ -1936,6 +1942,8 @@ CShaderAPIDx8::CShaderAPIDx8() :
 	memset( &m_CascadedShadowMappingState, 0, sizeof( m_CascadedShadowMappingState ) );
 	memset( &m_CascadedShadowMappingState_LightMapScaled, 0, sizeof( m_CascadedShadowMappingState_LightMapScaled ) );
 	m_pCascadedShadowMappingDepthTexture = NULL;
+	m_bGeneratingCSMs = false;
+	m_bCSMsValidThisFrame = false;
 	//m_DynamicState.m_HeightClipMode = MATERIAL_HEIGHTCLIPMODE_DISABLE;
 	m_nWindowHeight = m_nWindowWidth = 0;
 	m_maxBoneLoaded = 0;
@@ -13230,6 +13238,24 @@ const CascadedShadowMappingState_t &CShaderAPIDx8::GetCascadedShadowMappingState
 	{
 		return m_CascadedShadowMappingState;
 	}
+}
+
+void CShaderAPIDx8::BeginGeneratingCSMs()
+{
+	m_bGeneratingCSMs = true;
+}
+
+void CShaderAPIDx8::EndGeneratingCSMs()
+{
+	m_bGeneratingCSMs = false;
+	m_bCSMsValidThisFrame = true;
+}
+
+void CShaderAPIDx8::PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias )
+{
+	// CS:GO also slams D3D depth-bias render states here (mat_depthwrite_new_path); this tree routes
+	// the same values through the existing shadow depth bias path.
+	SetShadowDepthBiasFactors( fShadowSlopeScaleDepthBias, fShadowDepthBias );
 }
 
 void CShaderAPIDx8::ClearVertexAndPixelShaderRefCounts()

@@ -964,6 +964,10 @@ public:
 		return dummyState;
 	}
 
+	virtual void BeginGeneratingCSMs() {}
+	virtual void EndGeneratingCSMs() {}
+	virtual void PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias ) {}
+
 	virtual const FlashlightState_t &GetFlashlightState( VMatrix &worldToTexture ) const 
 	{
 		static FlashlightState_t  blah;
@@ -1150,6 +1154,8 @@ public:
 	virtual void ComputeVertexDescription( unsigned char* pBuffer, VertexFormat_t vertexFormat, MeshDesc_t& desc ) const {}
 
 	virtual bool SupportsShadowDepthTextures() { return false; }
+
+	virtual float GetLightMapScaleFactor() const { return 1.0f; }
 
 	virtual bool SupportsCascadedShadowMapping() const { return false; }
 	virtual CSMQualityMode_t GetCSMQuality() const { return CSMQUALITY_VERY_LOW; }

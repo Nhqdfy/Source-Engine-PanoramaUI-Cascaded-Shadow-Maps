@@ -422,6 +422,10 @@ public:
 	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas ) = 0;
 	virtual const CascadedShadowMappingState_t &GetCascadedShadowMappingState( ITexture **pDepthTextureAtlas, bool bLightMapScale = false ) const = 0;
 
+	virtual void BeginGeneratingCSMs() = 0;
+	virtual void EndGeneratingCSMs() = 0;
+	virtual void PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias ) = 0;
+
 	virtual void ClearVertexAndPixelShaderRefCounts() = 0;
 	virtual void PurgeUnusedVertexAndPixelShaders() = 0;
 

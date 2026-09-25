@@ -179,6 +179,15 @@
 	#error
 #endif
 
+// CS:GO-style platform aliases used by the CSM code (this tree spells them IsOSX()/IsX360()).
+#ifndef IsPlatformOSX
+#define IsPlatformOSX() IsOSX()
+#endif
+#ifndef IsPlatformX360
+#define IsPlatformX360() IsX360()
+#endif
+
+
 typedef unsigned char uint8;
 typedef signed char int8;
 

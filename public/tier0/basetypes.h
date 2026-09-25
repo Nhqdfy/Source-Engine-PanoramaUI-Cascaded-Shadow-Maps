@@ -127,6 +127,23 @@ T Clamp( T const &val, T const &minVal, T const &maxVal )
 		return val;
 }
 
+
+#ifdef __cplusplus
+
+// CS:GO's mixed-type clamp template (this tree previously only had Clamp)
+template< class T, class Y, class X >
+inline T clamp( T const &val, Y const &minVal, X const &maxVal )
+{
+	if( val < minVal )
+		return minVal;
+	else if( val > maxVal )
+		return maxVal;
+	else
+		return val;
+}
+
+#endif
+
 // This is the preferred Min operator. Using the MIN macro can lead to unexpected
 // side-effects or more expensive code.
 template< class T >

@@ -167,7 +167,8 @@ enum MaterialBufferTypes_t
 enum MaterialCullMode_t
 {
 	MATERIAL_CULLMODE_CCW,	// this culls polygons with counterclockwise winding
-	MATERIAL_CULLMODE_CW	// this culls polygons with clockwise winding
+	MATERIAL_CULLMODE_CW,	// this culls polygons with clockwise winding
+	MATERIAL_CULLMODE_NONE	// cull nothing
 };
 
 enum MaterialIndexFormat_t
@@ -1397,6 +1398,10 @@ public:
 	virtual bool IsCascadedShadowMapping() const = 0;
 	virtual void SetCascadedShadowMapping( bool bEnable ) = 0;
 	virtual void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas ) = 0;
+
+	virtual void				BeginGeneratingCSMs() = 0;
+	virtual void				EndGeneratingCSMs() = 0;
+	virtual void				PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias ) = 0;
 
 	// Gets the current height clip mode
 	virtual MaterialHeightClipMode_t GetHeightClipMode( ) = 0;

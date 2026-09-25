@@ -276,6 +276,10 @@ public:
 		m_queue.QueueCall( m_pHardwareContext, &IMatRenderContext::SetCascadedShadowMappingState, RefToVal( state ), pDepthTextureAtlas );
 	}
 
+	DEFINE_QUEUED_CALL_0(					BeginGeneratingCSMs, IMatRenderContext, m_pHardwareContext );
+	DEFINE_QUEUED_CALL_0(					EndGeneratingCSMs, IMatRenderContext, m_pHardwareContext );
+	DEFINE_QUEUED_CALL_3(					PerpareForCascadeDraw, int, float, float, IMatRenderContext, m_pHardwareContext );
+
 	DEFINE_QUEUED_CALL_AFTER_BASE_1(		SetHeightClipMode, MaterialHeightClipMode_t, IMatRenderContext, m_pHardwareContext );
 	DEFINE_QUEUED_CALL_AFTER_BASE_1(		SetHeightClipZ, float, IMatRenderContext, m_pHardwareContext );
 

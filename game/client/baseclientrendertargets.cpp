@@ -8,6 +8,7 @@
 
 #include "cbase.h"
 #include "baseclientrendertargets.h"						// header	
+#include "c_env_cascade_light.h"
 #include "materialsystem/imaterialsystemhardwareconfig.h"	// Hardware config checks
 #include "tier0/icommandline.h"
 
@@ -60,6 +61,9 @@ void CBaseClientRenderTargets::InitClientRenderTargets( IMaterialSystem* pMateri
 
 	// Monitors
 	m_CameraTexture.Init( CreateCameraTexture( pMaterialSystem, iCameraTextureSize ) );
+
+	// CSM: allocate the cascade shadow depth atlas (CS:GO CBaseClientRenderTargets::SetupClientRenderTargets)
+	g_CascadeLightManager.InitRenderTargets();
 }
 
 //-----------------------------------------------------------------------------
@@ -75,4 +79,7 @@ void CBaseClientRenderTargets::ShutdownClientRenderTargets()
 
 	// Monitors
 	m_CameraTexture.Shutdown();
+
+	// CSM: release the cascade shadow depth atlas
+	g_CascadeLightManager.ShutdownRenderTargets();
 }

@@ -23,7 +23,6 @@ def build(bld):
 		'keybindings.cpp',
 		'../public/map_utils.cpp',
 		'../public/materialsystem/MaterialSystemUtil.cpp',
-		'camerautils.cpp',
 		'meshutils.cpp',
 		'p4helpers.cpp',
 		'renderutils.cpp',

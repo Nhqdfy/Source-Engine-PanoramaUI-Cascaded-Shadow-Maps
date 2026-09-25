@@ -574,6 +574,7 @@ $Project
 		$File	"ServerNetworkProperty.cpp"
 		$File	"ServerNetworkProperty.h"
 		$File	"shadowcontrol.cpp"
+		$File	"env_cascade_light.cpp"
 		$File	"$SRCDIR\public\shattersurfacetypes.h"
 		$File	"$SRCDIR\game\shared\sheetsimulator.h"
 		$File	"$SRCDIR\public\simple_physics.h"

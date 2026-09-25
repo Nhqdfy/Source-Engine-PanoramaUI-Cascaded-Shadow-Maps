@@ -416,6 +416,8 @@ public:
 	virtual void OverrideStreamOffsetSupport( bool bOverrideEnabled, bool bEnableSupport ) {}
 	virtual int GetShadowFilterMode() const { return 0; }
 
+	virtual float GetLightMapScaleFactor() const { return 1.0f; }
+
 	virtual bool SupportsCascadedShadowMapping() const { return false; }
 	virtual CSMQualityMode_t GetCSMQuality() const { return CSMQUALITY_VERY_LOW; }
 	virtual bool SupportsBilinearPCFSampling() const { return true; }
@@ -1646,6 +1648,10 @@ public:
 	{
 		state, pDepthTextureAtlas;
 	}
+
+	virtual void BeginGeneratingCSMs() {}
+	virtual void EndGeneratingCSMs() {}
+	virtual void PerpareForCascadeDraw( int cascade, float fShadowSlopeScaleDepthBias, float fShadowDepthBias ) { cascade; fShadowSlopeScaleDepthBias; fShadowDepthBias; }
 	virtual void SetFlashlightStateEx( const FlashlightState_t &state, const VMatrix &worldToTexture, ITexture *pFlashlightDepthTexture )
 	{
 	}

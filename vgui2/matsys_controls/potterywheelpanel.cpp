@@ -247,9 +247,9 @@ CPotteryWheelPanel::CPotteryWheelPanel( vgui::Panel *pParent, const char *pName 
 
 	m_vecCameraOffset.Init( 100.0f, 0.0f, 0.0f );
 		
-	m_Camera.m_flZNear = 3.0f;
-	m_Camera.m_flZFar = 16384.0f * 1.73205080757f;
-	m_Camera.m_flFOV = 30.0f;
+	m_Camera.Init( Vector( 0, 0, 0 ), QAngle( 0, 0, 0 ), 3.0f, 16384.0f * 1.73205080757f, 30.0f, 1.0f );
+
+
 
 	m_pCameraRotate = new CRotationManipulator( &m_CameraPivot );
 	m_pCameraTranslate = new CTranslationManipulator( &m_CameraPivot );
@@ -604,7 +604,7 @@ ITexture *CPotteryWheelPanel::GetLightProbeCubemap( bool bHDR )
 //-----------------------------------------------------------------------------
 int CPotteryWheelPanel::GetCameraFOV( void )
 {
-	return m_Camera.m_flFOV;
+	return m_Camera.m_flFOVX;
 }
 
 //-----------------------------------------------------------------------------
@@ -612,7 +612,7 @@ int CPotteryWheelPanel::GetCameraFOV( void )
 //-----------------------------------------------------------------------------
 void CPotteryWheelPanel::SetCameraFOV( float flFOV )
 {
-	m_Camera.m_flFOV = flFOV;
+	m_Camera.m_flFOVX = flFOV;
 }
 
 //-----------------------------------------------------------------------------
@@ -674,7 +674,7 @@ void CPotteryWheelPanel::LookAt( float flRadius )
 	// cos( fov/2 ) = r / r' where r = sphere radius, r' = perp distance from sphere center to max extent of camera
 	// d/f = r'/d' where d' is distance of camera to sphere
 	// d' = r' / tan( fov/2 ) * r' = r / ( cos (fov/2) * tan( fov/2 ) ) = r / sin( fov/2 )
-	float flFOVx = m_Camera.m_flFOV;
+	float flFOVx = m_Camera.m_flFOVX;
 
 	// Compute fov/2 in radians
 	flFOVx *= M_PI / 360.0f;

@@ -1376,3 +1376,20 @@ void CHardwareConfig::SetCSMAccurateBlending( bool bEnable )
 {
 	m_bCSMAccurateBlending = bEnable;
 }
+
+float CHardwareConfig::GetLightMapScaleFactor( void ) const
+{
+	switch( GetHDRType() )
+	{
+	case HDR_TYPE_FLOAT:
+		return 1.0;
+		break;
+
+	case HDR_TYPE_INTEGER:
+		return 16.0;
+
+	case HDR_TYPE_NONE:
+	default:
+		return GammaToLinearFullRange( 2.0 );	// light map scale
+	}
+}

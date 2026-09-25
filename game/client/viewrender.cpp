@@ -14,6 +14,7 @@
 #include "clientsideeffects.h"
 #include "particlemgr.h"
 #include "viewrender.h"
+#include "c_env_cascade_light.h"
 #include "iclientmode.h"
 #include "voice_status.h"
 #include "glow_overlay.h"
@@ -1289,8 +1290,12 @@ void CViewRender::SetCurrentlyDrawingEntity( C_BaseEntity *pEnt )
 	m_pCurrentlyDrawingEntity = pEnt;
 }
 
-bool CViewRender::UpdateShadowDepthTexture( ITexture *pRenderTarget, ITexture *pDepthTexture, const CViewSetup &shadowViewIn )
+bool CViewRender::UpdateShadowDepthTexture( ITexture *pRenderTarget, ITexture *pDepthTexture, const CViewSetup &shadowViewIn, bool bRenderWorldAndObjects, bool bRenderViewModels )
 {
+	// NOTE: bRenderWorldAndObjects / bRenderViewModels come from CS:GO's CSM path. The local shadow
+	// depth view renders the world and its objects in one pass, so both flags are accepted for parity.
+	( void )bRenderWorldAndObjects;
+	( void )bRenderViewModels;
 	VPROF_INCREMENT_COUNTER( "shadow depth textures rendered", 1 );
 
 	CMatRenderContextPtr pRenderContext( materials );
@@ -1325,6 +1330,9 @@ void CViewRender::ViewDrawScene( bool bDrew3dSkybox, SkyboxVisibility_t nSkyboxV
 	if ( r_flashlightdepthtexture.GetBool() && (viewID == VIEW_MAIN) )
 	{
 		g_pClientShadowMgr->ComputeShadowDepthTextures( view );
+
+		// CSM: build the cascade shadow depth atlas for this view
+		g_CascadeLightManager.ComputeShadowDepthTextures( view );
 	}
 
 	m_BaseDrawFlags = baseDrawFlags;
@@ -1398,6 +1406,8 @@ void CViewRender::ViewDrawScene( bool bDrew3dSkybox, SkyboxVisibility_t nSkyboxV
 	if ( r_flashlightdepthtexture.GetBool() )
 	{
 		g_pClientShadowMgr->UnlockAllShadowDepthTextures();
+		// CSM: free the cascade shadow depth atlas for use in subsequent views
+		g_CascadeLightManager.UnlockAllShadowDepthTextures();
 	}
 }
 
@@ -2868,6 +2878,9 @@ void CViewRender::ViewDrawScene_Intro( const CViewSetup &view, int nClearFlags, 
 		if ( r_flashlightdepthtexture.GetBool() )
 		{
 			g_pClientShadowMgr->ComputeShadowDepthTextures( playerView );
+
+			// CSM: build the cascade shadow depth atlas for this view
+			g_CascadeLightManager.ComputeShadowDepthTextures( playerView );
 		}
 
 		SetupCurrentView( playerView.origin, playerView.angles, VIEW_INTRO_PLAYER );
@@ -2886,6 +2899,8 @@ void CViewRender::ViewDrawScene_Intro( const CViewSetup &view, int nClearFlags, 
 		if ( r_flashlightdepthtexture.GetBool() )
 		{
 			g_pClientShadowMgr->UnlockAllShadowDepthTextures();
+			// CSM: free the cascade shadow depth atlas for use in subsequent views
+			g_CascadeLightManager.UnlockAllShadowDepthTextures();
 		}
 	}
 	else
@@ -2901,6 +2916,9 @@ void CViewRender::ViewDrawScene_Intro( const CViewSetup &view, int nClearFlags, 
 	if ( r_flashlightdepthtexture.GetBool() )
 	{
 		g_pClientShadowMgr->ComputeShadowDepthTextures( view );
+
+		// CSM: build the cascade shadow depth atlas for this view
+		g_CascadeLightManager.ComputeShadowDepthTextures( view );
 	}
 
 	// -----------------------------------------------------------------------
@@ -3002,6 +3020,8 @@ void CViewRender::ViewDrawScene_Intro( const CViewSetup &view, int nClearFlags, 
 	if ( r_flashlightdepthtexture.GetBool() )
 	{
 		g_pClientShadowMgr->UnlockAllShadowDepthTextures();
+		// CSM: free the cascade shadow depth atlas for use in subsequent views
+		g_CascadeLightManager.UnlockAllShadowDepthTextures();
 	}
 }
 

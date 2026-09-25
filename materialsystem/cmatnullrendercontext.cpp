@@ -336,6 +336,9 @@ public:
 	bool IsCascadedShadowMapping() const { return false; }
 	void SetCascadedShadowMapping( bool ) {}
 	void SetCascadedShadowMappingState( const CascadedShadowMappingState_t &, ITexture * ) {}
+	void BeginGeneratingCSMs() {}
+	void EndGeneratingCSMs() {}
+	void PerpareForCascadeDraw( int, float, float ) {}
 
 	void SetScissorRect( const int nLeft, const int nTop, const int nRight, const int nBottom, const bool bEnableScissor  )
 	{

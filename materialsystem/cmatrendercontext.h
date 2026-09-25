@@ -445,6 +445,10 @@ public:
 	void									SetCascadedShadowMapping( bool bEnable );
 	void									SetCascadedShadowMappingState( const CascadedShadowMappingState_t &state, ITexture *pDepthTextureAtlas );
 
+	DELEGATE_TO_OBJECT_0V(					BeginGeneratingCSMs, g_pShaderAPI );
+	DELEGATE_TO_OBJECT_0V(					EndGeneratingCSMs, g_pShaderAPI );
+	DELEGATE_TO_OBJECT_3V(					PerpareForCascadeDraw, int, float, float, g_pShaderAPI );
+
 	void									SetScissorRect( const int nLeft, const int nTop, const int nRight, const int nBottom, const bool bEnableScissor );
 
 	// Creates/destroys morph data associated w/ a particular material
