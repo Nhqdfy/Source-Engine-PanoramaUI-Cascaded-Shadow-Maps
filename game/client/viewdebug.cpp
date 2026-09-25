@@ -14,6 +14,12 @@
 #include "smoke_fog_overlay.h"
 #include "materialsystem/imaterialvar.h"
 
+#include "c_env_cascade_light.h"
+
+// CSM debug views (ported from CS:GO game/client/viewdebug.cpp)
+extern ConVar cl_csm_debug_2d;
+extern ConVar cl_csm_debug_3d;
+
 #ifdef PORTAL
 //#include "C_Portal_Player.h"
 #include "portal_render_targets.h"
@@ -518,6 +524,11 @@ void CDebugViewRender::Draw3DDebuggingInfo( const CViewSetup &view )
 {
 	VPROF("CViewRender::Draw3DDebuggingInfo");
 
+	if ( cl_csm_debug_3d.GetInt() )
+	{
+		g_CascadeLightManager.Draw3DDebugInfo();
+	}
+
 	// Draw 3d overlays
 	render->Draw3DDebugOverlays();
 
@@ -571,6 +582,11 @@ void CDebugViewRender::Draw2DDebuggingInfo( const CViewSetup &view )
 	{
 		int nSize = cl_shadowtextureoverlaysize.GetInt();
 		g_pClientShadowMgr->RenderShadowTexture( nSize, nSize );
+	}
+
+	if ( cl_csm_debug_2d.GetInt() )
+	{
+		g_CascadeLightManager.Draw2DDebugInfo();
 	}
 
 	const char *pDrawMaterial = cl_drawmaterial.GetString();
