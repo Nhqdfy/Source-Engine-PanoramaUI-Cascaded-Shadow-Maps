@@ -8,6 +8,7 @@
 #include "cbase.h"
 #include "lights.h"
 #include "world.h"
+#include "env_cascade_light.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -246,20 +247,41 @@ LINK_ENTITY_TO_CLASS( light_environment, CEnvLight );
 
 bool CEnvLight::KeyValue( const char *szKeyName, const char *szValue )
 {
+	bool bSuccess = true;
 	if (FStrEq(szKeyName, "_light"))
+	{
+		int tmp[4];
+		// CS:GO calls V_StringToIntArray() here; this tree only carries the shared-game copy.
+		UTIL_StringToIntArray( tmp, 4, szValue );
+		CCascadeLight::SetLightColor( tmp[0], tmp[1], tmp[2], tmp[3] );
+	}
+	else if ( FStrEq( szKeyName, "_ambient" ) )
 	{
 		// nothing
 	}
 	else
 	{
-		return BaseClass::KeyValue( szKeyName, szValue );
+		bSuccess = BaseClass::KeyValue( szKeyName, szValue );
 	}
 
-	return true;
+	// CS:GO: the map's light_environment feeds the CSM sun.  CCascadeLight::SetEnvLightShadow*
+	// stores the direction and (when the env_cascade_light entity already exists) refreshes
+	// m_envLightShadowDirection, which the client uses whenever the entity's "uselightenvangles"
+	// and cl_csm_use_env_light_direction are on.
+	if ( FStrEq( szKeyName, "pitch" ) )
+	{
+		CCascadeLight::SetEnvLightShadowPitch( atof( szValue ) );
+	}
+
+	CCascadeLight::SetEnvLightShadowAngles( GetAbsAngles() );
+
+	return bSuccess;
 }
 
 
 void CEnvLight::Spawn( void )
 {
 	BaseClass::Spawn( );
+
+	CCascadeLight::SetEnvLightShadowAngles( GetAbsAngles() );
 }
