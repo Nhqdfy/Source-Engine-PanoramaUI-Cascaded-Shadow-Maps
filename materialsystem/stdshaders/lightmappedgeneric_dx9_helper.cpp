@@ -987,7 +987,14 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 				}
 			}
 
-			pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMEnabled, 1 );
+			pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMEnabled, 1 );
+
+			// CSM debug shading: 1 = cascade colors, 2 = raw shadow factor
+			ConVarRef r_csm_debug_shading( "r_csm_debug_shading" );
+			BOOL bCSMVizSplit = ( r_csm_debug_shading.GetInt() == 1 );
+			BOOL bCSMVizShadow = ( r_csm_debug_shading.GetInt() == 2 );
+			pShaderAPI->SetBooleanPixelShaderConstant( 1, &bCSMVizSplit, 1 );
+			pShaderAPI->SetBooleanPixelShaderConstant( 2, &bCSMVizShadow, 1 );
 
 			static int nDbgLastCSM = -1;
 			if ( ( bCSMEnabled ? 1 : 0 ) != nDbgLastCSM ) { nDbgLastCSM = bCSMEnabled ? 1 : 0; Msg( "CSM: lmg dynamic -> ps30, bCSMEnabled=%d isCSM=%d qualityMode=%d\n", bCSMEnabled ? 1 : 0, pShaderAPI->IsCascadedShadowMapping() ? 1 : 0, (int)g_pHardwareConfig->GetCSMQuality() ); }

@@ -1818,7 +1818,9 @@ static ConVar mat_fastnobump(		"mat_fastnobump", "0", FCVAR_CHEAT ); // Binds 1-
 // These are not controlled by the material system, but are limited by settings in the material system
 static ConVar r_shadowrendertotexture(		"r_shadowrendertotexture", "0", FCVAR_ARCHIVE );
 static ConVar r_flashlightdepthtexture(		"r_flashlightdepthtexture", "1" );
-static ConVar csm_quality_level( "csm_quality_level", "0", 0, "Cascaded shadow map quality level, [0,3], 0=VERY_LOW, 3=HIGHEST" );
+static ConVar csm_quality_level( "csm_quality_level", "0", 0, "Cascaded shadow map quality level, [0,3], 0=VERY_LOW, 3=HIGHEST" );
+// 1 = paint the world with the cascade each pixel selects, 2 = paint the raw CSM shadow factor (white=lit, black=shadowed)
+static ConVar r_csm_debug_shading( "r_csm_debug_shading", "0", 0, "CSM debug shading (0=off, 1=cascade colors, 2=shadow factor)" );
 #ifndef _X360
 static ConVar r_waterforceexpensive(		"r_waterforceexpensive", "0", FCVAR_ARCHIVE );
 #endif

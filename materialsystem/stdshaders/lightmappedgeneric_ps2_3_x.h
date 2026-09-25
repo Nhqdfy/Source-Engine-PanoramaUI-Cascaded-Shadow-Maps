@@ -44,7 +44,9 @@
 //-----------------------------------------------------------------------------------------------------------------------------
 // CSM (ported from CS:GO materialsystem/stdshaders/lightmappedgeneric_ps2_3_x.h)
 #if ( CASCADED_SHADOW_MAPPING ) && !defined( _X360 ) && !defined( _PS3 ) && !defined( SHADER_MODEL_PS_2_B )
-const bool g_bCSMEnabled : register(b0);
+const bool g_bCSMEnabled : register(b0);
+const bool g_bCSMVizSplit : register(b1);
+const bool g_bCSMVizShadow : register(b2);
 #undef CASCADE_SIZE
 #define CASCADE_SIZE 1
 #endif
@@ -495,7 +497,17 @@ HALF4 main( PS_INPUT i ) : COLOR
 	// CS:GO CSM sampling (csm_common_pc_fxc.h). CS:GO's fully blended path modulates by the
 	// vrad-baked lightmap alpha sun percent (CSM_BLENDING / MapHasLightMapAlphaData); this
 	// tree's lightmaps do not carry that channel yet, so the shadow term is applied directly.
-	if ( g_bCSMEnabled )
+	if ( g_bCSMVizSplit )
+	{
+		// debug: paint the cascade each pixel selects (CS:GO CSMVisualizeSplit)
+		diffuseLighting.rgb = CSMVisualizeSplit( i.worldPos_projPosZ.xyz );
+	}
+	else if ( g_bCSMVizShadow )
+	{
+		// debug: raw shadow factor, white = lit, black = shadowed
+		diffuseLighting.rgb = CSMComputeShadowing( i.worldPos_projPosZ.xyz ).xxx;
+	}
+	else if ( g_bCSMEnabled )
 	{
 		diffuseLighting.rgb *= CSMComputeShadowing( i.worldPos_projPosZ.xyz );
 	}
