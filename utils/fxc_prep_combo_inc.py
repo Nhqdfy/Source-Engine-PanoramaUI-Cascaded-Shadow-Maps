@@ -157,9 +157,14 @@ def main(argv):
         sys.stderr.write('usage: %s <shader.fxc> [out.inc]\n' % argv[0])
         return 1
 
-    fxc = argv[1]
-    shader = os.path.splitext(os.path.basename(fxc))[0]
-    out = argv[2] if len(argv) > 2 else os.path.join(os.path.dirname(fxc), 'fxctmp9', shader + '.inc')
+    # Model shaders share ONE _ps2x.fxc for ps20/ps20b/ps30, so the shader name the engine asks for
+    # (which drives the [ps20b]/[ps30] tag filtering) cannot be derived from the file name.
+    # Pass it as --target=<name>; fall back to the file name otherwise.
+    positional = [a for a in argv[1:] if not a.startswith('--')]
+    target = next((a.split('=', 1)[1] for a in argv[1:] if a.startswith('--target=')), None)
+    fxc = positional[0]
+    shader = target or os.path.splitext(os.path.basename(fxc))[0]
+    out = positional[1] if len(positional) > 1 else os.path.join(os.path.dirname(fxc), 'fxctmp9', shader + '.inc')
 
     static, dynamic = parse_combos(fxc, shader)
     if not static and not dynamic:
