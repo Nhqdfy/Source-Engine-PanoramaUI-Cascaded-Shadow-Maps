@@ -31,71 +31,71 @@
 
 #define MAX_CSM_CASCADES 3
 
-ConVar cl_csm_enabled( "cl_csm_enabled", "1", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_max_shadow_dist("cl_csm_max_shadow_dist", ( IsX360() ) ? "350" : IsPS3() ? "250" : "-1", FCVAR_DEVELOPMENTONLY, "" );
+ConVar cl_csm_enabled( "cl_csm_enabled", "1", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_max_shadow_dist("cl_csm_max_shadow_dist", ( IsX360() ) ? "350" : IsPS3() ? "250" : "-1", FCVAR_CLIENTDLL, "" );
 
-ConVar cl_csm_capture_state( "cl_csm_capture_state", "0", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_clear_captured_state( "cl_csm_clear_captured_state", "0", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_debug_render_ztest( "cl_csm_debug_render_ztest", "1", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_max_visible_dist("cl_csm_max_visible_dist", "5000", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_debug_vis_lo_range("cl_csm_debug_vis_lo_range", ".35", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_debug_vis_hi_range("cl_csm_debug_vis_hi_range", "1.0", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_use_forced_view_matrices("cl_csm_use_forced_view_matrices", "1", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_debug_2d( "cl_csm_debug_2d", "0", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_debug_3d( "cl_csm_debug_3d", "0", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_debug_culling( "cl_csm_debug_culling", "0", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_debug_culling_cascade( "cl_csm_debug_culling_cascade", "-1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_print_culling_planes( "cl_csm_print_culling_planes", "0", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_viz_numplanes( "cl_csm_viz_numplanes", "-1", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_viz_polyhedron_quad_size( "cl_csm_viz_polyhedron_quad_size", "131072", FCVAR_DEVELOPMENTONLY, "" );
+ConVar cl_csm_capture_state( "cl_csm_capture_state", "0", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_clear_captured_state( "cl_csm_clear_captured_state", "0", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_debug_render_ztest( "cl_csm_debug_render_ztest", "1", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_max_visible_dist("cl_csm_max_visible_dist", "5000", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_debug_vis_lo_range("cl_csm_debug_vis_lo_range", ".35", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_debug_vis_hi_range("cl_csm_debug_vis_hi_range", "1.0", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_use_forced_view_matrices("cl_csm_use_forced_view_matrices", "1", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_debug_2d( "cl_csm_debug_2d", "0", FCVAR_CLIENTDLL );
+ConVar cl_csm_debug_3d( "cl_csm_debug_3d", "0", FCVAR_CLIENTDLL );
+ConVar cl_csm_debug_culling( "cl_csm_debug_culling", "0", FCVAR_CLIENTDLL );
+ConVar cl_csm_debug_culling_cascade( "cl_csm_debug_culling_cascade", "-1", FCVAR_CLIENTDLL );
+ConVar cl_csm_print_culling_planes( "cl_csm_print_culling_planes", "0", FCVAR_CLIENTDLL );
+ConVar cl_csm_viz_numplanes( "cl_csm_viz_numplanes", "-1", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_viz_polyhedron_quad_size( "cl_csm_viz_polyhedron_quad_size", "131072", FCVAR_CLIENTDLL, "" );
 
-ConVar cl_csm_use_env_light_direction( "cl_csm_use_env_light_direction", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_rot_override( "cl_csm_rot_override", "0", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_use_env_light_direction( "cl_csm_use_env_light_direction", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_rot_override( "cl_csm_rot_override", "0", FCVAR_CLIENTDLL );
 
 // dust2's angles
-ConVar cl_csm_rot_x( "cl_csm_rot_x", "50", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_rot_y( "cl_csm_rot_y", "43", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_rot_z( "cl_csm_rot_z", "0", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_rot_x( "cl_csm_rot_x", "50", FCVAR_CLIENTDLL );
+ConVar cl_csm_rot_y( "cl_csm_rot_y", "43", FCVAR_CLIENTDLL );
+ConVar cl_csm_rot_z( "cl_csm_rot_z", "0", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_disable_culling( "cl_csm_disable_culling", "0", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_disable_culling( "cl_csm_disable_culling", "0", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_shadows( "cl_csm_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_entity_shadows( "cl_csm_entity_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_static_prop_shadows( "cl_csm_static_prop_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_world_shadows( "cl_csm_world_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_world_shadows_in_viewmodelcascade( "cl_csm_world_shadows_in_viewmodelcascade", ( IsGameConsole() || IsPlatformOSX() ) ? "0" : "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_sprite_shadows( "cl_csm_sprite_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_rope_shadows( "cl_csm_rope_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_translucent_shadows( "cl_csm_translucent_shadows", ( IsGameConsole() || IsPlatformOSX()  )? "0" : "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_translucent_shadows_using_opaque_path( "cl_csm_translucent_shadows_using_opaque_path", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_ignore_disable_shadow_depth_rendering( "cl_csm_ignore_disable_shadow_depth_rendering", "0", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_optimize_static_props( "cl_csm_optimize_static_props", "1", FCVAR_DEVELOPMENTONLY, "Enable/Disable optimal static prop rendering into CSM's (cull static props that make no visual contribution to shadows)" );
+ConVar cl_csm_shadows( "cl_csm_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_entity_shadows( "cl_csm_entity_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_static_prop_shadows( "cl_csm_static_prop_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_world_shadows( "cl_csm_world_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_world_shadows_in_viewmodelcascade( "cl_csm_world_shadows_in_viewmodelcascade", ( IsGameConsole() || IsPlatformOSX() ) ? "0" : "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_sprite_shadows( "cl_csm_sprite_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_rope_shadows( "cl_csm_rope_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_translucent_shadows( "cl_csm_translucent_shadows", ( IsGameConsole() || IsPlatformOSX()  )? "0" : "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_translucent_shadows_using_opaque_path( "cl_csm_translucent_shadows_using_opaque_path", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_ignore_disable_shadow_depth_rendering( "cl_csm_ignore_disable_shadow_depth_rendering", "0", FCVAR_CLIENTDLL );
+ConVar cl_csm_optimize_static_props( "cl_csm_optimize_static_props", "1", FCVAR_CLIENTDLL, "Enable/Disable optimal static prop rendering into CSM's (cull static props that make no visual contribution to shadows)" );
 
-ConVar cl_csm_viewmodel_shadows( "cl_csm_viewmodel_shadows", "1", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_viewmodel_max_shadow_dist( "cl_csm_viewmodel_max_shadow_dist", "21", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_viewmodel_farz( "cl_csm_viewmodel_farz", ( IsGameConsole() || IsPlatformOSX() ) ? "15" : "30", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_viewmodel_max_visible_dist( "cl_csm_viewmodel_max_visible_dist", "1000", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_viewmodel_shadows( "cl_csm_viewmodel_shadows", "1", FCVAR_CLIENTDLL );
+ConVar cl_csm_viewmodel_max_shadow_dist( "cl_csm_viewmodel_max_shadow_dist", "21", FCVAR_CLIENTDLL );
+ConVar cl_csm_viewmodel_farz( "cl_csm_viewmodel_farz", ( IsGameConsole() || IsPlatformOSX() ) ? "15" : "30", FCVAR_CLIENTDLL );
+ConVar cl_csm_viewmodel_max_visible_dist( "cl_csm_viewmodel_max_visible_dist", "1000", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_slopescaledepthbias_c0( "cl_csm_slopescaledepthbias_c0", ( IsGameConsole() || IsPlatformOSX() ) ? "2" : "1.3", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_slopescaledepthbias_c1( "cl_csm_slopescaledepthbias_c1", IsPlatformOSX() ? "4" : "2", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_slopescaledepthbias_c2( "cl_csm_slopescaledepthbias_c2", IsPlatformOSX() ? "4" : "2", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_slopescaledepthbias_c3( "cl_csm_slopescaledepthbias_c3", "2", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_slopescaledepthbias_c0( "cl_csm_slopescaledepthbias_c0", ( IsGameConsole() || IsPlatformOSX() ) ? "2" : "1.3", FCVAR_CLIENTDLL );
+ConVar cl_csm_slopescaledepthbias_c1( "cl_csm_slopescaledepthbias_c1", IsPlatformOSX() ? "4" : "2", FCVAR_CLIENTDLL );
+ConVar cl_csm_slopescaledepthbias_c2( "cl_csm_slopescaledepthbias_c2", IsPlatformOSX() ? "4" : "2", FCVAR_CLIENTDLL );
+ConVar cl_csm_slopescaledepthbias_c3( "cl_csm_slopescaledepthbias_c3", "2", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_depthbias_c0(	"cl_csm_depthbias_c0", ( IsGameConsole() || IsPlatformOSX() ) ? ".000005" : ".000025", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_depthbias_c1(	"cl_csm_depthbias_c1", IsPlatformOSX() ? "2" : ".000025", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_depthbias_c2(	"cl_csm_depthbias_c2", IsPlatformOSX() ? "2" : ".000025", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_depthbias_c3(	"cl_csm_depthbias_c3", ".000025", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_depthbias_c0(	"cl_csm_depthbias_c0", ( IsGameConsole() || IsPlatformOSX() ) ? ".000005" : ".000025", FCVAR_CLIENTDLL );
+ConVar cl_csm_depthbias_c1(	"cl_csm_depthbias_c1", IsPlatformOSX() ? "2" : ".000025", FCVAR_CLIENTDLL );
+ConVar cl_csm_depthbias_c2(	"cl_csm_depthbias_c2", IsPlatformOSX() ? "2" : ".000025", FCVAR_CLIENTDLL );
+ConVar cl_csm_depthbias_c3(	"cl_csm_depthbias_c3", ".000025", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_viewmodel_slopescaledepthbias( "cl_csm_viewmodel_slopescaledepthbias", ( IsGameConsole() || IsPlatformOSX() ) ? "2" : "1.5", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_viewmodel_depthbias( "cl_csm_viewmodel_depthbias", ( IsGameConsole() || IsPlatformOSX() ) ? ".000005" : ".00005", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_viewmodel_slopescaledepthbias( "cl_csm_viewmodel_slopescaledepthbias", ( IsGameConsole() || IsPlatformOSX() ) ? "2" : "1.5", FCVAR_CLIENTDLL );
+ConVar cl_csm_viewmodel_depthbias( "cl_csm_viewmodel_depthbias", ( IsGameConsole() || IsPlatformOSX() ) ? ".000005" : ".00005", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_hack_proj_matrices_for_cull_debugging( "cl_csm_hack_proj_matrices_for_cull_debugging", "0", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_hack_proj_matrices_for_cull_debugging( "cl_csm_hack_proj_matrices_for_cull_debugging", "0", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_xlat_continuity( "cl_csm_xlat_continuity", "1", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_xlat_continuity( "cl_csm_xlat_continuity", "1", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_force_no_csm_in_reflections( "cl_csm_force_no_csm_in_reflections", "0", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_force_no_csm_in_reflections( "cl_csm_force_no_csm_in_reflections", "0", FCVAR_CLIENTDLL );
 
-ConVar cl_csm_cull_small_prop_threshold_volume( "cl_csm_cull_small_prop_threshold_volume", "2000.0f ", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_cull_small_prop_threshold_volume( "cl_csm_cull_small_prop_threshold_volume", "2000.0f ", FCVAR_CLIENTDLL );
 
 void CC_CSM_Status( const CCommand& args );
 static ConCommand cl_csm_status("cl_csm_status", CC_CSM_Status, "Usage:\n   cl_csm_status\n", 0);

@@ -10,8 +10,8 @@
 #include "tier0/memdbgon.h"
 
 // We don't currently support smooth cascade transitioning on Gameconsoles. This convar must be adjusted if we ever do.
-ConVar cl_csm_shadow_split_lerp_factor_range( "cl_csm_shadow_split_lerp_factor_range", IsGameConsole() ? "0" : ".2", FCVAR_DEVELOPMENTONLY );
-ConVar cl_csm_shadow_split_radial_dist_lerp_factor_multiplier( "cl_csm_shadow_split_radial_dist_lerp_factor_multiplier", IsGameConsole() ? ".75" : ".85", FCVAR_DEVELOPMENTONLY );
+ConVar cl_csm_shadow_split_lerp_factor_range( "cl_csm_shadow_split_lerp_factor_range", IsGameConsole() ? "0" : ".2", FCVAR_CLIENTDLL );
+ConVar cl_csm_shadow_split_radial_dist_lerp_factor_multiplier( "cl_csm_shadow_split_radial_dist_lerp_factor_multiplier", IsGameConsole() ? ".75" : ".85", FCVAR_CLIENTDLL );
 
 namespace CCSMFrustumDefinition
 {
@@ -143,11 +143,11 @@ void CCSMParallelSplit::Init( uint nMaxShadowBufferSize, uint nMaxCascadeSize )
 	m_nShadowAtlasHeight = m_nShadowBufferSize * 2;
 }
 
-ConVar cl_csm_parallel_split_log_lin_lerp( "cl_csm_parallel_split_log_lin_lerp", ".94", FCVAR_DEVELOPMENTONLY, "" );
+ConVar cl_csm_parallel_split_log_lin_lerp( "cl_csm_parallel_split_log_lin_lerp", ".94", FCVAR_CLIENTDLL, "" );
 
-ConVar cl_csm_parallel_split_dist1( "cl_csm_parallel_split_dist1", "-1", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_parallel_split_dist2( "cl_csm_parallel_split_dist2", "-1", FCVAR_DEVELOPMENTONLY, "" );
-ConVar cl_csm_parallel_split_dist3( "cl_csm_parallel_split_dist3", "-1", FCVAR_DEVELOPMENTONLY, "" );
+ConVar cl_csm_parallel_split_dist1( "cl_csm_parallel_split_dist1", "-1", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_parallel_split_dist2( "cl_csm_parallel_split_dist2", "-1", FCVAR_CLIENTDLL, "" );
+ConVar cl_csm_parallel_split_dist3( "cl_csm_parallel_split_dist3", "-1", FCVAR_CLIENTDLL, "" );
 
 float CCSMParallelSplit::CalculateSplitPlaneDistance( int nSplit, int nShadowSplits, float flMaxShadowDistance, float flZNear, float flZFar )
 {
