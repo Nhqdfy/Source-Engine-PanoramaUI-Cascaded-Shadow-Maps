@@ -13,6 +13,7 @@
 #include "lightmappedgeneric_ps20.inc"
 #include "lightmappedgeneric_vs20.inc"
 #include "lightmappedgeneric_ps20b.inc"
+#include "lightmappedgeneric_ps30.inc"
 
 #include "tier0/memdbgon.h"
 
@@ -545,7 +546,47 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 #endif
 				SET_STATIC_VERTEX_SHADER( lightmappedgeneric_vs20 );
 
-				if ( g_pHardwareConfig->SupportsPixelShaders_2_b() )
+				// CSM: use the ps_3_0 variant when CSM is available so the cascade atlas can be sampled.
+				// (CS:GO uses ps_3_0 for every lightmappedgeneric draw on dx9.5+; here it is scoped to
+				//  CSM-capable hardware so the proven ps20b path is untouched otherwise.)
+				if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() )
+				{
+					pShaderShadow->EnableTexture( SHADER_SAMPLER15, true );
+					pShaderShadow->SetShadowDepthFiltering( SHADER_SAMPLER15 );
+
+					DECLARE_STATIC_PIXEL_SHADER( lightmappedgeneric_ps30 );
+					SET_STATIC_PIXEL_SHADER_COMBO( BASETEXTURE2, hasBaseTexture2 );
+					SET_STATIC_PIXEL_SHADER_COMBO( DETAILTEXTURE, hasDetailTexture );
+					SET_STATIC_PIXEL_SHADER_COMBO( BUMPMAP,  bumpmap_variant );
+					SET_STATIC_PIXEL_SHADER_COMBO( BUMPMAP2, hasBump2 );
+					SET_STATIC_PIXEL_SHADER_COMBO( BUMPMASK, hasBumpMask );
+					SET_STATIC_PIXEL_SHADER_COMBO( DIFFUSEBUMPMAP,  hasDiffuseBumpmap );
+					SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP,  hasEnvmap );
+					SET_STATIC_PIXEL_SHADER_COMBO( ENVMAPMASK,  hasEnvmapMask );
+					SET_STATIC_PIXEL_SHADER_COMBO( BASEALPHAENVMAPMASK,  hasBaseAlphaEnvmapMask );
+					SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM,  hasSelfIllum );
+					SET_STATIC_PIXEL_SHADER_COMBO( NORMALMAPALPHAENVMAPMASK,  hasNormalMapAlphaEnvmapMask );
+					SET_STATIC_PIXEL_SHADER_COMBO( BASETEXTURENOENVMAP,  params[info.m_nBaseTextureNoEnvmap]->GetIntValue() );
+					SET_STATIC_PIXEL_SHADER_COMBO( BASETEXTURE2NOENVMAP, params[info.m_nBaseTexture2NoEnvmap]->GetIntValue() );
+					SET_STATIC_PIXEL_SHADER_COMBO( WARPLIGHTING, hasLightWarpTexture );
+					SET_STATIC_PIXEL_SHADER_COMBO( FANCY_BLENDING, bHasBlendModulateTexture );
+					SET_STATIC_PIXEL_SHADER_COMBO( MASKEDBLENDING, bMaskedBlending);
+					SET_STATIC_PIXEL_SHADER_COMBO( RELIEF_MAPPING, bReliefMapping );
+					SET_STATIC_PIXEL_SHADER_COMBO( SEAMLESS, bSeamlessMapping );
+					SET_STATIC_PIXEL_SHADER_COMBO( OUTLINE, bHasOutline );
+					SET_STATIC_PIXEL_SHADER_COMBO( SOFTEDGES, bHasSoftEdges );
+					SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
+					SET_STATIC_PIXEL_SHADER_COMBO( NORMAL_DECODE_MODE, (int)  NORMAL_DECODE_NONE );
+					SET_STATIC_PIXEL_SHADER_COMBO( NORMALMASK_DECODE_MODE, (int) NORMAL_DECODE_NONE );
+#ifdef _X360
+					SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHT, hasFlashlight);
+#endif
+					SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, 1 );
+					SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, g_pHardwareConfig->GetCSMShaderMode( g_pHardwareConfig->GetCSMQuality() ) );
+					SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
+					SET_STATIC_PIXEL_SHADER( lightmappedgeneric_ps30 );
+				}
+				else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() )
 				{
 					DECLARE_STATIC_PIXEL_SHADER( lightmappedgeneric_ps20b );
 					SET_STATIC_PIXEL_SHADER_COMBO( BASETEXTURE2, hasBaseTexture2 );
@@ -915,7 +956,36 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 		}
 
 		float envmapContrast = params[info.m_nEnvmapContrast]->GetFloatValue();
-		if ( g_pHardwareConfig->SupportsPixelShaders_2_b() )
+		if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() )
+		{
+			// CSM: bind the cascade shadow depth atlas and push the cascade state to the shader
+			BOOL bCSMEnabled = pShaderAPI->IsCascadedShadowMapping() && !( g_pConfig->nFullbright == 1 );
+			if ( bCSMEnabled )
+			{
+				ITexture *pDepthTextureAtlas = NULL;
+				const CascadedShadowMappingState_t &cascadeState = pShaderAPI->GetCascadedShadowMappingState( &pDepthTextureAtlas, true );
+
+				if ( pDepthTextureAtlas )
+					pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
+
+				DynamicCmdsOut.SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+			}
+
+			pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMEnabled, 1 );
+
+			DECLARE_DYNAMIC_PIXEL_SHADER( lightmappedgeneric_ps30 );
+			SET_DYNAMIC_PIXEL_SHADER_COMBO( FASTPATH,  bPixelShaderFastPath || pContextData->m_bPixelShaderForceFastPathBecauseOutline );
+ 			SET_DYNAMIC_PIXEL_SHADER_COMBO( FASTPATHENVMAPCONTRAST,  bPixelShaderFastPath && envmapContrast == 1.0f );
+			SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+			
+			// Don't write fog to alpha if we're using translucency
+			SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITE_DEPTH_TO_DESTALPHA, bWriteDepthToAlpha );
+			SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITEWATERFOGTODESTALPHA, bWriteWaterFogToAlpha );
+			SET_DYNAMIC_PIXEL_SHADER_COMBO( LIGHTING_PREVIEW, nFixedLightingMode );
+			
+			SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, lightmappedgeneric_ps30 );
+		}
+		else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() )
 		{
 			DECLARE_DYNAMIC_PIXEL_SHADER( lightmappedgeneric_ps20b );
 			SET_DYNAMIC_PIXEL_SHADER_COMBO( FASTPATH,  bPixelShaderFastPath || pContextData->m_bPixelShaderForceFastPathBecauseOutline );

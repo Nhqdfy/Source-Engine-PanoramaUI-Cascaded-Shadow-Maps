@@ -41,6 +41,27 @@
 #include "common_flashlight_fxc.h"
 #include "common_lightmappedgeneric_fxc.h"
 
+//-----------------------------------------------------------------------------------------------------------------------------
+// CSM (ported from CS:GO materialsystem/stdshaders/lightmappedgeneric_ps2_3_x.h)
+#if ( CASCADED_SHADOW_MAPPING ) && !defined( _X360 ) && !defined( _PS3 ) && !defined( SHADER_MODEL_PS_2_B )
+const bool g_bCSMEnabled : register(b0);
+#undef CASCADE_SIZE
+#define CASCADE_SIZE 1
+#endif
+
+#if ( CASCADE_SIZE > 0 )
+	#undef CASCADE_SIZE
+	#define CASCADE_SIZE 3
+#endif
+
+#if ( ( CASCADED_SHADOW_MAPPING ) && ( CASCADE_SIZE > 0 ) )
+	sampler CSMDepthAtlasSampler : register( s15 );
+
+	#include "csm_common_fxc.h"
+	#include "csm_blending_fxc.h"
+#endif
+
+
 #if SEAMLESS
 #define USE_FAST_PATH 1
 #else
@@ -465,6 +486,16 @@ HALF4 main( PS_INPUT i ) : COLOR
 	else
 	{
 		diffuseLighting = lightmapColor1 * g_TintValuesAndLightmapScale.rgb;
+
+#if ( CASCADED_SHADOW_MAPPING ) && ( CASCADE_SIZE > 0 )
+	// CS:GO CSM sampling (csm_common_pc_fxc.h). CS:GO's fully blended path modulates by the
+	// vrad-baked lightmap alpha sun percent (CSM_BLENDING / MapHasLightMapAlphaData); this
+	// tree's lightmaps do not carry that channel yet, so the shadow term is applied directly.
+	if ( g_bCSMEnabled )
+	{
+		diffuseLighting.rgb *= CSMComputeShadowing( i.worldPos_projPosZ.xyz );
+	}
+#endif
 	}
 
 #if WARPLIGHTING && ( SEAMLESS == 0 )
