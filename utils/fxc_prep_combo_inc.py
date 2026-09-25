@@ -129,7 +129,8 @@ def emit_class(lines, shader, combos, weights, is_static):
         lines.append('#endif // _DEBUG')
         lines.append('\t\tm_n%s = 0;' % name)
     lines.append('\t}')
-    lines.append('\tint GetIndex()')
+    # SE port: the combo index is 64 bit - CS:GO's map/shader combo tables exceed INT_MAX
+    lines.append('\tint64 GetIndex()')
     lines.append('\t{')
     lines.append('\t\t// Asserts to make sure that we aren\'t using any skipped combinations.')
     lines.append('\t\t// Asserts to make sure that we are setting all of the combination vars.')

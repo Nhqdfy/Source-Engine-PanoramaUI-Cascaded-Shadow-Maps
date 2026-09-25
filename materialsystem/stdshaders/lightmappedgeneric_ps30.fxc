@@ -13,12 +13,9 @@
 //
 //   * the combos this tree sets for ordinary materials are declared first, so they get the
 //     cheapest weights (see the GetIndex() in the generated .inc).
-//   * OUTLINE, SOFTEDGES, BASETEXTURENOENVMAP and BASETEXTURE2NOENVMAP are declared 0..0 for
-//     ps_3_0.  Those four bits are exactly what the CSM combos (1 * 4 * 2) cost, so the ps_3_0
-//     static index space stays identical to the existing ps_3_0-compatible ps20b one
-//     (96 * 9437184 = max index 905969568 < INT_MAX).
-//   * materials that need any of those four combos keep using the ps20b path, which still
-//     implements them - see the ps_3_0 branch of DrawLightmappedGeneric_DX9_Internal.
+//   * the shader combo index is 64 bit now (public/shaderapi/ishadershadow.h), so this file no
+//     longer trades combos away to stay inside INT_MAX: OUTLINE / SOFTEDGES /
+//     BASETEXTURENOENVMAP / BASETEXTURE2NOENVMAP carry their real ranges again, like CS:GO.
 //
 // STATIC: "CSM_MODE"						"0..3"	[ps30] [PC]
 // STATIC: "DETAIL_BLEND_MODE"				"0..11"
@@ -40,10 +37,10 @@
 // STATIC: "BUMPMASK"						"0..1"
 // STATIC: "WARPLIGHTING"					"0..1"
 // STATIC: "RELIEF_MAPPING"					"0..0"	[ps20b] [ps30]
-// STATIC: "OUTLINE"						"0..0"	[ps30] [PC]
-// STATIC: "SOFTEDGES"						"0..0"	[ps30] [PC]
-// STATIC: "BASETEXTURENOENVMAP"			"0..0"	[ps30] [PC]
-// STATIC: "BASETEXTURE2NOENVMAP"			"0..0"	[ps30] [PC]
+// STATIC: "OUTLINE"						"0..1"	[ps30] [PC]
+// STATIC: "SOFTEDGES"						"0..1"	[ps30] [PC]
+// STATIC: "BASETEXTURENOENVMAP"			"0..1"	[ps30] [PC]
+// STATIC: "BASETEXTURE2NOENVMAP"			"0..1"	[ps30] [PC]
 // STATIC: "NORMAL_DECODE_MODE"				"0..0"	[PC]
 // STATIC: "NORMALMASK_DECODE_MODE"			"0..0"	[PC]
 // STATIC: "FLASHLIGHT"						"0..1"	[ps20b] [ps30] [XBOX]

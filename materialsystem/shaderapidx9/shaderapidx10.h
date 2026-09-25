@@ -383,8 +383,8 @@ private:
 	virtual void DestroyVertexBuffers( bool bExitingLevel = false );
 
 	// Sets the vertex and pixel shaders
-	void SetVertexShaderIndex( int vshIndex );
-	void SetPixelShaderIndex( int pshIndex );
+	void SetVertexShaderIndex( int64 vshIndex );
+	void SetPixelShaderIndex( int64 pshIndex );
 
 	// Sets the constant register for vertex and pixel shaders
 	void SetVertexShaderConstant( int var, float const* pVec, int numConst = 1, bool bForce = false );

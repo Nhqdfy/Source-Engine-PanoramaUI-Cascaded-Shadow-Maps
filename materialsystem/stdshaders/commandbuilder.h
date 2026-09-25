@@ -358,13 +358,13 @@ public:
 		BindTexture( nSampler2, hTexture );
 	}
 
-	FORCEINLINE void SetPixelShaderIndex( int nIndex )
+	FORCEINLINE void SetPixelShaderIndex( int64 nIndex )
 	{
 		m_Storage.PutInt( CBCMD_SET_PSHINDEX );
 		m_Storage.PutInt( nIndex );
 	}
 
-	FORCEINLINE void SetVertexShaderIndex( int nIndex )
+	FORCEINLINE void SetVertexShaderIndex( int64 nIndex )
 	{
 		m_Storage.PutInt( CBCMD_SET_VSHINDEX );
 		m_Storage.PutInt( nIndex );

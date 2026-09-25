@@ -433,7 +433,7 @@ private:
 public:
 	void SetOUTLINE( int i )
 	{
-		Assert( i >= 0 && i <= 0 );
+		Assert( i >= 0 && i <= 1 );
 		m_nOUTLINE = i;
 #ifdef _DEBUG
 		m_bOUTLINE = true;
@@ -454,7 +454,7 @@ private:
 public:
 	void SetSOFTEDGES( int i )
 	{
-		Assert( i >= 0 && i <= 0 );
+		Assert( i >= 0 && i <= 1 );
 		m_nSOFTEDGES = i;
 #ifdef _DEBUG
 		m_bSOFTEDGES = true;
@@ -475,7 +475,7 @@ private:
 public:
 	void SetBASETEXTURENOENVMAP( int i )
 	{
-		Assert( i >= 0 && i <= 0 );
+		Assert( i >= 0 && i <= 1 );
 		m_nBASETEXTURENOENVMAP = i;
 #ifdef _DEBUG
 		m_bBASETEXTURENOENVMAP = true;
@@ -496,7 +496,7 @@ private:
 public:
 	void SetBASETEXTURE2NOENVMAP( int i )
 	{
-		Assert( i >= 0 && i <= 0 );
+		Assert( i >= 0 && i <= 1 );
 		m_nBASETEXTURE2NOENVMAP = i;
 #ifdef _DEBUG
 		m_bBASETEXTURE2NOENVMAP = true;
@@ -659,7 +659,7 @@ public:
 #endif // _DEBUG
 		m_nNORMALMASK_DECODE_MODE = 0;
 	}
-	int GetIndex()
+	int64 GetIndex()
 	{
 		// Asserts to make sure that we aren't using any skipped combinations.
 		// Asserts to make sure that we are setting all of the combination vars.
@@ -667,7 +667,7 @@ public:
 		bool bAllStaticVarsDefined = m_bCSM_MODE && m_bDETAIL_BLEND_MODE && m_bBUMPMAP && m_bCASCADED_SHADOW_MAPPING && m_bDIFFUSEBUMPMAP && m_bBASETEXTURE2 && m_bCUBEMAP && m_bENVMAPMASK && m_bSELFILLUM && m_bNORMALMAPALPHAENVMAPMASK && m_bBASEALPHAENVMAPMASK && m_bDETAILTEXTURE && m_bBUMPMAP2 && m_bCSM_BLENDING && m_bSEAMLESS && m_bMASKEDBLENDING && m_bFANCY_BLENDING && m_bBUMPMASK && m_bWARPLIGHTING && m_bRELIEF_MAPPING && m_bOUTLINE && m_bSOFTEDGES && m_bBASETEXTURENOENVMAP && m_bBASETEXTURE2NOENVMAP && m_bNORMAL_DECODE_MODE && m_bNORMALMASK_DECODE_MODE;
 		Assert( bAllStaticVarsDefined );
 #endif // _DEBUG
-		return ( 96 * m_nCSM_MODE ) + ( 384 * m_nDETAIL_BLEND_MODE ) + ( 4608 * m_nBUMPMAP ) + ( 13824 * m_nCASCADED_SHADOW_MAPPING ) + ( 27648 * m_nDIFFUSEBUMPMAP ) + ( 55296 * m_nBASETEXTURE2 ) + ( 110592 * m_nCUBEMAP ) + ( 221184 * m_nENVMAPMASK ) + ( 442368 * m_nSELFILLUM ) + ( 884736 * m_nNORMALMAPALPHAENVMAPMASK ) + ( 1769472 * m_nBASEALPHAENVMAPMASK ) + ( 3538944 * m_nDETAILTEXTURE ) + ( 7077888 * m_nBUMPMAP2 ) + ( 14155776 * m_nCSM_BLENDING ) + ( 28311552 * m_nSEAMLESS ) + ( 56623104 * m_nMASKEDBLENDING ) + ( 113246208 * m_nFANCY_BLENDING ) + ( 226492416 * m_nBUMPMASK ) + ( 452984832 * m_nWARPLIGHTING ) + ( 905969664 * m_nRELIEF_MAPPING ) + ( 905969664 * m_nOUTLINE ) + ( 905969664 * m_nSOFTEDGES ) + ( 905969664 * m_nBASETEXTURENOENVMAP ) + ( 905969664 * m_nBASETEXTURE2NOENVMAP ) + ( 905969664 * m_nNORMAL_DECODE_MODE ) + ( 905969664 * m_nNORMALMASK_DECODE_MODE ) + 0;
+		return ( 96 * m_nCSM_MODE ) + ( 384 * m_nDETAIL_BLEND_MODE ) + ( 4608 * m_nBUMPMAP ) + ( 13824 * m_nCASCADED_SHADOW_MAPPING ) + ( 27648 * m_nDIFFUSEBUMPMAP ) + ( 55296 * m_nBASETEXTURE2 ) + ( 110592 * m_nCUBEMAP ) + ( 221184 * m_nENVMAPMASK ) + ( 442368 * m_nSELFILLUM ) + ( 884736 * m_nNORMALMAPALPHAENVMAPMASK ) + ( 1769472 * m_nBASEALPHAENVMAPMASK ) + ( 3538944 * m_nDETAILTEXTURE ) + ( 7077888 * m_nBUMPMAP2 ) + ( 14155776 * m_nCSM_BLENDING ) + ( 28311552 * m_nSEAMLESS ) + ( 56623104 * m_nMASKEDBLENDING ) + ( 113246208 * m_nFANCY_BLENDING ) + ( 226492416 * m_nBUMPMASK ) + ( 452984832 * m_nWARPLIGHTING ) + ( 905969664 * m_nRELIEF_MAPPING ) + ( 905969664 * m_nOUTLINE ) + ( 1811939328 * m_nSOFTEDGES ) + ( 3623878656 * m_nBASETEXTURENOENVMAP ) + ( 7247757312 * m_nBASETEXTURE2NOENVMAP ) + ( 14495514624 * m_nNORMAL_DECODE_MODE ) + ( 14495514624 * m_nNORMALMASK_DECODE_MODE ) + 0;
 	}
 };
 #define shaderStaticTest_lightmappedgeneric_ps30 psh_forgot_to_set_static_CSM_MODE + psh_forgot_to_set_static_DETAIL_BLEND_MODE + psh_forgot_to_set_static_BUMPMAP + psh_forgot_to_set_static_CASCADED_SHADOW_MAPPING + psh_forgot_to_set_static_DIFFUSEBUMPMAP + psh_forgot_to_set_static_BASETEXTURE2 + psh_forgot_to_set_static_CUBEMAP + psh_forgot_to_set_static_ENVMAPMASK + psh_forgot_to_set_static_SELFILLUM + psh_forgot_to_set_static_NORMALMAPALPHAENVMAPMASK + psh_forgot_to_set_static_BASEALPHAENVMAPMASK + psh_forgot_to_set_static_DETAILTEXTURE + psh_forgot_to_set_static_BUMPMAP2 + psh_forgot_to_set_static_CSM_BLENDING + psh_forgot_to_set_static_SEAMLESS + psh_forgot_to_set_static_MASKEDBLENDING + psh_forgot_to_set_static_FANCY_BLENDING + psh_forgot_to_set_static_BUMPMASK + psh_forgot_to_set_static_WARPLIGHTING + psh_forgot_to_set_static_RELIEF_MAPPING + psh_forgot_to_set_static_OUTLINE + psh_forgot_to_set_static_SOFTEDGES + psh_forgot_to_set_static_BASETEXTURENOENVMAP + psh_forgot_to_set_static_BASETEXTURE2NOENVMAP + psh_forgot_to_set_static_NORMAL_DECODE_MODE + psh_forgot_to_set_static_NORMALMASK_DECODE_MODE + 0
@@ -852,7 +852,7 @@ public:
 #endif // _DEBUG
 		m_nCASCADE_SIZE = 0;
 	}
-	int GetIndex()
+	int64 GetIndex()
 	{
 		// Asserts to make sure that we aren't using any skipped combinations.
 		// Asserts to make sure that we are setting all of the combination vars.

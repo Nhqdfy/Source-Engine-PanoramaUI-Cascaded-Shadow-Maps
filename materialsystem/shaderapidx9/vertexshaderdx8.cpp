@@ -565,8 +565,8 @@ public:
 	virtual void				DestroyVertexShader( VertexShaderHandle_t hShader );
 	virtual PixelShaderHandle_t CreatePixelShader( IShaderBuffer* pShaderBuffer );
 	virtual void				DestroyPixelShader( PixelShaderHandle_t hShader );
-	virtual VertexShader_t		CreateVertexShader( const char *pVertexShaderFile, int nStaticVshIndex = 0, char *debugLabel = NULL );
-	virtual PixelShader_t		CreatePixelShader( const char *pPixelShaderFile, int nStaticPshIndex = 0, char *debugLabel = NULL );
+	virtual VertexShader_t		CreateVertexShader( const char *pVertexShaderFile, int64 nStaticVshIndex = 0, char *debugLabel = NULL );
+	virtual PixelShader_t		CreatePixelShader( const char *pPixelShaderFile, int64 nStaticPshIndex = 0, char *debugLabel = NULL );
 	virtual void				SetVertexShader( VertexShader_t shader );
 	virtual void				SetPixelShader( PixelShader_t shader );
 	virtual void				BindVertexShader( VertexShaderHandle_t shader );
@@ -613,7 +613,7 @@ private:
 	struct ShaderLookup_t
 	{
 		CUtlSymbol				m_Name;
-		int						m_nStaticIndex;
+		int64					m_nStaticIndex;
 		ShaderStaticCombos_t	m_ShaderStaticCombos;
 		DWORD					m_Flags;
 		int						m_nRefCount;
@@ -708,7 +708,7 @@ private:
 #ifdef DYNAMIC_SHADER_COMPILE
 	bool					LoadAndCreateShaders_Dynamic( ShaderLookup_t &lookup, bool bVertexShader );
 	const ShaderCombos_t	*FindOrCreateShaderCombos( const char *pShaderName );
-	HardwareShader_t		CompileShader( const char *pShaderName, int nStaticIndex, int nDynamicIndex, bool bVertexShader );
+	HardwareShader_t		CompileShader( const char *pShaderName, int64 nStaticIndex, int nDynamicIndex, bool bVertexShader );
 #endif
 
 	void					DisassembleShader( ShaderLookup_t *pLookup, int dynamicCombo, uint8 *pByteCode );
@@ -1588,7 +1588,7 @@ static ConVar mat_flushshaders_generate_updbs( "mat_flushshaders_generate_updbs"
 #endif
 
 HardwareShader_t CShaderManager::CompileShader( const char *pShaderName, 
-												int nStaticIndex, int nDynamicIndex, bool bVertexShader )
+												int64 nStaticIndex, int nDynamicIndex, bool bVertexShader )
 {
 	VPROF_BUDGET( "CompileShader", "CompileShader" );
 	Assert( m_ShaderNameToCombos.Defined( pShaderName ) );
@@ -1621,7 +1621,7 @@ HardwareShader_t CShaderManager::CompileShader( const char *pShaderName,
 	// plus 1 for null termination, plus 1 for #define SHADER_MODEL_*, and plus 1 for #define _X360 on 360
 	macros.SetCount( combos.m_DynamicCombos.Count() + combos.m_StaticCombos.Count() + 2 + ( IsX360() ? 1 : 0 ) );
 
-	int nCombo = nStaticIndex + nDynamicIndex;
+	int64 nCombo = nStaticIndex + nDynamicIndex;
 	int macroIndex = 0;
 	int i;
 	for( i = 0; i < combos.m_DynamicCombos.Count(); i++ )
@@ -3141,7 +3141,7 @@ bool	CShaderManager::LoadShaderCache( char *cacheName )
 //-----------------------------------------------------------------------------
 // Creates and destroys vertex shaders
 //-----------------------------------------------------------------------------
-VertexShader_t CShaderManager::CreateVertexShader( const char *pFileName, int nStaticVshIndex, char *debugLabel )
+VertexShader_t CShaderManager::CreateVertexShader( const char *pFileName, int64 nStaticVshIndex, char *debugLabel )
 {
 	MEM_ALLOC_CREDIT();
 
@@ -3179,7 +3179,7 @@ VertexShader_t CShaderManager::CreateVertexShader( const char *pFileName, int nS
 //-----------------------------------------------------------------------------
 // Create pixel shader
 //-----------------------------------------------------------------------------
-PixelShader_t CShaderManager::CreatePixelShader( const char *pFileName, int nStaticPshIndex, char *debugLabel )
+PixelShader_t CShaderManager::CreatePixelShader( const char *pFileName, int64 nStaticPshIndex, char *debugLabel )
 {
 	MEM_ALLOC_CREDIT();
 

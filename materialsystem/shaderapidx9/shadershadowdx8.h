@@ -130,8 +130,8 @@ struct ShadowShaderState_t
 	PixelShader_t	m_PixelShader;
 
 	// The static vertex + pixel shader indices
-	int				m_nStaticVshIndex;
-	int				m_nStaticPshIndex;
+	int64				m_nStaticVshIndex;
+	int64				m_nStaticPshIndex;
 
 	// Vertex data used by this snapshot
 	// Note that the vertex format actually used will be the
