@@ -112,6 +112,7 @@ public:
 	void		PreTranslate(const Vector &vTrans);
 	void		PostTranslate(const Vector &vTrans);
 
+	matrix3x4_t& As3x4();
 	const matrix3x4_t& As3x4() const;
 	void		CopyFrom3x4( const matrix3x4_t &m3x4 );
 	void		Set3x4( const matrix3x4_t& matrix3x4 );
@@ -858,6 +859,11 @@ inline void VMatrix::PostTranslate(const Vector &vTrans)
 inline const matrix3x4_t& VMatrix::As3x4() const
 {
 	return *((const matrix3x4_t*)this);
+}
+
+inline matrix3x4_t& VMatrix::As3x4()
+{
+	return *((matrix3x4_t*)this);
 }
 
 inline void VMatrix::CopyFrom3x4( const matrix3x4_t &m3x4 )
@@ -1727,25 +1733,13 @@ inline VMatrix SetupMatrixOrgAngles(const Vector &origin, const QAngle &vAngles)
 
 inline bool PlaneIntersection( const VPlane &vp1, const VPlane &vp2, const VPlane &vp3, Vector &vOut )
 {
-	VMatrix mMat, mInverse;
-
-	mMat.Init(
-		vp1.m_Normal.x, vp1.m_Normal.y, vp1.m_Normal.z, -vp1.m_Dist,
-		vp2.m_Normal.x, vp2.m_Normal.y, vp2.m_Normal.z, -vp2.m_Dist,
-		vp3.m_Normal.x, vp3.m_Normal.y, vp3.m_Normal.z, -vp3.m_Dist,
-		0.0f, 0.0f, 0.0f, 1.0f
-		);
-	
-	if(mMat.InverseGeneral(mInverse))
-	{
-		//vOut = mInverse * Vector(0.0f, 0.0f, 0.0f);
-		mInverse.GetTranslation( vOut );
-		return true;
-	}
-	else
-	{
+	Vector v2Cross3 = CrossProduct( vp2.m_Normal, vp3.m_Normal );
+	float flDenom = DotProduct( vp1.m_Normal, v2Cross3 );
+	if ( fabs( flDenom ) < FLT_EPSILON )
 		return false;
-	}
+	Vector vRet = vp1.m_Dist * v2Cross3 + vp2.m_Dist * CrossProduct( vp3.m_Normal, vp1.m_Normal ) + vp3.m_Dist * CrossProduct( vp1.m_Normal, vp2.m_Normal );
+	vOut = vRet * ( 1.0 / flDenom );
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -1957,52 +1951,23 @@ inline void CalculateSphereFromProjectionMatrix( const VMatrix &worldToVolume, V
 }
 
 
-static inline void FrustumPlanesFromMatrixHelper( const VMatrix &shadowToWorld, const Vector &p1, const Vector &p2, const Vector &p3, 
-												 Vector &normal, float &dist )
+void FrustumPlanesFromMatrix( const VMatrix &clipToWorld, Frustum_t &frustum );
+
+inline Vector4D MatrixGetRowAsVector4D( const VMatrix &src, int nRow )
 {
-	Vector world1, world2, world3;
-	Vector3DMultiplyPositionProjective( shadowToWorld, p1, world1 );
-	Vector3DMultiplyPositionProjective( shadowToWorld, p2, world2 );
-	Vector3DMultiplyPositionProjective( shadowToWorld, p3, world3 );
-
-	Vector v1, v2;
-	VectorSubtract( world2, world1, v1 );
-	VectorSubtract( world3, world1, v2 );
-
-	CrossProduct( v1, v2, normal );
-	VectorNormalize( normal );
-	dist = DotProduct( normal, world1 );	
+	Assert( (nRow >= 0) && (nRow <= 3) );
+	return Vector4D( src[nRow] );
 }
 
-inline void FrustumPlanesFromMatrix( const VMatrix &clipToWorld, Frustum_t &frustum )
-{
-	Vector normal;
-	float dist;
-
-	FrustumPlanesFromMatrixHelper( clipToWorld, 
-		Vector( 0.0f, 0.0f, 0.0f ), Vector( 1.0f, 0.0f, 0.0f ), Vector( 0.0f, 1.0f, 0.0f ), normal, dist );
-	frustum.SetPlane( FRUSTUM_NEARZ, PLANE_ANYZ, normal, dist );
-
-	FrustumPlanesFromMatrixHelper( clipToWorld, 
-		Vector( 0.0f, 0.0f, 1.0f ), Vector( 0.0f, 1.0f, 1.0f ), Vector( 1.0f, 0.0f, 1.0f ), normal, dist );
-	frustum.SetPlane( FRUSTUM_FARZ, PLANE_ANYZ, normal, dist );
-
-	FrustumPlanesFromMatrixHelper( clipToWorld, 
-		Vector( 1.0f, 0.0f, 0.0f ), Vector( 1.0f, 1.0f, 1.0f ), Vector( 1.0f, 1.0f, 0.0f ), normal, dist );
-	frustum.SetPlane( FRUSTUM_RIGHT, PLANE_ANYZ, normal, dist );
-
-	FrustumPlanesFromMatrixHelper( clipToWorld, 
-		Vector( 0.0f, 0.0f, 0.0f ), Vector( 0.0f, 1.0f, 1.0f ), Vector( 0.0f, 0.0f, 1.0f ), normal, dist );
-	frustum.SetPlane( FRUSTUM_LEFT, PLANE_ANYZ, normal, dist );
-
-	FrustumPlanesFromMatrixHelper( clipToWorld, 
-		Vector( 1.0f, 1.0f, 0.0f ), Vector( 1.0f, 1.0f, 1.0f ), Vector( 0.0f, 1.0f, 1.0f ), normal, dist );
-	frustum.SetPlane( FRUSTUM_TOP, PLANE_ANYZ, normal, dist );
-
-	FrustumPlanesFromMatrixHelper( clipToWorld, 
-		Vector( 1.0f, 0.0f, 0.0f ), Vector( 0.0f, 0.0f, 1.0f ), Vector( 1.0f, 0.0f, 1.0f ), normal, dist );
-	frustum.SetPlane( FRUSTUM_BOTTOM, PLANE_ANYZ, normal, dist );
-}
+//-----------------------------------------------------------------------------
+// Extracts clip planes from an arbitrary view projection matrix.
+// Differences from ExtractClipPlanesFromTransposedMatrix():
+// This function assumes the matrix has NOT been transposed.
+// If bD3DClippingRange is true, the projection space clipping range is assumed
+// to be [0,1], vs. the OpenGL range [-1,1].
+// This function always returns normalized planes.
+//-----------------------------------------------------------------------------
+void ExtractClipPlanesFromNonTransposedMatrix( const VMatrix &viewProjMatrix, VPlane *pPlanesOut, bool bD3DClippingRange = true );
 
 inline void MatrixBuildOrtho( VMatrix& dst, double left, double top, double right, double bottom, double zNear, double zFar )
 {
@@ -2077,5 +2042,6 @@ inline void MatrixBuildPerspectiveOffCenterX( VMatrix& dst, double flFovX, doubl
 }
 
 #endif
+
 
 

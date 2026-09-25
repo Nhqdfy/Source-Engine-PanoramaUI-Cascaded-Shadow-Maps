@@ -7,6 +7,26 @@
 #ifndef _MATH_PFNS_H_
 #define _MATH_PFNS_H_
 
+// MatrixAxisType_t comes from Source2 / CS:GO math_pfns.h - camera.cpp and the CSM code use it.
+enum MatrixAxisType_t
+{
+#ifdef YUP_ACTIVE
+	FORWARD_AXIS = 2,
+	LEFT_AXIS = 0,
+	UP_AXIS = 1,
+#else
+	FORWARD_AXIS = 0,
+	LEFT_AXIS = 1,
+	UP_AXIS = 2,
+#endif
+
+	X_AXIS = 0,
+	Y_AXIS = 1,
+	Z_AXIS = 2,
+	ORIGIN = 3,
+	PROJECTIVE = 3,
+};
+
 #if defined( _X360 )
 #include <xboxmath.h>
 #endif

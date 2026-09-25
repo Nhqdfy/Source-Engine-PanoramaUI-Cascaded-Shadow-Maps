@@ -573,7 +573,10 @@ void CSGFrustum( Frustum_t &frustum )
 	CUtlVector<cplane_t> planeList;
 	for ( int i = 0; i < 6; i++ )
 	{
-		planeList.AddToTail( *frustum.GetPlane( i ) );
+		cplane_t tmp;
+		tmp.type = PLANE_ANYZ;
+		frustum.GetPlane(i, &tmp.normal, &tmp.dist);
+		planeList.AddToTail( tmp );
 	}
 	CSGPlaneList( g_FrustumVis, planeList );
 }

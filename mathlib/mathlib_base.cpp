@@ -30,6 +30,8 @@
 #endif
 
 #include "mathlib/ssemath.h"
+#include "mathlib/vplane.h"
+#include "mathlib/vmatrix.h"
 #include "mathlib/ssequaternion.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -3837,13 +3839,13 @@ float CalcFovX( float flFovY, float flAspect )
 //-----------------------------------------------------------------------------
 void GeneratePerspectiveFrustum( const Vector& origin, const Vector &forward, 
 	const Vector &right, const Vector &up, float flZNear, float flZFar, 
-	float flFovX, float flFovY, Frustum_t &frustum )
+	float flFovX, float flFovY, VPlane *pPlanesOut )
 {
 	float flIntercept = DotProduct( origin, forward );
 
 	// Setup the near and far planes.
-	frustum.SetPlane( FRUSTUM_FARZ, PLANE_ANYZ, -forward, -flZFar - flIntercept );
-	frustum.SetPlane( FRUSTUM_NEARZ, PLANE_ANYZ, forward, flZNear + flIntercept );
+	pPlanesOut[FRUSTUM_FARZ].Init( -forward, -flZFar - flIntercept );
+	pPlanesOut[FRUSTUM_NEARZ].Init( forward, flZNear + flIntercept );
 
 	flFovX *= 0.5f;
 	flFovY *= 0.5f;
@@ -3860,8 +3862,8 @@ void GeneratePerspectiveFrustum( const Vector& origin, const Vector &forward,
 	VectorNormalize( normalPos );
 	VectorNormalize( normalNeg );
 
-	frustum.SetPlane( FRUSTUM_LEFT, PLANE_ANYZ, normalPos, normalPos.Dot( origin ) );
-	frustum.SetPlane( FRUSTUM_RIGHT, PLANE_ANYZ, normalNeg, normalNeg.Dot( origin ) );
+	pPlanesOut[FRUSTUM_LEFT].Init( normalPos, normalPos.Dot( origin ) );
+	pPlanesOut[FRUSTUM_RIGHT].Init( normalNeg, normalNeg.Dot( origin ) );
 
 	VectorMA( up, flTanY, forward, normalPos );
 	VectorMA( normalPos, -2.0f, up, normalNeg );
@@ -3869,39 +3871,731 @@ void GeneratePerspectiveFrustum( const Vector& origin, const Vector &forward,
 	VectorNormalize( normalPos );
 	VectorNormalize( normalNeg );
 
-	frustum.SetPlane( FRUSTUM_BOTTOM, PLANE_ANYZ, normalPos, normalPos.Dot( origin ) );
-	frustum.SetPlane( FRUSTUM_TOP, PLANE_ANYZ, normalNeg, normalNeg.Dot( origin ) );
+	pPlanesOut[FRUSTUM_BOTTOM].Init( normalPos, normalPos.Dot( origin ) );
+	pPlanesOut[FRUSTUM_TOP].Init( normalNeg, normalNeg.Dot( origin ) );
 }
 
+//-----------------------------------------------------------------------------
+// Generate a frustum based on orthographic parameters
+//-----------------------------------------------------------------------------
+void GenerateOrthoFrustum( const Vector &origin, const Vector &forward, const Vector &right, const Vector &up, float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar, VPlane *pPlanesOut )
+{
+	float flIntercept = DotProduct( origin, forward );
+
+	pPlanesOut[FRUSTUM_NEARZ].Init( forward, flZNear + flIntercept );
+	pPlanesOut[FRUSTUM_FARZ].Init( -forward, -flZFar - flIntercept );
+
+	flIntercept = DotProduct( origin, right );
+
+	pPlanesOut[FRUSTUM_RIGHT].Init( -right, -flRight - flIntercept );
+	pPlanesOut[FRUSTUM_LEFT].Init( right, flLeft + flIntercept );
+
+	flIntercept = DotProduct( origin, up );
+
+	pPlanesOut[FRUSTUM_BOTTOM].Init( up, flBottom + flIntercept );
+	pPlanesOut[FRUSTUM_TOP].Init( -up, -flTop - flIntercept );
+}
 
 //-----------------------------------------------------------------------------
 // Version that accepts angles instead of vectors
 //-----------------------------------------------------------------------------
 void GeneratePerspectiveFrustum( const Vector& origin, const QAngle &angles, float flZNear, float flZFar, float flFovX, float flAspectRatio, Frustum_t &frustum )
 {
+	VPlane planes[FRUSTUM_NUMPLANES];
 	Vector vecForward, vecRight, vecUp;
 	AngleVectors( angles, &vecForward, &vecRight, &vecUp );
 	float flFovY = CalcFovY( flFovX, flAspectRatio );
-	GeneratePerspectiveFrustum( origin, vecForward, vecRight, vecUp, flZNear, flZFar, flFovX, flFovY, frustum );
+	GeneratePerspectiveFrustum( origin, vecForward, vecRight, vecUp, flZNear, flZFar, flFovX, flFovY, planes );
+	frustum.SetPlanes( planes );
 }
 
+void fourplanes_t::ComputeSignbits()
+{
+	xSign = CmpLtSIMD( nX, Four_Zeros );
+	ySign = CmpLtSIMD( nY, Four_Zeros );
+	zSign = CmpLtSIMD( nZ, Four_Zeros );
+	nXAbs = fabs(nX);
+	nYAbs = fabs(nY);
+	nZAbs = fabs(nZ);
+}
+
+void fourplanes_t::GetPlane( int index, Vector *pNormalOut, float *pDistOut ) const
+{
+	pNormalOut->x = SubFloat(nX,index);
+	pNormalOut->y = SubFloat(nY,index);
+	pNormalOut->z = SubFloat(nZ,index);
+	*pDistOut = SubFloat(dist,index);
+}
+void fourplanes_t::SetPlane( int index, const Vector &vecNormal, float planeDist )
+{
+	SubFloat(nX,index) = vecNormal.x;
+	SubFloat(nY,index) = vecNormal.y;
+	SubFloat(nZ,index) = vecNormal.z;
+	SubFloat(dist,index) = planeDist;
+	ComputeSignbits();
+}
+
+void fourplanes_t::Set4Planes( const VPlane *pPlanes )
+{
+	nX = LoadUnalignedSIMD( &pPlanes[0].m_Normal.x );
+	nY = LoadUnalignedSIMD( &pPlanes[1].m_Normal.x );
+	nZ = LoadUnalignedSIMD( &pPlanes[2].m_Normal.x );
+	dist = LoadUnalignedSIMD( &pPlanes[3].m_Normal.x );
+	TransposeSIMD(nX, nY, nZ, dist);
+	ComputeSignbits();
+}
+
+void fourplanes_t::Set2Planes( const VPlane *pPlanes )
+{
+	nX = LoadUnalignedSIMD( &pPlanes[0].m_Normal.x );
+	nY = LoadUnalignedSIMD( &pPlanes[1].m_Normal.x );
+	nZ = Four_Zeros;
+	dist = Four_Zeros;
+	TransposeSIMD(nX, nY, nZ, dist);
+	ComputeSignbits();
+}
+
+void fourplanes_t::Get4Planes( VPlane *pPlanesOut ) const
+{
+	fltx4 p0 = nX;
+	fltx4 p1 = nY;
+	fltx4 p2 = nZ;
+	fltx4 p3 = dist;
+	TransposeSIMD(p0, p1, p2, p3);
+	StoreUnalignedSIMD( &pPlanesOut[0].m_Normal.x, p0 );
+	StoreUnalignedSIMD( &pPlanesOut[1].m_Normal.x, p1 );
+	StoreUnalignedSIMD( &pPlanesOut[2].m_Normal.x, p2 );
+	StoreUnalignedSIMD( &pPlanesOut[3].m_Normal.x, p3 );
+}
+
+void fourplanes_t::Get2Planes( VPlane *pPlanesOut ) const
+{
+	fltx4 p0 = nX;
+	fltx4 p1 = nY;
+	fltx4 p2 = nZ;
+	fltx4 p3 = dist;
+	TransposeSIMD(p0, p1, p2, p3);
+	StoreUnalignedSIMD( &pPlanesOut[0].m_Normal.x, p0 );
+	StoreUnalignedSIMD( &pPlanesOut[1].m_Normal.x, p1 );
+}
+
+
+Frustum_t::Frustum_t()
+{
+	memset(this, 0, sizeof(*this));
+}
+
+void Frustum_t::SetPlane( int i, const Vector &vecNormal, float dist )
+{
+	if ( i < 4 )
+	{
+		planes[0].SetPlane( i, vecNormal, dist );
+	}
+	else
+	{
+		planes[1].SetPlane( i-4, vecNormal, dist );
+	}
+}
+
+void Frustum_t::GetPlane( int i, Vector *pNormalOut, float *pDistOut ) const
+{
+	if ( i < 4 )
+	{
+		planes[0].GetPlane( i, pNormalOut, pDistOut );
+	}
+	else
+	{
+		planes[1].GetPlane( i-4, pNormalOut, pDistOut );
+	}
+}
+
+void Frustum_t::SetPlanes( const VPlane *pPlanes )
+{
+	planes[0].Set4Planes(pPlanes);
+	planes[1].Set2Planes(pPlanes+4);
+}
+
+void Frustum_t::GetPlanes( VPlane *pPlanesOut ) const
+{
+	planes[0].Get4Planes(pPlanesOut);
+	planes[1].Get2Planes(pPlanesOut+4);
+}
+
+
+bool Frustum_t::CullBox( const Vector &mins, const Vector &maxs ) const
+{
+	fltx4 mins4 = LoadUnalignedSIMD( &mins.x );
+	fltx4 minx = SplatXSIMD(mins4);
+	fltx4 miny = SplatYSIMD(mins4);
+	fltx4 minz = SplatZSIMD(mins4);
+	fltx4 maxs4 = LoadUnalignedSIMD( &maxs.x );
+	fltx4 maxx = SplatXSIMD(maxs4);
+	fltx4 maxy = SplatYSIMD(maxs4);
+	fltx4 maxz = SplatZSIMD(maxs4);
+
+	// compute the dot product of the normal and the farthest corner
+	// dotBack0 = DotProduct( normal, normals.x < 0 ? mins.x : maxs.x );
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = MulSIMD( planes[i].nX, MaskedAssign( planes[i].xSign, minx, maxx ) );
+		fltx4 yTotalBack = MulSIMD( planes[i].nY, MaskedAssign( planes[i].ySign, miny, maxy ) );
+		fltx4 zTotalBack = MulSIMD( planes[i].nZ, MaskedAssign( planes[i].zSign, minz, maxz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+		if  ( IsVector4LessThan( dotBack, planes[i].dist ) )
+			return true;
+	}
+	return false;
+}
+
+bool Frustum_t::CullBox( const fltx4 &mins4, const fltx4 &maxs4 ) const
+{
+	fltx4 minx = SplatXSIMD(mins4);
+	fltx4 miny = SplatYSIMD(mins4);
+	fltx4 minz = SplatZSIMD(mins4);
+	fltx4 maxx = SplatXSIMD(maxs4);
+	fltx4 maxy = SplatYSIMD(maxs4);
+	fltx4 maxz = SplatZSIMD(maxs4);
+
+	// compute the dot product of the normal and the farthest corner
+	// dotBack0 = DotProduct( normal, normals.x < 0 ? mins.x : maxs.x );
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = MulSIMD( planes[i].nX, MaskedAssign( planes[i].xSign, minx, maxx ) );
+		fltx4 yTotalBack = MulSIMD( planes[i].nY, MaskedAssign( planes[i].ySign, miny, maxy ) );
+		fltx4 zTotalBack = MulSIMD( planes[i].nZ, MaskedAssign( planes[i].zSign, minz, maxz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+		if  ( IsVector4LessThan( dotBack, planes[i].dist ) )
+			return true;
+	}
+	return false;
+}
+
+bool Frustum_t::CullBoxCenterExtents( const Vector &center, const Vector &extents ) const
+{
+	fltx4 center4 = LoadUnalignedSIMD( &center.x );
+	fltx4 centerx = SplatXSIMD(center4);
+	fltx4 centery = SplatYSIMD(center4);
+	fltx4 centerz = SplatZSIMD(center4);
+	fltx4 extents4 = LoadUnalignedSIMD( &extents.x );
+	fltx4 extx = SplatXSIMD(extents4);
+	fltx4 exty = SplatYSIMD(extents4);
+	fltx4 extz = SplatZSIMD(extents4);
+
+	// compute the dot product of the normal and the farthest corner
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = AddSIMD( MulSIMD( planes[i].nX, centerx ), MulSIMD(planes[i].nXAbs, extx ) );
+		fltx4 yTotalBack = AddSIMD( MulSIMD( planes[i].nY, centery ), MulSIMD(planes[i].nYAbs, exty ) );
+		fltx4 zTotalBack = AddSIMD( MulSIMD( planes[i].nZ, centerz ), MulSIMD(planes[i].nZAbs, extz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+		if  ( IsVector4LessThan( dotBack, planes[i].dist ) )
+			return true;
+	}
+	return false;
+}
+
+
+bool Frustum_t::CullBoxCenterExtents( const fltx4 &fl4Center, const fltx4 &fl4Extents ) const
+{
+	fltx4 centerx = SplatXSIMD(fl4Center);
+	fltx4 centery = SplatYSIMD(fl4Center);
+	fltx4 centerz = SplatZSIMD(fl4Center);
+	fltx4 extx = SplatXSIMD(fl4Extents);
+	fltx4 exty = SplatYSIMD(fl4Extents);
+	fltx4 extz = SplatZSIMD(fl4Extents);
+
+	// compute the dot product of the normal and the farthest corner
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = AddSIMD( MulSIMD( planes[i].nX, centerx ), MulSIMD(planes[i].nXAbs, extx ) );
+		fltx4 yTotalBack = AddSIMD( MulSIMD( planes[i].nY, centery ), MulSIMD(planes[i].nYAbs, exty ) );
+		fltx4 zTotalBack = AddSIMD( MulSIMD( planes[i].nZ, centerz ), MulSIMD(planes[i].nZAbs, extz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+		if  ( IsVector4LessThan( dotBack, planes[i].dist ) )
+			return true;
+	}
+	return false;
+}
+
+// Return true if this bounding volume is contained in the frustum, false if it is not
+// TODO SIMDIFY
+bool Frustum_t::Contains( const Vector &mins, const Vector &maxs ) const
+{
+	// Get box corners 
+	Vector vCorners[8];
+	vCorners[0] = mins;
+	vCorners[1] = Vector( mins.x, mins.y, maxs.z );
+	vCorners[2] = Vector( mins.x, maxs.y, mins.z );
+	vCorners[3] = Vector( mins.x, maxs.y, maxs.z );
+
+	vCorners[4] = Vector( maxs.x, mins.y, mins.z );
+	vCorners[5] = Vector( maxs.x, mins.y, maxs.z );
+	vCorners[6] = Vector( maxs.x, maxs.y, mins.z );
+	vCorners[7] = maxs;
+
+
+	// if we are in with all points, then we are fully in
+	for ( int j = 0; j < FRUSTUM_NUMPLANES; ++j ) 
+	{
+		for( int i = 0; i < 8; ++i ) 
+		{		
+			// compute the dot product of the normal and the corner
+			Vector vNormal;
+			float dist;
+			GetPlane( i, &vNormal, &dist );
+			if ( DotProduct( vCorners[j], vNormal ) <= 0 ) 
+			{
+				return false;
+			}
+		}		
+	}	
+
+	return true;	// all pts were inside
+}
+
+// Brute force SAT frustum intersection between two frustums
+bool Frustum_t::Intersects( Frustum_t &otherFrustum ) const
+{
+	Vector pPointsA[8];
+	bool bResult = false;
+	bResult = GetCorners( pPointsA );
+	Assert( bResult );
+	VPlane pPlanesA[FRUSTUM_NUMPLANES];
+	GetPlanes( pPlanesA );
+
+	Vector pPointsB[8];
+	bResult = otherFrustum.GetCorners( pPointsB );
+	Assert( bResult );
+	VPlane pPlanesB[FRUSTUM_NUMPLANES];
+	otherFrustum.GetPlanes( pPlanesB );
+
+	// See if all points in B are on one side of any plane in A
+	for ( int p=0; p<6; ++p )
+	{
+		bool bPointsOnOutside = true;
+		for ( int i=0; i<8; ++i )
+		{
+			float flDist = pPlanesA[ p ].DistTo( pPointsB[ i ] );
+
+			// If dist is pos, we are not on the outside
+			if ( flDist > 0 )
+			{
+				bPointsOnOutside = false;
+				break;
+			}
+		}
+
+		// We never hit a negative case, we have a separating axis
+		if ( bPointsOnOutside )
+		{
+			return false;
+		}
+	}
+
+	// See if all points in A are on one side of any plane in B
+	for ( int p=0; p<6; ++p )
+	{
+		bool bPointsOnOutside = true;
+		for ( int i=0; i<8; ++i )
+		{
+			float flDist = pPlanesB[ p ].DistTo( pPointsA[ i ] );
+
+			// If dist is pos, we are not on the outside
+			if ( flDist > 0 )
+			{
+				bPointsOnOutside = false;
+				break;
+			}
+		}
+
+		// We never hit a negative case, we have a separating axis
+		if ( bPointsOnOutside )
+		{
+			return false;
+		}
+	}
+
+	// They intersect
+	return true;
+}
+
+// Return true if this bounding volume intersects the frustum, false if it is outside
+bool Frustum_t::Intersects( const Vector &mins, const Vector &maxs ) const
+{
+	fltx4 mins4 = LoadUnalignedSIMD( &mins.x );
+	fltx4 minx = SplatXSIMD(mins4);
+	fltx4 miny = SplatYSIMD(mins4);
+	fltx4 minz = SplatZSIMD(mins4);
+	fltx4 maxs4 = LoadUnalignedSIMD( &maxs.x );
+	fltx4 maxx = SplatXSIMD(maxs4);
+	fltx4 maxy = SplatYSIMD(maxs4);
+	fltx4 maxz = SplatZSIMD(maxs4);
+
+	// compute the dot product of the normal and the farthest corner
+	// dotBack0 = DotProduct( normal, normals.x < 0 ? mins.x : maxs.x );
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = MulSIMD( planes[i].nX, MaskedAssign( planes[i].xSign, minx, maxx ) );
+		fltx4 yTotalBack = MulSIMD( planes[i].nY, MaskedAssign( planes[i].ySign, miny, maxy ) );
+		fltx4 zTotalBack = MulSIMD( planes[i].nZ, MaskedAssign( planes[i].zSign, minz, maxz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+#if _X360
+		if  ( !XMVector3GreaterOrEqual( dotBack, planes[i].dist ) )
+			return false;
+#elif defined( _PS3 )
+		bi32x4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#else
+		fltx4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#endif
+	}
+	return true;
+}
+
+bool Frustum_t::Intersects( const fltx4 &mins4, const fltx4 &maxs4 ) const
+{
+	fltx4 minx = SplatXSIMD(mins4);
+	fltx4 miny = SplatYSIMD(mins4);
+	fltx4 minz = SplatZSIMD(mins4);
+	fltx4 maxx = SplatXSIMD(maxs4);
+	fltx4 maxy = SplatYSIMD(maxs4);
+	fltx4 maxz = SplatZSIMD(maxs4);
+
+	// compute the dot product of the normal and the farthest corner
+	// dotBack0 = DotProduct( normal, normals.x < 0 ? mins.x : maxs.x );
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = MulSIMD( planes[i].nX, MaskedAssign( planes[i].xSign, minx, maxx ) );
+		fltx4 yTotalBack = MulSIMD( planes[i].nY, MaskedAssign( planes[i].ySign, miny, maxy ) );
+		fltx4 zTotalBack = MulSIMD( planes[i].nZ, MaskedAssign( planes[i].zSign, minz, maxz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+#if _X360
+		if  ( !XMVector4GreaterOrEqual( dotBack, planes[i].dist ) )
+			return false;
+#elif defined( _PS3 )
+		bi32x4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#else
+		fltx4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#endif
+	}
+	return true;
+}
+
+bool Frustum_t::IntersectsCenterExtents( const Vector &center, const Vector &extents ) const
+{
+	fltx4 center4 = LoadUnalignedSIMD( &center.x );
+	fltx4 centerx = SplatXSIMD(center4);
+	fltx4 centery = SplatYSIMD(center4);
+	fltx4 centerz = SplatZSIMD(center4);
+	fltx4 extents4 = LoadUnalignedSIMD( &extents.x );
+	fltx4 extx = SplatXSIMD(extents4);
+	fltx4 exty = SplatYSIMD(extents4);
+	fltx4 extz = SplatZSIMD(extents4);
+
+	// compute the dot product of the normal and the farthest corner
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = AddSIMD( MulSIMD( planes[i].nX, centerx ), MulSIMD(planes[i].nXAbs, extx ) );
+		fltx4 yTotalBack = AddSIMD( MulSIMD( planes[i].nY, centery ), MulSIMD(planes[i].nYAbs, exty ) );
+		fltx4 zTotalBack = AddSIMD( MulSIMD( planes[i].nZ, centerz ), MulSIMD(planes[i].nZAbs, extz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+#if _X360
+		if  ( !XMVector4GreaterOrEqual( dotBack, planes[i].dist ) )
+			return false;
+#elif defined( _PS3 )
+		bi32x4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#else
+		fltx4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#endif
+	}
+	return true;
+}
+
+
+bool Frustum_t::IntersectsCenterExtents( const fltx4 &fl4Center, const fltx4 &fl4Extents ) const
+{
+	fltx4 centerx = SplatXSIMD(fl4Center);
+	fltx4 centery = SplatYSIMD(fl4Center);
+	fltx4 centerz = SplatZSIMD(fl4Center);
+	fltx4 extx = SplatXSIMD(fl4Extents);
+	fltx4 exty = SplatYSIMD(fl4Extents);
+	fltx4 extz = SplatZSIMD(fl4Extents);
+
+	// compute the dot product of the normal and the farthest corner
+	for ( int i = 0; i < 2; i++ )
+	{
+		fltx4 xTotalBack = AddSIMD( MulSIMD( planes[i].nX, centerx ), MulSIMD(planes[i].nXAbs, extx ) );
+		fltx4 yTotalBack = AddSIMD( MulSIMD( planes[i].nY, centery ), MulSIMD(planes[i].nYAbs, exty ) );
+		fltx4 zTotalBack = AddSIMD( MulSIMD( planes[i].nZ, centerz ), MulSIMD(planes[i].nZAbs, extz ) );
+		fltx4 dotBack = AddSIMD( xTotalBack, AddSIMD(yTotalBack, zTotalBack) );
+		// if plane of the farthest corner is behind the plane, then the box is completely outside this plane
+#if _X360
+		if  ( !XMVector3GreaterOrEqual( dotBack, planes[i].dist ) )
+			return false;
+#elif defined( _PS3 )
+		bi32x4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#else
+		fltx4 isOut = CmpLtSIMD( dotBack, planes[i].dist );
+		if ( IsAnyNegative(isOut) )
+			return false;
+#endif
+	}
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// Generate a frustum based on orthographic parameters
+//-----------------------------------------------------------------------------
+void GenerateOrthoFrustumFLU( const Vector &origin, const Vector &forward, const Vector &vLeft, const Vector &up, float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar, VPlane *pPlanesOut )
+{
+	// YUP_ACTIVE: FIXME : This is actually producing incorrect planes (see the VectorMA below)
+	Vector vRight = vLeft;
+	vRight *= -1.0f;
+
+	float flIntercept = DotProduct( origin, forward );
+
+	pPlanesOut[FRUSTUM_NEARZ].Init( forward, flZNear + flIntercept );
+	pPlanesOut[FRUSTUM_FARZ].Init( -forward, -flZFar - flIntercept );
+
+	flIntercept = DotProduct( origin, vRight );
+
+	pPlanesOut[FRUSTUM_RIGHT].Init( -vRight, -flRight - flIntercept );
+	pPlanesOut[FRUSTUM_LEFT].Init( vRight, flLeft + flIntercept );
+
+	flIntercept = DotProduct( origin, up );
+
+	pPlanesOut[FRUSTUM_BOTTOM].Init( up, flBottom + flIntercept );
+	pPlanesOut[FRUSTUM_TOP].Init( -up, -flTop - flIntercept );
+}
+
+//-----------------------------------------------------------------------------
+// Generate a frustum based on perspective view parameters
+//-----------------------------------------------------------------------------
+void GeneratePerspectiveFrustumFLU( const Vector& origin, const Vector &forward, 
+	const Vector &vLeft, const Vector &up, float flZNear, float flZFar, 
+	float flFovX, float flAspect, VPlane *pPlanesOut )
+{
+	// YUP_ACTIVE: FIXME : This is actually producing incorrect planes (see the VectorMA below)
+	Vector vRight = vLeft;
+	vRight *= -1.0f;
+
+	float flIntercept = DotProduct( origin, forward );
+
+	// Setup the near and far planes.
+	pPlanesOut[FRUSTUM_FARZ].Init( -forward, -flZFar - flIntercept );
+	pPlanesOut[FRUSTUM_NEARZ].Init( forward, flZNear + flIntercept );
+
+	flFovX *= 0.5f;
+
+	float flTanX = tan( DEG2RAD( flFovX ) );
+	float flTanY = flTanX / flAspect;
+
+	// OPTIMIZE: Normalizing these planes is not necessary for culling
+	Vector normalPos, normalNeg;
+
+	// NOTE: This should be using left and not right to produce correct planes, not changing it quite yet
+	// because I'm not able to test whether fixing this breaks anything.
+	VectorMA( vRight, flTanX, forward, normalPos );
+	VectorMA( normalPos, -2.0f, vRight, normalNeg );
+
+	VectorNormalize( normalPos );
+	VectorNormalize( normalNeg );
+
+	pPlanesOut[FRUSTUM_LEFT].Init( normalPos, normalPos.Dot( origin ) );
+	pPlanesOut[FRUSTUM_RIGHT].Init( normalNeg, normalNeg.Dot( origin ) );
+
+	VectorMA( up, flTanY, forward, normalPos );
+	VectorMA( normalPos, -2.0f, up, normalNeg );
+
+	VectorNormalize( normalPos );
+	VectorNormalize( normalNeg );
+
+	pPlanesOut[FRUSTUM_BOTTOM].Init( normalPos, normalPos.Dot( origin ) );
+	pPlanesOut[FRUSTUM_TOP].Init( normalNeg, normalNeg.Dot( origin ) );
+}
+
+// Generate a frustum based on perspective view parameters
+void Frustum_t::CreatePerspectiveFrustumFLU( const Vector &vOrigin, const Vector &vForward, 
+	const Vector &vLeft, const Vector &vUp, float flZNear, float flZFar, 
+	float flFovX, float flAspect )
+{
+	VPlane localPlanes[FRUSTUM_NUMPLANES];
+	GeneratePerspectiveFrustumFLU( vOrigin, vForward, vLeft, vUp, flZNear, flZFar, flFovX, flAspect, localPlanes );
+	SetPlanes( localPlanes );
+}
+
+//#ifndef YUP_ACTIVE
+void Frustum_t::CreatePerspectiveFrustum( const Vector& origin, const Vector &forward, 
+	const Vector &right, const Vector &up, float flZNear, float flZFar, 
+	float flFovX, float flAspect )
+{
+	Vector vLeft = right;
+	vLeft *= -1.0f;
+	CreatePerspectiveFrustumFLU( origin, forward, vLeft, up, flZNear, flZFar, flFovX, flAspect );
+}
+//#endif
+
+// Version that accepts angles instead of vectors
+void Frustum_t::CreatePerspectiveFrustum( const Vector& origin, const QAngle &angles, float flZNear, float flZFar, float flFovX, float flAspectRatio )
+{
+	VPlane localPlanes[FRUSTUM_NUMPLANES];
+	Vector vecForward, vecLeft, vecUp;
+	AngleVectorsFLU( angles, &vecForward, &vecLeft, &vecUp );
+	GeneratePerspectiveFrustumFLU( origin, vecForward, vecLeft, vecUp, flZNear, flZFar, flFovX, flAspectRatio, localPlanes );
+	SetPlanes( localPlanes );
+}
+
+// Generate a frustum based on orthographic parameters
+void Frustum_t::CreateOrthoFrustumFLU( const Vector &origin, const Vector &forward, const Vector &vLeft, const Vector &up, float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar )
+{
+	VPlane localPlanes[FRUSTUM_NUMPLANES];
+	GenerateOrthoFrustumFLU( origin, forward, vLeft, up, flLeft, flRight, flBottom, flTop, flZNear, flZFar, localPlanes );
+	SetPlanes( localPlanes );
+}
+
+//#ifndef YUP_ACTIVE
+void Frustum_t::CreateOrthoFrustum( const Vector &origin, const Vector &forward, const Vector &right, const Vector &up, float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar )
+{
+	Vector vLeft = right;
+	vLeft *= -1.0f;
+	CreateOrthoFrustumFLU( origin, forward, vLeft, up, flLeft, flRight, flBottom, flTop, flZNear, flZFar );
+}
+
+// The points returned correspond to the corners of the frustum faces 
+// Points 0 to 3 correspond to the near face 
+// Points 4 to 7 correspond to the far face 
+// Returns points in a face in this order:
+//  2--3
+//	|  |
+//	0--1
+bool Frustum_t::GetCorners( Vector *pPoints ) const
+{
+	VPlane localPlanes[FRUSTUM_NUMPLANES];
+	GetPlanes( localPlanes );
+
+	// Near face
+	// Bottom Left
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_NEARZ], localPlanes[FRUSTUM_LEFT], localPlanes[FRUSTUM_BOTTOM], pPoints[0] ) )
+		return false;
+
+	// Bottom right
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_NEARZ], localPlanes[FRUSTUM_RIGHT], localPlanes[FRUSTUM_BOTTOM], pPoints[1] ) )
+		return false;
+
+	// Upper Left
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_NEARZ], localPlanes[FRUSTUM_LEFT], localPlanes[FRUSTUM_TOP], pPoints[2] ) )
+		return false;
+
+	// Upper right
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_NEARZ], localPlanes[FRUSTUM_RIGHT], localPlanes[FRUSTUM_TOP], pPoints[3] ) )
+		return false;
+
+	// Far face
+	// Bottom Left
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_FARZ], localPlanes[FRUSTUM_LEFT], localPlanes[FRUSTUM_BOTTOM], pPoints[4] ) )
+		return false;
+
+	// Bottom right
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_FARZ], localPlanes[FRUSTUM_RIGHT], localPlanes[FRUSTUM_BOTTOM], pPoints[5] ) )
+		return false;
+
+	// Upper Left
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_FARZ], localPlanes[FRUSTUM_LEFT], localPlanes[FRUSTUM_TOP], pPoints[6] ) )
+		return false;
+
+	// Upper right
+	if ( !PlaneIntersection( localPlanes[FRUSTUM_FARZ], localPlanes[FRUSTUM_RIGHT], localPlanes[FRUSTUM_TOP], pPoints[7] ) )
+		return false;
+
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+void AngleVectorsFLU( const QAngle &angles, Vector *pForward, Vector *pLeft, Vector *pUp )
+{
+	Assert( s_bMathlibInitialized );
+
+	float sr, sp, sy, cr, cp, cy;
+
+#ifdef _X360
+	fltx4 radians, scale, sine, cosine;
+	radians = LoadUnaligned3SIMD( angles.Base() );
+	scale = ReplicateX4( M_PI_F / 180.f ); 
+	radians = MulSIMD( radians, scale );
+	SinCos3SIMD( sine, cosine, radians ); 	
+	sp = SubFloat( sine, 0 );	sy = SubFloat( sine, 1 );	sr = SubFloat( sine, 2 );
+	cp = SubFloat( cosine, 0 );	cy = SubFloat( cosine, 1 );	cr = SubFloat( cosine, 2 );
+#else
+	SinCos( DEG2RAD( angles[YAW] ), &sy, &cy );
+	SinCos( DEG2RAD( angles[PITCH] ), &sp, &cp );
+	SinCos( DEG2RAD( angles[ROLL] ), &sr, &cr );
+#endif
+
+	if ( pForward )
+	{
+		(*pForward)[FORWARD_AXIS] = cp*cy;
+		(*pForward)[LEFT_AXIS] = cp*sy;
+		(*pForward)[UP_AXIS] = -sp;
+	}
+
+	if ( pLeft )
+	{
+		(*pLeft)[FORWARD_AXIS] = (sr*sp*cy+cr*-sy);
+		(*pLeft)[LEFT_AXIS] = (sr*sp*sy+cr*cy);
+		(*pLeft)[UP_AXIS] = sr*cp;
+	}
+
+	if ( pUp )
+	{
+		(*pUp)[FORWARD_AXIS] = (cr*sp*cy+-sr*-sy);
+		(*pUp)[LEFT_AXIS] = (cr*sp*sy+-sr*cy);
+		(*pUp)[UP_AXIS] = cr*cp;
+	}
+}
+// Cull helpers kept for this engine's call sites (CS:GO calls Frustum_t::CullBox
+// directly). Both return true when the box is entirely outside the frustum.
+//-----------------------------------------------------------------------------
 bool R_CullBox( const Vector& mins, const Vector& maxs, const Frustum_t &frustum )
 {
-	return (( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_RIGHT) ) == 2 ) || 
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_LEFT) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_TOP) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_BOTTOM) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_NEARZ) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_FARZ) ) == 2 ) );
+	return frustum.CullBox( mins, maxs );
 }
 
 bool R_CullBoxSkipNear( const Vector& mins, const Vector& maxs, const Frustum_t &frustum )
 {
-	return (( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_RIGHT) ) == 2 ) || 
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_LEFT) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_TOP) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_BOTTOM) ) == 2 ) ||
-			( BoxOnPlaneSide( mins, maxs, frustum.GetPlane(FRUSTUM_FARZ) ) == 2 ) );
+	VPlane planes[FRUSTUM_NUMPLANES];
+	frustum.GetPlanes( planes );
+
+	for ( int i = 0; i < FRUSTUM_NUMPLANES; i++ )
+	{
+		if ( i == FRUSTUM_NEARZ )
+			continue;
+
+		if ( planes[i].BoxOnPlaneSide( mins, maxs ) == SIDE_BACK )
+			return true;
+	}
+
+	return false;
 }
 
 

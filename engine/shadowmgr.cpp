@@ -1548,7 +1548,10 @@ void DrawFrustum( Frustum_t &frustum )
 	{
 		Vector points[maxPoints];
 		Vector points2[maxPoints];
-		int numPoints = PolyFromPlane( points, frustum.GetPlane( i )->normal, frustum.GetPlane( i )->dist );
+		Vector normal;
+		float dist;
+		frustum.GetPlane( i, &normal, &dist );
+		int numPoints = PolyFromPlane( points, normal, dist );
 		Assert( numPoints <= maxPoints );
 		Vector *in, *out;
 		in = points;
@@ -1560,7 +1563,8 @@ void DrawFrustum( Frustum_t &frustum )
 			{
 				continue;
 			}
-			numPoints = ClipPolyToPlane( in, numPoints, out, frustum.GetPlane( j )->normal, frustum.GetPlane( j )->dist );
+			frustum.GetPlane( j, &normal, &dist );
+			numPoints = ClipPolyToPlane( in, numPoints, out, normal, dist );
 			Assert( numPoints <= maxPoints );
 			V_swap( in, out );
 		}
@@ -2922,20 +2926,20 @@ void ExtractFrustumPlanes( Frustum frustumPlanes, float flPlaneEpsilon )
 
 	float flFOVy = CalcFovY( view.fov, view.m_flAspectRatio );
 
-	Frustum_t frustum;
+	VPlane localPlanes[FRUSTUM_NUMPLANES];
 
 	Vector vForward, vRight, vUp;
 	AngleVectors( view.angles, &vForward, &vRight, &vUp );
 
 	GeneratePerspectiveFrustum( view.origin, vForward, vRight, vUp,
 								view.zNear + flPlaneEpsilon, view.zFar - flPlaneEpsilon,	// Apply epsilon to near and far
-								view.fov, flFOVy, frustum );
+								view.fov, flFOVy, localPlanes );
 
 	// Copy out to the planes that the engine renderer uses.
 	for( int i=0; i < FRUSTUM_NUMPLANES; i++ )
 	{
-		frustumPlanes[i].m_Normal = frustum.GetPlane(i)->normal;
-		frustumPlanes[i].m_Dist = frustum.GetPlane(i)->dist;
+		frustumPlanes[i].m_Normal = localPlanes[i].m_Normal;
+		frustumPlanes[i].m_Dist = localPlanes[i].m_Dist;
 	}
 }
 

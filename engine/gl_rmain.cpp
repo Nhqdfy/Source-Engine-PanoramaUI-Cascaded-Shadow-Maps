@@ -1007,14 +1007,8 @@ void CRender::ExtractFrustumPlanes( Frustum frustumPlanes )
 
 	GeneratePerspectiveFrustum( CurrentViewOrigin(), 
 		CurrentViewForward(), CurrentViewRight(), CurrentViewUp(),
-		view.zNear, view.zFar, view.fov, m_yFOV, g_Frustum );
-
-	// Copy out to the planes that the engine renderer uses.
-	for( int i=0; i < FRUSTUM_NUMPLANES; i++ )
-	{
-		frustumPlanes[i].m_Normal = g_Frustum.GetPlane(i)->normal;
-		frustumPlanes[i].m_Dist = g_Frustum.GetPlane(i)->dist;
-	}
+		view.zNear, view.zFar, view.fov, m_yFOV, frustumPlanes );
+	g_Frustum.SetPlanes( frustumPlanes );
 }
 
 void CRender::OrthoExtractFrustumPlanes( Frustum frustumPlanes )
@@ -1044,30 +1038,12 @@ void CRender::OrthoExtractFrustumPlanes( Frustum frustumPlanes )
 
 	frustumPlanes[FRUSTUM_BOTTOM].m_Normal = -CurrentViewUp();
 	frustumPlanes[FRUSTUM_BOTTOM].m_Dist = -view.m_OrthoBottom - orgOffset;
-
-	// Copy out to the planes that the engine renderer uses.
-	for(int i=0; i < FRUSTUM_NUMPLANES; i++)
-	{
-		/*
-		if (fabs(frustumPlanes[i].m_Normal.x) - 1.0f > -1e-3)
-			frustum[i].type = PLANE_X;
-		else if (fabs(frustumPlanes[i].m_Normal.y) - 1.0f > -1e-3)
-			frustum[i].type = PLANE_Y;
-		else if (fabs(frustumPlanes[i].m_Normal.z) - 1.0f > -1e-3)
-			frustum[i].type = PLANE_Z;
-		else
-		*/
-		g_Frustum.SetPlane( i, PLANE_ANYZ, frustumPlanes[i].m_Normal, frustumPlanes[i].m_Dist );
-	}
+	g_Frustum.SetPlanes( frustumPlanes );
 }
 
 void CRender::OverrideViewFrustum( Frustum custom )
 {
-	// Copy out to the planes that the engine renderer uses.
-	for( int i = 0; i != FRUSTUM_NUMPLANES; ++i )
-	{
-		g_Frustum.SetPlane( i, PLANE_ANYZ, custom[i].m_Normal, custom[i].m_Dist );
-	}
+	g_Frustum.SetPlanes( custom );
 }
 
 void CRender::ExtractMatrices( void )

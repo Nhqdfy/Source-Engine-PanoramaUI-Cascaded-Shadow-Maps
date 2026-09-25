@@ -168,36 +168,28 @@ enum
 
 extern int SignbitsForPlane( cplane_t *out );
 
-class Frustum_t
-{
-public:
-	void SetPlane( int i, int nType, const Vector &vecNormal, float dist )
-	{
-		m_Plane[i].normal = vecNormal;
-		m_Plane[i].dist = dist;
-		m_Plane[i].type = nType;
-		m_Plane[i].signbits = SignbitsForPlane( &m_Plane[i] );
-		m_AbsNormal[i].Init( fabs(vecNormal.x), fabs(vecNormal.y), fabs(vecNormal.z) );
-	}
-
-	inline const cplane_t *GetPlane( int i ) const { return &m_Plane[i]; }
-	inline const Vector &GetAbsNormal( int i ) const { return m_AbsNormal[i]; }
-
-private:
-	cplane_t	m_Plane[FRUSTUM_NUMPLANES];
-	Vector		m_AbsNormal[FRUSTUM_NUMPLANES];
-};
+class Frustum_t;
 
 // Computes Y fov from an X fov and a screen aspect ratio + X from Y
 float CalcFovY( float flFovX, float flScreenAspect );
 float CalcFovX( float flFovY, float flScreenAspect );
 
+/// return surface area of an AABB
+FORCEINLINE float BoxSurfaceArea( Vector const &vecBoxMin, Vector const &vecBoxMax )
+{
+	Vector boxdim = vecBoxMax - vecBoxMin;
+	return 2.0 * ( ( boxdim[0] * boxdim[2] ) + ( boxdim[0] * boxdim[1] ) + ( boxdim[1] * boxdim[2] ) );
+}
+
 // Generate a frustum based on perspective view parameters
 // NOTE: FOV is specified in degrees, as the *full* view angle (not half-angle)
+class VPlane;
 void GeneratePerspectiveFrustum( const Vector& origin, const QAngle &angles, float flZNear, float flZFar, float flFovX, float flAspectRatio, Frustum_t &frustum );
-void GeneratePerspectiveFrustum( const Vector& origin, const Vector &forward, const Vector &right, const Vector &up, float flZNear, float flZFar, float flFovX, float flFovY, Frustum_t &frustum );
+void GeneratePerspectiveFrustum( const Vector& origin, const Vector &forward, const Vector &right, const Vector &up, float flZNear, float flZFar, float flFovX, float flFovY, VPlane *pPlanesOut );
+void GenerateOrthoFrustum( const Vector &origin, const Vector &forward, const Vector &right, const Vector &up, float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar, VPlane *pPlanesOut );
 
 // Cull the world-space bounding box to the specified frustum.
+// (thin wrappers over CS:GO's Frustum_t::CullBox, kept for this engine's call sites)
 bool R_CullBox( const Vector& mins, const Vector& maxs, const Frustum_t &frustum );
 bool R_CullBoxSkipNear( const Vector& mins, const Vector& maxs, const Frustum_t &frustum );
 
@@ -786,6 +778,7 @@ inline int ClampArrayBounds( int n, unsigned maxindex )
 
 void AngleVectors (const QAngle& angles, Vector *forward);
 void AngleVectors (const QAngle& angles, Vector *forward, Vector *right, Vector *up);
+void AngleVectorsFLU( const QAngle& angles, Vector *pForward, Vector *pLeft, Vector *pUp );
 void AngleVectorsTranspose (const QAngle& angles, Vector *forward, Vector *right, Vector *up);
 void AngleMatrix (const QAngle &angles, matrix3x4_t &mat );
 void AngleMatrix( const QAngle &angles, const Vector &position, matrix3x4_t &mat );

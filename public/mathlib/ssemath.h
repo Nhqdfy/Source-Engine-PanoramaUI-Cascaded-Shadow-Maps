@@ -3124,4 +3124,114 @@ FORCEINLINE int BoxOnPlaneSideSIMD( const fltx4& emins, const fltx4& emaxs, cons
 	return sides[0];
 }
 
+
+//-----------------------------------------------------------------------------
+// fourplanes_t / Frustum_t - ported from CS:GO public/mathlib/ssemath.h
+// (bi32x4 is spelled fltx4 here: this tree's CmpLtSIMD returns fltx4.)
+//-----------------------------------------------------------------------------
+struct ALIGN16 fourplanes_t
+{
+	fltx4		nX;
+	fltx4		nY;
+	fltx4		nZ;
+	fltx4		dist;
+	fltx4		xSign;
+	fltx4		ySign;
+	fltx4		zSign;
+	fltx4		nXAbs;
+	fltx4		nYAbs;
+	fltx4		nZAbs;
+
+	void ComputeSignbits();
+
+	// fast SIMD loads
+	void Set4Planes( const VPlane *pPlanes );
+	void Set2Planes( const VPlane *pPlanes );
+	void Get4Planes( VPlane *pPlanesOut ) const;
+	void Get2Planes( VPlane *pPlanesOut ) const;
+	// not-SIMD, much slower
+	void GetPlane( int index, Vector *pNormal, float *pDist ) const;
+	void SetPlane( int index, const Vector &vecNormal, float planeDist );
+};
+
+class ALIGN16 Frustum_t
+{
+public:
+	Frustum_t();
+	void SetPlane( int i, const Vector &vecNormal, float dist );
+	void GetPlane( int i, Vector *pNormalOut, float *pDistOut ) const;
+	void SetPlanes( const VPlane *pPlanes );
+	void GetPlanes( VPlane *pPlanesOut ) const;
+	// returns false if the box is within the frustum, true if it is outside
+	bool CullBox( const Vector &mins, const Vector &maxs ) const;
+	bool CullBoxCenterExtents( const Vector &center, const Vector &extents ) const;
+
+	bool CullBox( const fltx4 &fl4Mins, const fltx4 &fl4Maxs ) const;
+	bool CullBoxCenterExtents( const fltx4 &fl4Center, const fltx4 &fl4Extents ) const;
+
+
+	// Return true if frustum contains this bounding volume, false if any corner is outside
+	bool Contains( const Vector &mins, const Vector &maxs ) const;
+
+	// Return true if this frustum intersects the frustum, false if it is outside
+	bool Intersects( Frustum_t &otherFrustum ) const;
+
+	// Return true if this bounding volume intersects the frustum, false if it is outside
+	bool Intersects( const Vector &mins, const Vector &maxs ) const;
+	bool IntersectsCenterExtents( const Vector &center, const Vector &extents ) const;
+
+	bool Intersects( const fltx4 &fl4Mins, const fltx4 &fl4Maxs ) const;
+	bool IntersectsCenterExtents( const fltx4 &fl4Center, const fltx4 &fl4Extents ) const;
+
+	
+	void CreatePerspectiveFrustum( const Vector& origin, const Vector &forward, 
+		const Vector &right, const Vector &up, float flZNear, float flZFar, 
+		float flFovX, float flAspect );
+
+	void CreatePerspectiveFrustumFLU( const Vector& vOrigin, const Vector &vForward, 
+		const Vector &vLeft, const Vector &vUp, float flZNear, float flZFar, 
+		float flFovX, float flAspect );
+
+	// Version that accepts angles instead of vectors
+	void CreatePerspectiveFrustum( const Vector& origin, const QAngle &angles, float flZNear, 
+		float flZFar, float flFovX, float flAspectRatio );
+
+	// Generate a frustum based on orthographic parameters
+	void CreateOrthoFrustum( const Vector &origin, const Vector &forward, const Vector &right, const Vector &up, 
+		float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar );
+
+	void CreateOrthoFrustumFLU( const Vector &vOrigin, const Vector &vForward, const Vector &vLeft, const Vector &vUp, 
+		float flLeft, float flRight, float flBottom, float flTop, float flZNear, float flZFar );
+
+	// The points returned correspond to the corners of the frustum faces 
+	// Points 0 to 3 correspond to the near face 
+	// Points 4 to 7 correspond to the far face 
+	// Returns points in a face in this order:
+	//  2--3
+	//	|  |
+	//	0--1
+	// Returns false if a corner couldn't be generated for some reason.
+	bool GetCorners( Vector *pPoints ) const;
+		
+	fourplanes_t	planes[2];
+};
+
+
+inline bool IsVector3LessThan(const fltx4 &v1, const fltx4 &v2 )
+{
+	fltx4 isOut = CmpLtSIMD( v1, v2 );
+	return IsAnyNegative( isOut );
+}
+
+inline bool IsVector4LessThan(const fltx4 &v1, const fltx4 &v2 )
+{
+	fltx4 isOut = CmpLtSIMD( v1, v2 );
+	return IsAnyNegative( isOut );
+}
+
+// Convenience version
+inline fltx4 AbsSIMD( const fltx4 & x )
+{
+	return fabs( x );
+}
 #endif // _ssemath_h

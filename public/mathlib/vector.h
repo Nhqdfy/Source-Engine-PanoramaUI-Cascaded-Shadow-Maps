@@ -183,6 +183,12 @@ public:
 	Vector& operator=(const Vector &vOther);
 
 	// 2d
+	// returns 0, 1, 2 corresponding to the component with the largest absolute value
+	inline int LargestComponent() const;
+	inline vec_t LargestComponentValue() const;
+	inline int SmallestComponent() const;
+	inline vec_t SmallestComponentValue() const;
+
 	vec_t	Length2D(void) const;					
 	vec_t	Length2DSqr(void) const;					
 
@@ -2314,6 +2320,75 @@ inline bool Vector::IsLengthGreaterThan( float val ) const
 inline bool Vector::IsLengthLessThan( float val ) const
 {
 	return LengthSqr() < val*val;
+}
+inline int Vector::LargestComponent() const
+{
+	float flAbsx = fabs(x);
+	float flAbsy = fabs(y);
+	float flAbsz = fabs(z);
+	if ( flAbsx > flAbsy )
+	{
+		if ( flAbsx > flAbsz )
+			return X_INDEX;
+		return Z_INDEX;
+	}
+	if ( flAbsy > flAbsz )
+		return Y_INDEX;
+	return Z_INDEX;
+}
+
+inline int Vector::SmallestComponent() const
+{
+	float flAbsx = fabs( x );
+	float flAbsy = fabs( y );
+	float flAbsz = fabs( z );
+	if ( flAbsx < flAbsy )
+	{
+		if ( flAbsx < flAbsz )
+			return X_INDEX;
+		return Z_INDEX;
+	}
+	if ( flAbsy < flAbsz )
+		return Y_INDEX;
+	return Z_INDEX;
+}
+
+
+inline float Vector::LargestComponentValue() const
+{
+	float flAbsX = fabs( x );
+	float flAbsY = fabs( y );
+	float flAbsZ = fabs( z );
+	return MAX( MAX( flAbsX, flAbsY ), flAbsZ );
+}
+
+inline float Vector::SmallestComponentValue() const
+{
+	float flAbsX = fabs( x );
+	float flAbsY = fabs( y );
+	float flAbsZ = fabs( z );
+	return MIN( MIN( flAbsX, flAbsY ), flAbsZ );
+}
+
+// and when you want to return the vector rather than cause a LHS with it...
+inline Vector VectorMin( const Vector &a, const Vector &b )
+{
+	return Vector( fpmin(a.x, b.x), fpmin(a.y, b.y), fpmin(a.z, b.z) );
+}
+
+inline Vector VectorMax( const Vector &a, const Vector &b )
+{
+	return Vector( fpmax(a.x, b.x), fpmax(a.y, b.y), fpmax(a.z, b.z) );
+}
+
+inline float Snap( float a, float flSnap )
+{
+	return floorf( a / flSnap + 0.5f ) * flSnap;
+}
+
+inline  const Vector Snap( const Vector &a, float flSnap )
+{
+	return Vector( Snap( a.x, flSnap ), Snap( a.y, flSnap ), Snap( a.z, flSnap ) );
 }
 
 #endif

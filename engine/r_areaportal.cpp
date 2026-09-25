@@ -151,17 +151,19 @@ static inline bool GetPortalScreenExtents( dareaportal_t *pPortal,
 		bool bAllClipped = false;
 		for( int iPlane=0; iPlane < 4; iPlane++ )
 		{
-			const cplane_t *pPlane = g_Frustum.GetPlane(iPlane);
+			Vector vPlaneNormal;
+			float flPlaneDist;
+			g_Frustum.GetPlane( iPlane, &vPlaneNormal, &flPlaneDist );
 
 			Vector *pIn = clip->lists[iCurList];
 			Vector *pOut = clip->lists[!iCurList];
 
 			int nOutVerts = 0;
 			int iPrev = nStartVerts - 1;
-			float flPrevDot = pPlane->normal.Dot( pIn[iPrev] ) - pPlane->dist;
+			float flPrevDot = vPlaneNormal.Dot( pIn[iPrev] ) - flPlaneDist;
 			for( int iCur=0; iCur < nStartVerts; iCur++ )
 			{
-				float flCurDot = pPlane->normal.Dot( pIn[iCur] ) - pPlane->dist;
+				float flCurDot = vPlaneNormal.Dot( pIn[iCur] ) - flPlaneDist;
 
 				if( (flCurDot > 0) != (flPrevDot > 0) )
 				{
@@ -443,13 +445,13 @@ static void R_SetupVisibleAreaFrustums()
 		{
 			// Left and right planes...
 			float orgOffset = DotProduct(CurrentViewOrigin(), CurrentViewRight());
-			pInfo->m_Frustum.SetPlane( FRUSTUM_LEFT, PLANE_ANYZ, CurrentViewRight(), portalWindow.left + orgOffset );
-			pInfo->m_Frustum.SetPlane( FRUSTUM_RIGHT, PLANE_ANYZ, -CurrentViewRight(), -portalWindow.right - orgOffset );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_LEFT, CurrentViewRight(), portalWindow.left + orgOffset );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_RIGHT, -CurrentViewRight(), -portalWindow.right - orgOffset );
 
 			// Top and bottom planes...
 			orgOffset = DotProduct(CurrentViewOrigin(), CurrentViewUp());
-			pInfo->m_Frustum.SetPlane( FRUSTUM_TOP, PLANE_ANYZ, CurrentViewUp(), portalWindow.top + orgOffset );
-			pInfo->m_Frustum.SetPlane( FRUSTUM_BOTTOM, PLANE_ANYZ, -CurrentViewUp(), -portalWindow.bottom - orgOffset );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_TOP, CurrentViewUp(), portalWindow.top + orgOffset );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_BOTTOM, -CurrentViewUp(), -portalWindow.bottom - orgOffset );
 		}
 		else
 		{
@@ -465,34 +467,29 @@ static void R_SetupVisibleAreaFrustums()
 			}
 
 			Vector normal;
-			const cplane_t *pTest;
 
 			// right side
 			normal = portalWindow.right * CurrentViewForward() - CurrentViewRight();
 			VectorNormalize(normal); // OPTIMIZE: This is unnecessary for culling
-			pTest = pInfo->m_Frustum.GetPlane( FRUSTUM_RIGHT );
-			pInfo->m_Frustum.SetPlane( FRUSTUM_RIGHT, PLANE_ANYZ, normal, DotProduct(normal,CurrentViewOrigin()) );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_RIGHT, normal, DotProduct(normal,CurrentViewOrigin()) );
 
 			// left side
 			normal = CurrentViewRight() - portalWindow.left * CurrentViewForward();
 			VectorNormalize(normal); // OPTIMIZE: This is unnecessary for culling
-			pTest = pInfo->m_Frustum.GetPlane( FRUSTUM_LEFT );
-			pInfo->m_Frustum.SetPlane( FRUSTUM_LEFT, PLANE_ANYZ, normal, DotProduct(normal,CurrentViewOrigin()) );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_LEFT, normal, DotProduct(normal,CurrentViewOrigin()) );
 
 			// top
 			normal = portalWindow.top * CurrentViewForward() - CurrentViewUp();
 			VectorNormalize(normal); // OPTIMIZE: This is unnecessary for culling
-			pTest = pInfo->m_Frustum.GetPlane( FRUSTUM_TOP );
-			pInfo->m_Frustum.SetPlane( FRUSTUM_TOP, PLANE_ANYZ, normal, DotProduct(normal,CurrentViewOrigin()) );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_TOP, normal, DotProduct(normal,CurrentViewOrigin()) );
 
 			// bottom
 			normal = CurrentViewUp() - portalWindow.bottom * CurrentViewForward();
 			VectorNormalize(normal); // OPTIMIZE: This is unnecessary for culling
-			pTest = pInfo->m_Frustum.GetPlane( FRUSTUM_BOTTOM );
-			pInfo->m_Frustum.SetPlane( FRUSTUM_BOTTOM, PLANE_ANYZ, normal, DotProduct(normal,CurrentViewOrigin()) );
+			pInfo->m_Frustum.SetPlane( FRUSTUM_BOTTOM, normal, DotProduct(normal,CurrentViewOrigin()) );
 
 			// farz
-			pInfo->m_Frustum.SetPlane( FRUSTUM_FARZ, PLANE_ANYZ, -CurrentViewForward(), 
+			pInfo->m_Frustum.SetPlane( FRUSTUM_FARZ, -CurrentViewForward(), 
 				DotProduct(-CurrentViewForward(), CurrentViewOrigin() + CurrentViewForward()*g_viewSetup.zFar) );
 		}
 
@@ -503,9 +500,9 @@ static void R_SetupVisibleAreaFrustums()
 		{
 			if ( g_VisibleAreas[i] == r_snapportal.GetInt() )
 			{
-				pInfo->m_Frustum.SetPlane( FRUSTUM_NEARZ, PLANE_ANYZ, CurrentViewForward(), 
+				pInfo->m_Frustum.SetPlane( FRUSTUM_NEARZ, CurrentViewForward(), 
 					DotProduct(CurrentViewForward(), CurrentViewOrigin()) );
-				pInfo->m_Frustum.SetPlane( FRUSTUM_FARZ, PLANE_ANYZ, -CurrentViewForward(), 
+				pInfo->m_Frustum.SetPlane( FRUSTUM_FARZ, -CurrentViewForward(), 
 					DotProduct(-CurrentViewForward(), CurrentViewOrigin() + CurrentViewForward()*500) );
 				r_snapportal.SetValue( -1 );
 				CSGFrustum( pInfo->m_Frustum );
@@ -532,9 +529,11 @@ inline bool R_CullNodeInternal( mnode_t *pNode, int &nClipMask, const Frustum_t&
 	float flCenterDotNormal, flHalfDiagDotAbsNormal;
 	if (nClipMask & FRUSTUM_CLIP_RIGHT)
 	{
-		const cplane_t *pPlane = frustum.GetPlane(FRUSTUM_RIGHT);
-		flCenterDotNormal = DotProduct( pNode->m_vecCenter, pPlane->normal ) - pPlane->dist;
-		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, frustum.GetAbsNormal(FRUSTUM_RIGHT) );
+		Vector vPlaneNormal;
+		float flPlaneDist;
+		frustum.GetPlane( FRUSTUM_RIGHT, &vPlaneNormal, &flPlaneDist );
+		flCenterDotNormal = DotProduct( pNode->m_vecCenter, vPlaneNormal ) - flPlaneDist;
+		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, Vector( fabs(vPlaneNormal.x), fabs(vPlaneNormal.y), fabs(vPlaneNormal.z) ) );
 		if (flCenterDotNormal + flHalfDiagDotAbsNormal < 0.0f)
 			return true;
 		if (flCenterDotNormal - flHalfDiagDotAbsNormal < 0.0f)
@@ -543,9 +542,11 @@ inline bool R_CullNodeInternal( mnode_t *pNode, int &nClipMask, const Frustum_t&
 
 	if (nClipMask & FRUSTUM_CLIP_LEFT)
 	{
-		const cplane_t *pPlane = frustum.GetPlane(FRUSTUM_LEFT);
-		flCenterDotNormal = DotProduct( pNode->m_vecCenter, pPlane->normal ) - pPlane->dist;
-		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, frustum.GetAbsNormal(FRUSTUM_LEFT) );
+		Vector vPlaneNormal;
+		float flPlaneDist;
+		frustum.GetPlane( FRUSTUM_LEFT, &vPlaneNormal, &flPlaneDist );
+		flCenterDotNormal = DotProduct( pNode->m_vecCenter, vPlaneNormal ) - flPlaneDist;
+		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, Vector( fabs(vPlaneNormal.x), fabs(vPlaneNormal.y), fabs(vPlaneNormal.z) ) );
 		if (flCenterDotNormal + flHalfDiagDotAbsNormal < 0.0f)
 			return true;
 		if (flCenterDotNormal - flHalfDiagDotAbsNormal < 0.0f)
@@ -554,9 +555,11 @@ inline bool R_CullNodeInternal( mnode_t *pNode, int &nClipMask, const Frustum_t&
 
 	if (nClipMask & FRUSTUM_CLIP_TOP)
 	{
-		const cplane_t *pPlane = frustum.GetPlane(FRUSTUM_TOP);
-		flCenterDotNormal = DotProduct( pNode->m_vecCenter, pPlane->normal ) - pPlane->dist;
-		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, frustum.GetAbsNormal(FRUSTUM_TOP) );
+		Vector vPlaneNormal;
+		float flPlaneDist;
+		frustum.GetPlane( FRUSTUM_TOP, &vPlaneNormal, &flPlaneDist );
+		flCenterDotNormal = DotProduct( pNode->m_vecCenter, vPlaneNormal ) - flPlaneDist;
+		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, Vector( fabs(vPlaneNormal.x), fabs(vPlaneNormal.y), fabs(vPlaneNormal.z) ) );
 		if (flCenterDotNormal + flHalfDiagDotAbsNormal < 0.0f)
 			return true;
 		if (flCenterDotNormal - flHalfDiagDotAbsNormal < 0.0f)
@@ -565,9 +568,11 @@ inline bool R_CullNodeInternal( mnode_t *pNode, int &nClipMask, const Frustum_t&
 
 	if (nClipMask & FRUSTUM_CLIP_BOTTOM)
 	{
-		const cplane_t *pPlane = frustum.GetPlane(FRUSTUM_BOTTOM);
-		flCenterDotNormal = DotProduct( pNode->m_vecCenter, pPlane->normal ) - pPlane->dist;
-		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, frustum.GetAbsNormal(FRUSTUM_BOTTOM) );
+		Vector vPlaneNormal;
+		float flPlaneDist;
+		frustum.GetPlane( FRUSTUM_BOTTOM, &vPlaneNormal, &flPlaneDist );
+		flCenterDotNormal = DotProduct( pNode->m_vecCenter, vPlaneNormal ) - flPlaneDist;
+		flHalfDiagDotAbsNormal = DotProduct( pNode->m_vecHalfDiagonal, Vector( fabs(vPlaneNormal.x), fabs(vPlaneNormal.y), fabs(vPlaneNormal.z) ) );
 		if (flCenterDotNormal + flHalfDiagDotAbsNormal < 0.0f)
 			return true;
 		if (flCenterDotNormal - flHalfDiagDotAbsNormal < 0.0f)
