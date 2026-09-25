@@ -551,6 +551,9 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 				//  CSM-capable hardware so the proven ps20b path is untouched otherwise.)
 				if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() )
 				{
+					static bool bDbgPs30Static = false;
+					if ( !bDbgPs30Static ) { bDbgPs30Static = true; Msg( "CSM: lmg static -> ps30 (SM3=%d supportsCSM=%d)\n", g_pHardwareConfig->SupportsShaderModel_3_0() ? 1 : 0, g_pHardwareConfig->SupportsCascadedShadowMapping() ? 1 : 0 ); }
+
 					pShaderShadow->EnableTexture( SHADER_SAMPLER15, true );
 					pShaderShadow->SetShadowDepthFiltering( SHADER_SAMPLER15 );
 
@@ -588,6 +591,9 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 				}
 				else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() )
 				{
+					static bool bDbgPs20bStatic = false;
+					if ( !bDbgPs20bStatic ) { bDbgPs20bStatic = true; Msg( "CSM: lmg static -> ps20b (CSM shading path NOT used)\n" ); }
+
 					DECLARE_STATIC_PIXEL_SHADER( lightmappedgeneric_ps20b );
 					SET_STATIC_PIXEL_SHADER_COMBO( BASETEXTURE2, hasBaseTexture2 );
 					SET_STATIC_PIXEL_SHADER_COMBO( DETAILTEXTURE, hasDetailTexture );
@@ -969,9 +975,22 @@ void DrawLightmappedGeneric_DX9_Internal(CBaseVSShader *pShader, IMaterialVar** 
 					pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
 
 				DynamicCmdsOut.SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+
+				static int nDbgLastCascades = -1;
+				if ( (int)cascadeState.m_nNumCascades != nDbgLastCascades )
+				{
+					nDbgLastCascades = (int)cascadeState.m_nNumCascades;
+					Msg( "CSM: lmg bind - cascades=%d atlas=%d lightColor=(%.2f %.2f %.2f %.2f) texW=%.0f\n",
+			 cascadeState.m_nNumCascades, pDepthTextureAtlas ? 1 : 0,
+			 cascadeState.m_vLightColor.x, cascadeState.m_vLightColor.y, cascadeState.m_vLightColor.z, cascadeState.m_vLightColor.w,
+			 cascadeState.m_TexParams2.m_flShadowTextureWidth );
+				}
 			}
 
 			pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMEnabled, 1 );
+
+			static int nDbgLastCSM = -1;
+			if ( ( bCSMEnabled ? 1 : 0 ) != nDbgLastCSM ) { nDbgLastCSM = bCSMEnabled ? 1 : 0; Msg( "CSM: lmg dynamic -> ps30, bCSMEnabled=%d isCSM=%d qualityMode=%d\n", bCSMEnabled ? 1 : 0, pShaderAPI->IsCascadedShadowMapping() ? 1 : 0, (int)g_pHardwareConfig->GetCSMQuality() ); }
 
 			DECLARE_DYNAMIC_PIXEL_SHADER( lightmappedgeneric_ps30 );
 			SET_DYNAMIC_PIXEL_SHADER_COMBO( FASTPATH,  bPixelShaderFastPath || pContextData->m_bPixelShaderForceFastPathBecauseOutline );
@@ -1089,3 +1108,4 @@ void DrawLightmappedGeneric_DX9(CBaseVSShader *pShader, IMaterialVar** params,
 	
 	DrawLightmappedGeneric_DX9_Internal( pShader, params, hasFlashlight, pShaderAPI, pShaderShadow, info, pContextDataPtr );
 }
+

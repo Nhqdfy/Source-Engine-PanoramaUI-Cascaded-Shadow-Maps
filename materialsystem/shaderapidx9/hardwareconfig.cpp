@@ -1333,7 +1333,12 @@ bool CHardwareConfig::SupportsCascadedShadowMapping( void ) const
 
 CSMQualityMode_t CHardwareConfig::GetCSMQuality( void ) const
 {
-	return (CSMQualityMode_t)m_Caps.m_nCSMQuality;
+	// CS:GO keeps the hardware-caps quality separate from the user-configured one, and its shader
+	// helpers ask the material system config.  This tree's stdshader helpers only have the hardware
+	// config to ask, so report whichever is higher (the caps act as a floor).
+	CSMQualityMode_t nCaps = (CSMQualityMode_t)m_Caps.m_nCSMQuality;
+	CSMQualityMode_t nConfigured = ShaderUtil()->GetConfig().GetCSMQualityMode();
+	return ( nConfigured > nCaps ) ? nConfigured : nCaps;
 }
 
 bool CHardwareConfig::SupportsBilinearPCFSampling() const

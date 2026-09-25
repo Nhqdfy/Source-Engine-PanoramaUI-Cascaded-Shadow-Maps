@@ -1664,6 +1664,34 @@ void CCascadeLightManager::ComputeShadowDepthTextures( const CViewSetup &viewSet
 			pRenderContext->EndGeneratingCSMs();
 			m_bCSMIsActive = true;
 
+			static bool bDbgCSMParams = false;
+			if ( !bDbgCSMParams )
+			{
+				bDbgCSMParams = true;
+				const SunLightState_t &ls = GetActiveState().m_CSMParallelSplit.GetLightState();
+				const CascadedShadowMappingState_t &sp = ls.m_SunLightShaderParams;
+				Msg( "CSM: params cascades=%d dir=(%.3f %.3f %.3f) camPos=(%.1f %.1f %.1f) atlasW=%.0f atlasH=%.0f\n",
+					 sp.m_nNumCascades, sp.m_vLightDir.x, sp.m_vLightDir.y, sp.m_vLightDir.z,
+					 sp.m_vCamPosition.x, sp.m_vCamPosition.y, sp.m_vCamPosition.z,
+					 sp.m_TexParams2.m_flShadowTextureWidth, sp.m_TexParams2.m_flShadowTextureHeight );
+				for ( int i = 0; i < 3; ++i )
+				{
+					Msg( "CSM: c%d vp=(%d,%d %dx%d) uvOff=(%.3f %.3f %.3f %.3f)\n", i,
+						 ls.m_CascadeViewports[i].x, ls.m_CascadeViewports[i].y,
+						 ls.m_CascadeViewports[i].width, ls.m_CascadeViewports[i].height,
+						 sp.m_vCascadeAtlasUVOffsets[i].x, sp.m_vCascadeAtlasUVOffsets[i].y,
+						 sp.m_vCascadeAtlasUVOffsets[i].z, sp.m_vCascadeAtlasUVOffsets[i].w );
+					Msg( "CSM: c%d mat row0=(%.4f %.4f %.4f %.4f) row1=(%.4f %.4f %.4f %.4f) row2=(%.4f %.4f %.4f %.4f) row3=(%.4f %.4f %.4f %.4f)\n", i,
+						 sp.m_matWorldToShadowTexMatrices[i][0][0], sp.m_matWorldToShadowTexMatrices[i][0][1], sp.m_matWorldToShadowTexMatrices[i][0][2], sp.m_matWorldToShadowTexMatrices[i][0][3],
+						 sp.m_matWorldToShadowTexMatrices[i][1][0], sp.m_matWorldToShadowTexMatrices[i][1][1], sp.m_matWorldToShadowTexMatrices[i][1][2], sp.m_matWorldToShadowTexMatrices[i][1][3],
+						 sp.m_matWorldToShadowTexMatrices[i][2][0], sp.m_matWorldToShadowTexMatrices[i][2][1], sp.m_matWorldToShadowTexMatrices[i][2][2], sp.m_matWorldToShadowTexMatrices[i][2][3],
+						 sp.m_matWorldToShadowTexMatrices[i][3][0], sp.m_matWorldToShadowTexMatrices[i][3][1], sp.m_matWorldToShadowTexMatrices[i][3][2], sp.m_matWorldToShadowTexMatrices[i][3][3] );
+				}
+				Msg( "CSM: splitLerpBase=%.4f splitLerpInvRange=%.4f zLerpBase=%.4f zLerpRange=%.4f\n",
+					 sp.m_TexParams2.m_flSplitLerpFactorBase, sp.m_TexParams2.m_flSplitLerpFactorInvRange,
+					 sp.m_TexParams3.m_flDistLerpFactorBase, sp.m_TexParams3.m_flDistLerpFactorInvRange );
+			}
+
 			static bool bWarnedCSMActive = false;
 			if ( !bWarnedCSMActive )
 			{

@@ -153,6 +153,7 @@ sampler EnvmapMaskSampler		: register( s5 );
 #endif
 
 
+
 #if WARPLIGHTING
 sampler WarpLightingSampler		: register( s6 );
 #endif
@@ -260,6 +261,7 @@ HALF4 main( PS_INPUT i ) : COLOR
 		HALF2 bumpCoord1 = ComputeLightmapCoordinates( i.lightmapTexCoord1And2, i.lightmapTexCoord3.xy );
 		lightmapColor1 = LightMapSample( LightmapSampler, bumpCoord1 );
 	}
+
 #endif
 
 #if RELIEF_MAPPING
@@ -487,6 +489,8 @@ HALF4 main( PS_INPUT i ) : COLOR
 	{
 		diffuseLighting = lightmapColor1 * g_TintValuesAndLightmapScale.rgb;
 
+	}
+
 #if ( CASCADED_SHADOW_MAPPING ) && ( CASCADE_SIZE > 0 )
 	// CS:GO CSM sampling (csm_common_pc_fxc.h). CS:GO's fully blended path modulates by the
 	// vrad-baked lightmap alpha sun percent (CSM_BLENDING / MapHasLightMapAlphaData); this
@@ -496,7 +500,6 @@ HALF4 main( PS_INPUT i ) : COLOR
 		diffuseLighting.rgb *= CSMComputeShadowing( i.worldPos_projPosZ.xyz );
 	}
 #endif
-	}
 
 #if WARPLIGHTING && ( SEAMLESS == 0 )
 	float len=0.5*length(diffuseLighting);
