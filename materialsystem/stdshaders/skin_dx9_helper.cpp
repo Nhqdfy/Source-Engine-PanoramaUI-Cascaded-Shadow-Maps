@@ -453,6 +453,33 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 			SET_STATIC_VERTEX_SHADER_COMBO( USE_STATIC_CONTROL_FLOW, bUseStaticControlFlow );
 			SET_STATIC_VERTEX_SHADER( skin_vs20 );
 
+			// CS:GO: the player-model CSM code only exists in the ps_3_0 shader (character_ps2x.fxc /
+			// phong_ps2x.fxc gate it out for ps_2_b), so the vs20 vertex path stays and only the pixel
+			// shader is switched to ps_3_0 when cascades are available.
+			if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight )
+			{
+				DECLARE_STATIC_PIXEL_SHADER( skin_ps30 );
+				SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHT, bHasFlashlight );
+				SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM,  bHasSelfIllum && !bHasFlashlight );
+				SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUMFRESNEL,  bHasSelfIllumFresnel && !bHasFlashlight );
+				SET_STATIC_PIXEL_SHADER_COMBO( LIGHTWARPTEXTURE, bHasDiffuseWarp && bHasPhong );
+				SET_STATIC_PIXEL_SHADER_COMBO( PHONGWARPTEXTURE, bHasPhongWarp && bHasPhong );
+				SET_STATIC_PIXEL_SHADER_COMBO( WRINKLEMAP, bHasBaseTextureWrinkle || bHasBumpWrinkle );
+				SET_STATIC_PIXEL_SHADER_COMBO( DETAILTEXTURE,  hasDetailTexture );
+				SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
+				SET_STATIC_PIXEL_SHADER_COMBO( RIMLIGHT, bHasRimLight );
+				SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP, bHasEnvmap );
+				SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHTDEPTHFILTERMODE, nShadowFilterMode );
+				SET_STATIC_PIXEL_SHADER_COMBO( CONVERT_TO_SRGB, 0 );
+				SET_STATIC_PIXEL_SHADER_COMBO( FASTPATH_NOBUMP, pContextData->m_bFastPath );
+				SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+				SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight );
+				SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, g_pHardwareConfig->GetCSMShaderMode( g_pHardwareConfig->GetCSMQuality() ) );
+				SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
+				SET_STATIC_PIXEL_SHADER( skin_ps30 );
+			}
+			else
+			{
 			// Assume we're only going to get in here if we support 2b
 			DECLARE_STATIC_PIXEL_SHADER( skin_ps20b );
 			SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHT, bHasFlashlight );
@@ -469,7 +496,13 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 			SET_STATIC_PIXEL_SHADER_COMBO( CONVERT_TO_SRGB, 0 );
 			SET_STATIC_PIXEL_SHADER_COMBO( FASTPATH_NOBUMP, pContextData->m_bFastPath );
 			SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+			// CS:GO character/phong: the ps_2_b variant declares these as 0..0 / 0..1 and never
+			// samples the cascade atlas.
+			SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, 0 );
+			SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, 0 );
+			SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 			SET_STATIC_PIXEL_SHADER( skin_ps20b );
+			}
 		}
 #ifndef _X360
 		else
@@ -496,6 +529,12 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 			SET_STATIC_PIXEL_SHADER_COMBO( CONVERT_TO_SRGB, 0 );
 			SET_STATIC_PIXEL_SHADER_COMBO( FASTPATH_NOBUMP, pContextData->m_bFastPath );
 			SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+			// CS:GO character/phong: this branch is only reached with fast vertex textures (not this
+			// machine); keep the cascade combos at their declared minimum here.  The CSM-enabled
+			// ps_3_0 path is the vs20 branch above.
+			SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, 0 );
+			SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, 0 );
+			SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 			SET_STATIC_PIXEL_SHADER( skin_ps30 );
 		}
 #endif
@@ -670,13 +709,61 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 			SET_DYNAMIC_VERTEX_SHADER_COMBO( NUM_LIGHTS, bUseStaticControlFlow ? 0 : lightState.m_nNumLights );
 			SET_DYNAMIC_VERTEX_SHADER( skin_vs20 );
 
-			DECLARE_DYNAMIC_PIXEL_SHADER( skin_ps20b );
-			SET_DYNAMIC_PIXEL_SHADER_COMBO( NUM_LIGHTS, lightState.m_nNumLights );
-			SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITEWATERFOGTODESTALPHA, bWriteWaterFogToAlpha );
-			SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITE_DEPTH_TO_DESTALPHA, bWriteDepthToAlpha );
-			SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
-			SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
-			SET_DYNAMIC_PIXEL_SHADER( skin_ps20b );
+			// CS:GO: same split as the static pass - the player-model CSM state lives in the ps_3_0
+			// variant only.
+			if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight )
+			{
+				DECLARE_DYNAMIC_PIXEL_SHADER( skin_ps30 );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( NUM_LIGHTS, lightState.m_nNumLights );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITEWATERFOGTODESTALPHA, bWriteWaterFogToAlpha );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITE_DEPTH_TO_DESTALPHA, bWriteDepthToAlpha );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
+				// CS:GO character/phong: PC keeps the cascade size combo at 0
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
+				// CS:GO character_dx9_helper.cpp - bind the cascade shadow depth atlas (s15) and push
+				// the cascade state (matrices + light colour) to c64, then set the b0/b1/b2 flags.
+				if ( pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight )
+				{
+					ITexture *pDepthTextureAtlas = NULL;
+					const CascadedShadowMappingState_t &cascadeState = pShaderAPI->GetCascadedShadowMappingState( &pDepthTextureAtlas, true );
+					if ( pDepthTextureAtlas )
+						pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
+					pShaderAPI->SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+				}
+				BOOL bCSMBool = pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight;
+				ConVarRef r_csm_debug_shading( "r_csm_debug_shading" );
+				BOOL bCSMVizSplit = ( r_csm_debug_shading.GetInt() == 1 );
+				BOOL bCSMVizShadow = ( r_csm_debug_shading.GetInt() == 2 );
+				{
+					static int s_nDbgSkinCSM = 0;
+					if ( s_nDbgSkinCSM < 4 && bCSMBool )
+					{
+						s_nDbgSkinCSM++;
+						ITexture *pDbgAtlas = NULL;
+						const CascadedShadowMappingState_t &dbgState = pShaderAPI->GetCascadedShadowMappingState( &pDbgAtlas );
+						Msg( "CSM: skin draw[skin_ps30] - bCSMEnabled=%d atlas=%d cascades=%d lightDir=(%.2f %.2f %.2f)\n",
+							bCSMBool ? 1 : 0, pDbgAtlas ? 1 : 0, dbgState.m_nNumCascades,
+							dbgState.m_vLightDir.x, dbgState.m_vLightDir.y, dbgState.m_vLightDir.z );
+					}
+				}
+				pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMBool, 1 );
+				pShaderAPI->SetBooleanPixelShaderConstant( 1, &bCSMVizSplit, 1 );
+				pShaderAPI->SetBooleanPixelShaderConstant( 2, &bCSMVizShadow, 1 );
+				SET_DYNAMIC_PIXEL_SHADER( skin_ps30 );
+			}
+			else
+			{
+				DECLARE_DYNAMIC_PIXEL_SHADER( skin_ps20b );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( NUM_LIGHTS, lightState.m_nNumLights );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITEWATERFOGTODESTALPHA, bWriteWaterFogToAlpha );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITE_DEPTH_TO_DESTALPHA, bWriteDepthToAlpha );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
+				// CS:GO character/phong: PC keeps the cascade size combo at 0
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
+				SET_DYNAMIC_PIXEL_SHADER( skin_ps20b );
+			}
 		}
 #ifndef _X360
 		else
@@ -697,6 +784,8 @@ void DrawSkin_DX9_Internal( CBaseVSShader *pShader, IMaterialVar** params, IShad
 			SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITE_DEPTH_TO_DESTALPHA, bWriteDepthToAlpha );
 			SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
 			SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
+			// CS:GO character/phong: PC keeps the cascade size combo at 0
+			SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
 			SET_DYNAMIC_PIXEL_SHADER( skin_ps30 );
 
 			bool bUnusedTexCoords[3] = { false, false, !pShaderAPI->IsHWMorphingEnabled() || !bIsDecal };
