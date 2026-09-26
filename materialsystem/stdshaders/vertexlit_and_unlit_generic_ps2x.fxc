@@ -25,12 +25,23 @@
 // STATIC: "BLENDTINTBYBASEALPHA"       "0..1"
 // STATIC: "SRGB_INPUT_ADAPTER"			"0..1"	[ps20b]
 // STATIC: "CUBEMAP_SPHERE_LEGACY"		"0..1"
+// CS:GO vertexlit_and_unlit_generic_ps2x.fxc:39-46 - model cascade shadow combos
+// STATIC: "CASCADED_SHADOW_MAPPING"	"0..0"	[ps20] [PC]
+// STATIC: "CASCADED_SHADOW_MAPPING"	"0..1"	[ps20b] [ps30] [PC]
+// STATIC: "CSM_MODE"					"0..0"	[ps20] [ps20b] [PC]
+// STATIC: "CSM_MODE"					"0..3"	[ps30] [PC]
+// STATIC: "CSM_BLENDING"				"0..1"
+
 
 // DYNAMIC: "PIXELFOGTYPE"				"0..1"  [ps20]
 // DYNAMIC: "LIGHTING_PREVIEW"          "0..2"	[PC]
 // DYNAMIC: "LIGHTING_PREVIEW"          "0..0"	[XBOX]
 // DYNAMIC: "FLASHLIGHTSHADOWS"			"0..1"	[ps20b]
 // DYNAMIC: "FLASHLIGHTSHADOWS"			"0..1"	[ps30]
+// CS:GO vertexlit_and_unlit_generic_ps2x.fxc:59-61
+// DYNAMIC: "CASCADE_SIZE"				"0..1"	[ps20b] [PC]
+// DYNAMIC: "CASCADE_SIZE"				"0..0"	[ps20] [ps30] [PC]
+
 
 // detail blend mode 6 = ps20b only
 // SKIP: $DETAIL_BLEND_MODE == 6				[ps20]
@@ -210,6 +221,23 @@ float4 FinalOutputConst( const float4 vShaderColor, float pixelFogFactor, float 
 }
 
 
+// CS:GO vertexlit_and_unlit_generic_ps2x.fxc:297-322 - CSM preamble.  Identical guard structure:
+// the bool flags and the cascade state only exist for ps_3_0 (ps_2_b has no bool constant
+// registers and this tree's model draws are kept on the ps_3_0 path when CSM is on).
+#if ( CASCADED_SHADOW_MAPPING ) && !defined( _X360 ) && !defined( _PS3 ) && !defined( SHADER_MODEL_PS_2_B )
+	const bool g_bCSMEnabled : register( b0 );
+	#undef CASCADE_SIZE
+	#define CASCADE_SIZE 1
+#endif
+
+#if ( CASCADED_SHADOW_MAPPING ) && ( CASCADE_SIZE > 0 ) && !defined( _X360 ) && !defined( _PS3 ) && !defined( SHADER_MODEL_PS_2_B )
+	#define CSM_ENABLED 1
+	sampler CSMDepthAtlasSampler : register( s15 );
+	#include "csm_common_fxc.h"
+#else
+	#define CSM_ENABLED 0
+#endif
+
 #if LIGHTING_PREVIEW == 2
 LPREVIEW_PS_OUT main( PS_INPUT i ) : COLOR
 #else
@@ -330,11 +358,50 @@ float4 main( PS_INPUT i ) : COLOR
 		specularFactor *= 1.0 - baseColor.a; // this blows!
 	}
 
+#if ( CSM_ENABLED )
+	// CS:GO takes the sun's share of the surface lighting from the vertex shader
+	// (i.directionalLightingColor_flShadowDimScalar.a, baked from the vertex static light).  This
+	// tree's model vertex format has no such channel - the engine bakes one colour24 per vertex - so
+	// the same term is reconstructed from N.L against the cascade light direction.
+	float flSunAmount = saturate( dot( normalize( i.worldSpaceNormal ), normalize( g_vCSMLightDir.xyz ) ) );
+	float flDirectionalShadow = 1.0f;
+	if ( g_bCSMEnabled )
+	{
+		flDirectionalShadow = CSMComputeShadowing( i.worldPos_projPosZ.xyz );
+	}
+#endif
+
 	float3 diffuseLighting = float3( 1.0f, 1.0f, 1.0f );
 	if( bDiffuseLighting || bVertexColor && !( bVertexColor && bDiffuseLighting ) )
 	{
 		diffuseLighting = i.color.rgb;
 	}
+
+#if ( CSM_ENABLED && !VERTEXCOLOR && !FLASHLIGHT )
+	{
+		if ( g_bCSMEnabled )
+		{
+			// CS:GO vertexlit_and_unlit_generic_ps2x.fxc:528-563 - only the sun's share of the
+			// lighting is shadowed, the baked indirect lighting is kept as-is.
+#if ( CSM_BLENDING == 1 )
+			if ( flSunAmount > 0.0f )
+			{
+				float3 vDirect = flSunAmount * g_vCSMLightColor.rgb;
+				float3 vIndirect = diffuseLighting.rgb * ( 1.0f - flSunAmount );
+				diffuseLighting.rgb = ( vDirect * flDirectionalShadow ) + vIndirect;
+			}
+#else
+			{
+				float flShadowScalar = 1.0 - ( flSunAmount * ( 1.0 - flDirectionalShadow ) );
+				diffuseLighting.rgb *= flShadowScalar;
+				// Desaturate shadow colour since we only have a grayscale dim factor
+				diffuseLighting.rgb = lerp( diffuseLighting.bgr, diffuseLighting.rgb, flShadowScalar * 0.5 + 0.5 );
+			}
+#endif
+		}
+	}
+#endif
+
 
 	float3 albedo = baseColor;
 	if (bBlendTintByBaseAlpha)

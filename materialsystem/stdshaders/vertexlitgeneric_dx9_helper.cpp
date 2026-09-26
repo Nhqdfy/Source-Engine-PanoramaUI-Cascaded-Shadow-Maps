@@ -677,7 +677,31 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_STATIC_VERTEX_SHADER_COMBO( USE_STATIC_CONTROL_FLOW, bUseStaticControlFlow );
 					SET_STATIC_VERTEX_SHADER( vertexlit_and_unlit_generic_bump_vs20 );
 				
-					if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send GL this way
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:903-945 - see the non-bumped case: on PC the
+					// model CSM code lives in the ps_3_0 shader only, and the vs20 vertex path is kept.
+					if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight )
+					{
+						DECLARE_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps30 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP,  bHasEnvmap );
+						SET_STATIC_PIXEL_SHADER_COMBO( DIFFUSELIGHTING,  hasDiffuseLighting );
+						SET_STATIC_PIXEL_SHADER_COMBO( LIGHTWARPTEXTURE, bHasDiffuseWarp && !bHasSelfIllumFresnel );
+						SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM,  bHasSelfIllum );
+						SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUMFRESNEL, bHasSelfIllumFresnel );
+						SET_STATIC_PIXEL_SHADER_COMBO( NORMALMAPALPHAENVMAPMASK,  hasNormalMapAlphaEnvmapMask && bHasEnvmap );
+						SET_STATIC_PIXEL_SHADER_COMBO( HALFLAMBERT,  bHalfLambert);
+						SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHT,  bHasFlashlight );
+						SET_STATIC_PIXEL_SHADER_COMBO( DETAILTEXTURE,  bHasDetailTexture );
+						SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
+						SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHTDEPTHFILTERMODE, nShadowFilterMode );
+						SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp - CSM static combos for this variant
+						const bool bCSMStatic = g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight;
+						SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, bCSMStatic );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, bCSMStatic ? g_pHardwareConfig->GetCSMShaderMode( g_pHardwareConfig->GetCSMQuality() ) : 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
+						SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps30 );
+					}
+					else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send GL this way
 					{
 						DECLARE_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps20b );
 						SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP,  bHasEnvmap );
@@ -692,6 +716,12 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 						SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
 						SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHTDEPTHFILTERMODE, nShadowFilterMode );
 						SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp: CSM static combos for this model shader variant
+						const bool bCSMStatic = g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight;
+						SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, bCSMStatic );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp:944 - CSM_MODE is a 0..0 combo on ps_2_b
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 						SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps20b );
 					}
 					else // ps_2_0
@@ -708,6 +738,11 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 						SET_STATIC_PIXEL_SHADER_COMBO( DETAILTEXTURE,  bHasDetailTexture );
 						SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
 						SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp: CSM static combos for this model shader variant
+						// CS:GO vertexlitgeneric_dx9_helper.cpp:969-970 - ps_2_0 declares both as 0..0
+						SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 						SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps20 );
 					}
 				}
@@ -736,6 +771,11 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
 					SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHTDEPTHFILTERMODE, nShadowFilterMode );
 					SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp: CSM static combos for this model shader variant
+					const bool bCSMStatic = g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight;
+					SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, bCSMStatic );
+					SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, bCSMStatic ? g_pHardwareConfig->GetCSMShaderMode( g_pHardwareConfig->GetCSMQuality() ) : 0 );
+					SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 					SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps30 );
 				}
 #endif
@@ -775,10 +815,47 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_STATIC_VERTEX_SHADER_COMBO( USE_STATIC_CONTROL_FLOW, bUseStaticControlFlow );
 					SET_STATIC_VERTEX_SHADER_COMBO( DONT_GAMMA_CONVERT_VERTEX_COLOR, (! bSRGBWrite ) && bHasVertexColor );
 					SET_STATIC_VERTEX_SHADER( vertexlit_and_unlit_generic_vs20 );
-
-					if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send Gl this way
+					
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:918-944 - on PC the model CSM code only exists
+					// in the ps_3_0 pixel shaders (the ps_2_b variants gate it out with
+					// !defined(SHADER_MODEL_PS_2_B) and keep CASCADE_SIZE == 0).  This tree picks
+					// vs20 whenever HasFastVertexTextures() is false, so the vs20 vertex path is kept
+					// (identical VS_OUTPUT layout) and only the pixel shader is switched to ps_3_0.
+					if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight )
+					{
+						DECLARE_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps30 );
+						const bool bCSMStatic = g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight;
+						SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM_ENVMAPMASK_ALPHA, ( hasSelfIllumInEnvMapMask && ( bHasEnvmapMask ) ) );
+						SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP,  bHasEnvmap );
+						SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP_SPHERE_LEGACY,  bHasLegacyEnvSphereMap );
+						SET_STATIC_PIXEL_SHADER_COMBO( DIFFUSELIGHTING,  hasDiffuseLighting );
+						SET_STATIC_PIXEL_SHADER_COMBO( ENVMAPMASK,  bHasEnvmapMask );
+						SET_STATIC_PIXEL_SHADER_COMBO( BASEALPHAENVMAPMASK,  hasBaseAlphaEnvmapMask );
+						SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM,  bHasSelfIllum );
+						SET_STATIC_PIXEL_SHADER_COMBO( VERTEXCOLOR,  bHasVertexColor );
+						SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHT,  bHasFlashlight );
+						SET_STATIC_PIXEL_SHADER_COMBO( DETAILTEXTURE,  bHasDetailTexture );
+						SET_STATIC_PIXEL_SHADER_COMBO( DETAIL_BLEND_MODE, nDetailBlendMode );
+						SET_STATIC_PIXEL_SHADER_COMBO( SEAMLESS_BASE, bSeamlessBase );
+						SET_STATIC_PIXEL_SHADER_COMBO( SEAMLESS_DETAIL, bSeamlessDetail );
+						SET_STATIC_PIXEL_SHADER_COMBO( DISTANCEALPHA, bDistanceAlpha );
+						SET_STATIC_PIXEL_SHADER_COMBO( DISTANCEALPHAFROMDETAIL, bDistanceAlphaFromDetail );
+						SET_STATIC_PIXEL_SHADER_COMBO( SOFT_MASK, bSoftMask );
+						SET_STATIC_PIXEL_SHADER_COMBO( OUTLINE, bOutline );
+						SET_STATIC_PIXEL_SHADER_COMBO( OUTER_GLOW, bGlow );
+						SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHTDEPTHFILTERMODE, nShadowFilterMode );
+						SET_STATIC_PIXEL_SHADER_COMBO( DEPTHBLEND, bDoDepthBlend );
+						SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp:1195-1197 - CSM static combos
+						SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, bCSMStatic );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, bCSMStatic ? g_pHardwareConfig->GetCSMShaderMode( g_pHardwareConfig->GetCSMQuality() ) : 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
+						SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps30 );
+					}
+					else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send Gl this way
 					{
 						DECLARE_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps20b );
+						const bool bCSMStatic = g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight;
 						SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM_ENVMAPMASK_ALPHA, ( hasSelfIllumInEnvMapMask && ( bHasEnvmapMask ) ) );
 						SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP,  bHasEnvmap );
 						SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP_SPHERE_LEGACY,  bHasLegacyEnvSphereMap );
@@ -801,6 +878,12 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 						SET_STATIC_PIXEL_SHADER_COMBO( DEPTHBLEND, bDoDepthBlend );
 						SET_STATIC_PIXEL_SHADER_COMBO( SRGB_INPUT_ADAPTER, bSRGBInputAdapter ? 1 : 0 );
 						SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp: CSM combos also exist on the ps_2_b variants (
+						// the shader code itself is guarded by !SHADER_MODEL_PS_2_B, so they are inert there).
+						SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, bCSMStatic );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp:944 - CSM_MODE is a 0..0 combo on ps_2_b
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 						SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps20b );
 					}
 					else // ps_2_0
@@ -825,6 +908,12 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 						SET_STATIC_PIXEL_SHADER_COMBO( OUTLINE, bOutline );
 						SET_STATIC_PIXEL_SHADER_COMBO( OUTER_GLOW, bGlow );
 						SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+						// CS:GO vertexlitgeneric_dx9_helper.cpp: CSM combos also exist on the ps_2_b variants (
+						// the shader code itself is guarded by !SHADER_MODEL_PS_2_B, so they are inert there).
+						// CS:GO vertexlitgeneric_dx9_helper.cpp:1132-1133 - ps_2_0 declares both as 0..0
+						SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, 0 );
+						SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 						SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps20 );
 					}
 				}
@@ -847,6 +936,7 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_STATIC_VERTEX_SHADER( vertexlit_and_unlit_generic_vs30 );
 
 					DECLARE_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps30 );
+					const bool bCSMStatic = g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight;
 					SET_STATIC_PIXEL_SHADER_COMBO( SELFILLUM_ENVMAPMASK_ALPHA, ( hasSelfIllumInEnvMapMask && ( bHasEnvmapMask ) ) );
 					SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP,  bHasEnvmap );
 					SET_STATIC_PIXEL_SHADER_COMBO( CUBEMAP_SPHERE_LEGACY,  bHasLegacyEnvSphereMap );
@@ -868,6 +958,11 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_STATIC_PIXEL_SHADER_COMBO( FLASHLIGHTDEPTHFILTERMODE, nShadowFilterMode );
 					SET_STATIC_PIXEL_SHADER_COMBO( DEPTHBLEND, bDoDepthBlend );
 					SET_STATIC_PIXEL_SHADER_COMBO( BLENDTINTBYBASEALPHA, bBlendTintByBaseAlpha );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:1195-1197 - CSM static combos for the ps_3_0 model shader
+					// (this tree has no SFM / bDisableCSMLookup gates, so only the flashlight exclusion is kept)
+					SET_STATIC_PIXEL_SHADER_COMBO( CASCADED_SHADOW_MAPPING, bCSMStatic );
+					SET_STATIC_PIXEL_SHADER_COMBO( CSM_MODE, bCSMStatic ? g_pHardwareConfig->GetCSMShaderMode( g_pHardwareConfig->GetCSMQuality() ) : 0 );
+					SET_STATIC_PIXEL_SHADER_COMBO( CSM_BLENDING, g_pHardwareConfig->GetCSMAccurateBlending() );
 					SET_STATIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps30 );
 				}
 #endif
@@ -1229,13 +1324,63 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 				SET_DYNAMIC_VERTEX_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_bump_vs20 );
 
 				// Bind ps_2_b shader so we can get shadow mapping...
-				if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send GL this way
+				// CS:GO vertexlitgeneric_dx9_helper.cpp:1984-2074 - the ps_3_0 model pixel shader with the
+				// cascade state pushed to c64 (same dynamic state as the vs30 branch, minus the vertex side).
+				if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight )
+				{
+					DECLARE_DYNAMIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps30 );
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( NUM_LIGHTS, lightState.m_nNumLights );
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( AMBIENT_LIGHT, lightState.m_bAmbientLight ? 1 : 0 );
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp: PC keeps the cascade size combo at 0
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:1942-1944 - bind the cascade shadow depth atlas (s15)
+					// and push the cascade state (matrices + light colour) to c64, then set the b0/b1/b2 flags.
+					if ( pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight )
+					{
+						ITexture *pDepthTextureAtlas = NULL;
+						const CascadedShadowMappingState_t &cascadeState = pShaderAPI->GetCascadedShadowMappingState( &pDepthTextureAtlas, true );
+						if ( pDepthTextureAtlas )
+							pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
+						DynamicCmdsOut.SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+					}
+					BOOL bCSMBool = pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight;
+					ConVarRef r_csm_debug_shading( "r_csm_debug_shading" );
+					// 1 = cascade colours, 2 = raw shadow factor (same convars the world CSM path uses)
+					BOOL bCSMVizSplit = ( r_csm_debug_shading.GetInt() == 1 );
+					BOOL bCSMVizShadow = ( r_csm_debug_shading.GetInt() == 2 );
+					// SE port: one-shot diagnostic so engine.log shows that model draws really do get a
+					// cascade light (mirrors the "CSM: lmg bind/dynamic" lines the world path prints).
+					{
+						static int s_nDbgModelCSM = 0;
+						if ( s_nDbgModelCSM < 4 && bCSMBool )
+						{
+							s_nDbgModelCSM++;
+							ITexture *pDbgAtlas = NULL;
+							const CascadedShadowMappingState_t &dbgState = pShaderAPI->GetCascadedShadowMappingState( &pDbgAtlas );
+							Msg( "CSM: model draw[vertexlit_and_unlit_generic_bump_ps30] - bCSMEnabled=%d atlas=%d cascades=%d lightDir=(%.2f %.2f %.2f) fastVTF=%d sm3=%d ps2b=%d\n",
+								bCSMBool ? 1 : 0, pDbgAtlas ? 1 : 0, dbgState.m_nNumCascades,
+								dbgState.m_vLightDir.x, dbgState.m_vLightDir.y, dbgState.m_vLightDir.z,
+								g_pHardwareConfig->HasFastVertexTextures() ? 1 : 0,
+								g_pHardwareConfig->SupportsShaderModel_3_0() ? 1 : 0,
+								g_pHardwareConfig->SupportsPixelShaders_2_b() ? 1 : 0 );
+						}
+					}
+					pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMBool, 1 );
+					pShaderAPI->SetBooleanPixelShaderConstant( 1, &bCSMVizSplit, 1 );
+					pShaderAPI->SetBooleanPixelShaderConstant( 2, &bCSMVizShadow, 1 );
+					SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_bump_ps30 );
+				}
+				else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send GL this way
 				{
 					DECLARE_DYNAMIC_PIXEL_SHADER( vertexlit_and_unlit_generic_bump_ps20b );
 					SET_DYNAMIC_PIXEL_SHADER_COMBO( NUM_LIGHTS, lightState.m_nNumLights );
 					SET_DYNAMIC_PIXEL_SHADER_COMBO( AMBIENT_LIGHT, lightState.m_bAmbientLight ? 1 : 0 );
 					SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
 //					SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:2029 - on PC the ps_2_b model shader never does a
+					// cascade lookup, the combo is simply pinned to 0.
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
 					SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_bump_ps20b );
 				}
 				else
@@ -1245,6 +1390,8 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_DYNAMIC_PIXEL_SHADER_COMBO( AMBIENT_LIGHT, lightState.m_bAmbientLight ? 1 : 0 );
 					SET_DYNAMIC_PIXEL_SHADER_COMBO( WRITEWATERFOGTODESTALPHA, bWriteWaterFogToAlpha );
 					SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp: PC keeps the cascade size combo at 0
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
 					SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_bump_ps20 );
 				}
 			}
@@ -1265,6 +1412,43 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 				SET_DYNAMIC_PIXEL_SHADER_COMBO( AMBIENT_LIGHT, lightState.m_bAmbientLight ? 1 : 0 );
 				SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
 //				SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+				// CS:GO vertexlitgeneric_dx9_helper.cpp: PC keeps the cascade size combo at 0
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
+				// CS:GO vertexlitgeneric_dx9_helper.cpp:1942-1944 - bind the cascade shadow depth atlas (s15)
+				// and push the cascade state (matrices + light colour) to c64, then set the b0/b1/b2 flags.
+				if ( pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight )
+				{
+					ITexture *pDepthTextureAtlas = NULL;
+					const CascadedShadowMappingState_t &cascadeState = pShaderAPI->GetCascadedShadowMappingState( &pDepthTextureAtlas, true );
+					if ( pDepthTextureAtlas )
+						pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
+					DynamicCmdsOut.SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+				}
+				BOOL bCSMBool = pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight;
+				ConVarRef r_csm_debug_shading( "r_csm_debug_shading" );
+				// 1 = cascade colours, 2 = raw shadow factor (same convars the world CSM path uses)
+				BOOL bCSMVizSplit = ( r_csm_debug_shading.GetInt() == 1 );
+				BOOL bCSMVizShadow = ( r_csm_debug_shading.GetInt() == 2 );
+				// SE port: one-shot diagnostic so engine.log shows that model draws really do get a
+				// cascade light (mirrors the "CSM: lmg bind/dynamic" lines the world path prints).
+				{
+					static int s_nDbgModelCSM = 0;
+					if ( s_nDbgModelCSM < 4 && bCSMBool )
+					{
+						s_nDbgModelCSM++;
+						ITexture *pDbgAtlas = NULL;
+						const CascadedShadowMappingState_t &dbgState = pShaderAPI->GetCascadedShadowMappingState( &pDbgAtlas );
+						Msg( "CSM: model draw[vertexlit_and_unlit_generic_bump_ps30] - bCSMEnabled=%d atlas=%d cascades=%d lightDir=(%.2f %.2f %.2f) fastVTF=%d sm3=%d ps2b=%d\n",
+							bCSMBool ? 1 : 0, pDbgAtlas ? 1 : 0, dbgState.m_nNumCascades,
+							dbgState.m_vLightDir.x, dbgState.m_vLightDir.y, dbgState.m_vLightDir.z,
+							g_pHardwareConfig->HasFastVertexTextures() ? 1 : 0,
+							g_pHardwareConfig->SupportsShaderModel_3_0() ? 1 : 0,
+							g_pHardwareConfig->SupportsPixelShaders_2_b() ? 1 : 0 );
+					}
+				}
+				pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMBool, 1 );
+				pShaderAPI->SetBooleanPixelShaderConstant( 1, &bCSMVizSplit, 1 );
+				pShaderAPI->SetBooleanPixelShaderConstant( 2, &bCSMVizShadow, 1 );
 				SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_bump_ps30 );
 
 				bool bUnusedTexCoords[3] = { false, false, !pShaderAPI->IsHWMorphingEnabled() || !bIsDecal };
@@ -1300,7 +1484,56 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 				SET_DYNAMIC_VERTEX_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_vs20 );
 
 				// Bind ps_2_b shader so we can get shadow mapping
-				if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send GL this way
+				// CS:GO vertexlitgeneric_dx9_helper.cpp:1984-2074 - the ps_3_0 model pixel shader carries the
+				// CSM code on PC (the ps_2_b variants gate it out), so switch only the pixel shader here.
+				if ( g_pHardwareConfig->SupportsShaderModel_3_0() && g_pHardwareConfig->SupportsCascadedShadowMapping() && !bHasFlashlight )
+				{
+					DECLARE_DYNAMIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps30 );
+//					SET_DYNAMIC_PIXEL_SHADER_COMBO( PIXELFOGTYPE, pShaderAPI->GetPixelFogCombo() );
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
+					SET_DYNAMIC_PIXEL_SHADER_COMBO(
+						LIGHTING_PREVIEW,
+						pShaderAPI->GetIntRenderingParameter(INT_RENDERPARM_ENABLE_FIXED_LIGHTING) );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp: PC keeps the cascade size combo at 0
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:1942-1944 - bind the cascade shadow depth atlas (s15)
+					// and push the cascade state (matrices + light colour) to c64, then set the b0/b1/b2 flags.
+					if ( pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight )
+					{
+						ITexture *pDepthTextureAtlas = NULL;
+						const CascadedShadowMappingState_t &cascadeState = pShaderAPI->GetCascadedShadowMappingState( &pDepthTextureAtlas, true );
+						if ( pDepthTextureAtlas )
+							pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
+						DynamicCmdsOut.SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+					}
+					BOOL bCSMBool = pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight;
+					ConVarRef r_csm_debug_shading( "r_csm_debug_shading" );
+					// 1 = cascade colours, 2 = raw shadow factor (same convars the world CSM path uses)
+					BOOL bCSMVizSplit = ( r_csm_debug_shading.GetInt() == 1 );
+					BOOL bCSMVizShadow = ( r_csm_debug_shading.GetInt() == 2 );
+					// SE port: one-shot diagnostic so engine.log shows that model draws really do get a
+					// cascade light (mirrors the "CSM: lmg bind/dynamic" lines the world path prints).
+					{
+						static int s_nDbgModelCSM = 0;
+						if ( s_nDbgModelCSM < 4 && bCSMBool )
+						{
+							s_nDbgModelCSM++;
+							ITexture *pDbgAtlas = NULL;
+							const CascadedShadowMappingState_t &dbgState = pShaderAPI->GetCascadedShadowMappingState( &pDbgAtlas );
+							Msg( "CSM: model draw[vertexlit_and_unlit_generic_ps30] - bCSMEnabled=%d atlas=%d cascades=%d lightDir=(%.2f %.2f %.2f) fastVTF=%d sm3=%d ps2b=%d\n",
+								bCSMBool ? 1 : 0, pDbgAtlas ? 1 : 0, dbgState.m_nNumCascades,
+								dbgState.m_vLightDir.x, dbgState.m_vLightDir.y, dbgState.m_vLightDir.z,
+								g_pHardwareConfig->HasFastVertexTextures() ? 1 : 0,
+								g_pHardwareConfig->SupportsShaderModel_3_0() ? 1 : 0,
+								g_pHardwareConfig->SupportsPixelShaders_2_b() ? 1 : 0 );
+						}
+					}
+					pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMBool, 1 );
+					pShaderAPI->SetBooleanPixelShaderConstant( 1, &bCSMVizSplit, 1 );
+					pShaderAPI->SetBooleanPixelShaderConstant( 2, &bCSMVizShadow, 1 );
+					SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_ps30 );
+				}
+				else if ( g_pHardwareConfig->SupportsPixelShaders_2_b() || g_pHardwareConfig->ShouldAlwaysUseShaderModel2bShaders() ) // Always send GL this way
 				{
 					DECLARE_DYNAMIC_PIXEL_SHADER( vertexlit_and_unlit_generic_ps20b );
 
@@ -1309,6 +1542,9 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_DYNAMIC_PIXEL_SHADER_COMBO(
 						LIGHTING_PREVIEW,
 						pShaderAPI->GetIntRenderingParameter(INT_RENDERPARM_ENABLE_FIXED_LIGHTING) );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp:2029 - on PC the ps_2_b model shader never does a
+					// cascade lookup, the combo is simply pinned to 0.
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
 					SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_ps20b );
 				}
 				else
@@ -1318,6 +1554,8 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 					SET_DYNAMIC_PIXEL_SHADER_COMBO(
 						LIGHTING_PREVIEW,
 						pShaderAPI->GetIntRenderingParameter(INT_RENDERPARM_ENABLE_FIXED_LIGHTING) );
+					// CS:GO vertexlitgeneric_dx9_helper.cpp: PC keeps the cascade size combo at 0
+					SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
 					SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_ps20 );
 				}
 			}
@@ -1342,6 +1580,43 @@ static void DrawVertexLitGeneric_DX9_Internal( CBaseVSShader *pShader, IMaterial
 				SET_DYNAMIC_PIXEL_SHADER_COMBO( FLASHLIGHTSHADOWS, bFlashlightShadows );
 				SET_DYNAMIC_PIXEL_SHADER_COMBO(	LIGHTING_PREVIEW,
 					pShaderAPI->GetIntRenderingParameter(INT_RENDERPARM_ENABLE_FIXED_LIGHTING) );
+				// CS:GO vertexlitgeneric_dx9_helper.cpp: PC keeps the cascade size combo at 0
+				SET_DYNAMIC_PIXEL_SHADER_COMBO( CASCADE_SIZE, 0 );
+				// CS:GO vertexlitgeneric_dx9_helper.cpp:1942-1944 - bind the cascade shadow depth atlas (s15)
+				// and push the cascade state (matrices + light colour) to c64, then set the b0/b1/b2 flags.
+				if ( pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight )
+				{
+					ITexture *pDepthTextureAtlas = NULL;
+					const CascadedShadowMappingState_t &cascadeState = pShaderAPI->GetCascadedShadowMappingState( &pDepthTextureAtlas, true );
+					if ( pDepthTextureAtlas )
+						pShader->BindTexture( SHADER_SAMPLER15, pDepthTextureAtlas, 0 );
+					DynamicCmdsOut.SetPixelShaderConstant( 64, &cascadeState.m_vLightColor.x, CASCADED_SHADOW_MAPPING_CONSTANT_BUFFER_SIZE );
+				}
+				BOOL bCSMBool = pShaderAPI->IsCascadedShadowMapping() && !bHasFlashlight;
+				ConVarRef r_csm_debug_shading( "r_csm_debug_shading" );
+				// 1 = cascade colours, 2 = raw shadow factor (same convars the world CSM path uses)
+				BOOL bCSMVizSplit = ( r_csm_debug_shading.GetInt() == 1 );
+				BOOL bCSMVizShadow = ( r_csm_debug_shading.GetInt() == 2 );
+				// SE port: one-shot diagnostic so engine.log shows that model draws really do get a
+				// cascade light (mirrors the "CSM: lmg bind/dynamic" lines the world path prints).
+				{
+					static int s_nDbgModelCSM = 0;
+					if ( s_nDbgModelCSM < 4 && bCSMBool )
+					{
+						s_nDbgModelCSM++;
+						ITexture *pDbgAtlas = NULL;
+						const CascadedShadowMappingState_t &dbgState = pShaderAPI->GetCascadedShadowMappingState( &pDbgAtlas );
+						Msg( "CSM: model draw[vertexlit_and_unlit_generic_ps30] - bCSMEnabled=%d atlas=%d cascades=%d lightDir=(%.2f %.2f %.2f) fastVTF=%d sm3=%d ps2b=%d\n",
+							bCSMBool ? 1 : 0, pDbgAtlas ? 1 : 0, dbgState.m_nNumCascades,
+							dbgState.m_vLightDir.x, dbgState.m_vLightDir.y, dbgState.m_vLightDir.z,
+							g_pHardwareConfig->HasFastVertexTextures() ? 1 : 0,
+							g_pHardwareConfig->SupportsShaderModel_3_0() ? 1 : 0,
+							g_pHardwareConfig->SupportsPixelShaders_2_b() ? 1 : 0 );
+					}
+				}
+				pShaderAPI->SetBooleanPixelShaderConstant( 0, &bCSMBool, 1 );
+				pShaderAPI->SetBooleanPixelShaderConstant( 1, &bCSMVizSplit, 1 );
+				pShaderAPI->SetBooleanPixelShaderConstant( 2, &bCSMVizShadow, 1 );
 				SET_DYNAMIC_PIXEL_SHADER_CMD( DynamicCmdsOut, vertexlit_and_unlit_generic_ps30 );
 
 				bool bUnusedTexCoords[3] = { false, false, !pShaderAPI->IsHWMorphingEnabled() || !bIsDecal };
