@@ -89,6 +89,10 @@
 static ConVar r_flashlightdrawfrustum( "r_flashlightdrawfrustum", "0" );
 static ConVar r_flashlightmodels( "r_flashlightmodels", "1" );
 static ConVar r_shadowrendertotexture( "r_shadowrendertotexture", "0" );
+// CS:GO clientshadowmgr.cpp:114-119 - "Slam blobby shadows to disabled in CS:GO (RTT shadows are
+// also disabled too)."  The CS:GO cstrike build defaults this to 1; the non-cstrike builds keep 0.
+// This tree is the cstrike game, so it matches the CS:GO cstrike value.
+static ConVar r_disable_update_shadow( "r_disable_update_shadow", "1", FCVAR_CHEAT );
 static ConVar r_flashlight_version2( "r_flashlight_version2", "0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY );
 
 ConVar r_flashlightdepthtexture( "r_flashlightdepthtexture", "1" );
@@ -3093,6 +3097,15 @@ void CClientShadowMgr::UpdateShadow( ClientShadowHandle_t handle, bool force )
 	{
 		// Retire the shadow if the entity is gone
 		DestroyShadow( handle );
+		return;
+	}
+
+	// CS:GO clientshadowmgr.cpp:4646-4651 - cstrike disables the blob/RTT model shadow updates (see
+	// the r_disable_update_shadow default above); the cascade shadows replace them.
+	if ( r_disable_update_shadow.GetBool() )
+	{
+		pRenderable->MarkShadowDirty( false );
+		shadowmgr->EnableShadow( shadow.m_ShadowHandle, false );
 		return;
 	}
 
