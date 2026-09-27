@@ -32,6 +32,7 @@ This project is using waf buildsystem. If you have waf-related questions look ht
 - Panorama UI framework support
 - Panorama XML/CSS/JavaScript support
 - WebM support
+CSM shadow
 
 # Current tasks
 - Rewrite materialsystem for OpenGL render
